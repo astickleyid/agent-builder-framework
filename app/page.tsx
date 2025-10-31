@@ -1,3 +1,5 @@
+'use client';
+
 import Navbar from '@/components/Navbar';
 import AIAssistant from '@/components/AIAssistant';
 import TerminalAnimation from '@/components/TerminalAnimation';

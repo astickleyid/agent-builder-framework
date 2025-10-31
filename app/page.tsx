@@ -1,194 +1,418 @@
-import { Terminal, Zap, Code2, Sparkles, ArrowRight, Github } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import AIAssistant from '@/components/AIAssistant';
+import TerminalAnimation from '@/components/TerminalAnimation';
+import HolographicNodes from '@/components/HolographicNodes';
+import FeatureCard from '@/components/FeatureCard';
+import AgentIcon from '@/components/icons/AgentIcon';
+import OrchestrationIcon from '@/components/icons/OrchestrationIcon';
+import WorkflowIcon from '@/components/icons/WorkflowIcon';
+import { Terminal, Cpu, Network, Database, ArrowRight, Github, Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <AIAssistant />
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
-        {/* Grid background */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_80%)]" />
+      <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden pt-20">
+        {/* Holographic Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(14,165,233,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.02)_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_90%)]" />
         
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-surface border border-border text-sm text-zinc-400 mb-8">
-            <Sparkles className="w-4 h-4 text-accent-purple" />
-            Build AI agents locally, without limits
+        {/* Animated glow orbs */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-blue/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-cyan/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-8">
+            <Sparkles className="w-4 h-4 text-accent-blue" />
+            Enterprise-grade AI agent orchestration
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-semibold tracking-tight mb-6">
-            Build Custom Agents
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8">
+            Build. Deploy. Scale.
             <br />
-            <span className="bg-gradient-to-r from-accent-purple via-accent-blue to-accent-cyan bg-clip-text text-transparent">
-              In Minutes
+            <span className="gradient-text">
+              Your AI Agents
             </span>
           </h1>
           
-          <p className="text-lg md:text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            A local-first framework for creating specialized AI agents. Define behavior, tools, and design preferences — no cloud required.
+          <p className="text-xl md:text-2xl text-zinc-400 mb-16 max-w-3xl mx-auto leading-relaxed font-light">
+            The most advanced local-first agent framework. Configure, orchestrate, and deploy specialized AI agents with enterprise-grade tooling.
           </p>
           
+          <div className="mb-16">
+            <TerminalAnimation />
+          </div>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="group px-6 py-3 bg-accent-purple hover:bg-accent-purple/90 text-white rounded-md font-medium transition-all flex items-center gap-2">
-              Get Started
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <button className="group px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all flex items-center gap-2 shadow-lg shadow-accent-blue/20">
+              Start Building
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-6 py-3 bg-transparent hover:bg-surface border border-border text-white rounded-md font-medium transition-all flex items-center gap-2">
-              <Github className="w-4 h-4" />
+            <button className="px-8 py-4 glass-morphic hover:bg-surface text-white rounded-md font-semibold transition-all flex items-center gap-2">
+              <Github className="w-5 h-5" />
               View on GitHub
             </button>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-32 px-6 border-t border-border">
+      {/* Orchestration Visualization */}
+      <section className="py-32 px-6 relative">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-semibold mb-4">
-              Everything you need
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              Agent Orchestration
             </h2>
-            <p className="text-zinc-400 text-lg">
-              Purpose-built for AI agent development
+            <p className="text-zinc-400 text-xl max-w-2xl mx-auto">
+              Visualize and control complex agent workflows in real-time
+            </p>
+          </div>
+          <HolographicNodes />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-32 px-6 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              Enterprise-Grade Features
+            </h2>
+            <p className="text-zinc-400 text-xl">
+              Everything you need to build, deploy, and scale AI agents
             </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
-            {/* Feature 1 */}
-            <div className="group p-8 bg-surface hover:bg-surface-hover border border-border rounded-lg transition-all">
-              <div className="w-12 h-12 bg-accent-purple/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Terminal className="w-6 h-6 text-accent-purple" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Local-First</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Run everything on your machine. Full control over your agents, data, and execution environment.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="group p-8 bg-surface hover:bg-surface-hover border border-border rounded-lg transition-all">
-              <div className="w-12 h-12 bg-accent-blue/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Zap className="w-6 h-6 text-accent-blue" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Fast Setup</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Define your agent with JSON config. Instructions, tools, design preferences — all in one file.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="group p-8 bg-surface hover:bg-surface-hover border border-border rounded-lg transition-all">
-              <div className="w-12 h-12 bg-accent-cyan/10 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Code2 className="w-6 h-6 text-accent-cyan" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Tool Integration</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Access bash, file operations, GitHub APIs, and web search. Extend with custom tools easily.
-              </p>
-            </div>
+            <FeatureCard
+              icon={Terminal}
+              title="Local-First Architecture"
+              description="Zero cloud dependencies. Run agents entirely on your infrastructure with complete data sovereignty and privacy."
+              index={0}
+            />
+            <FeatureCard
+              icon={Cpu}
+              title="Multi-Agent Orchestration"
+              description="Coordinate multiple specialized agents working together. Define dependencies, workflows, and handoffs declaratively."
+              index={1}
+            />
+            <FeatureCard
+              icon={Network}
+              title="Real-Time Monitoring"
+              description="Track agent performance, resource usage, and execution flows with built-in observability and debugging tools."
+              index={2}
+            />
+            <FeatureCard
+              icon={Database}
+              title="State Management"
+              description="Persistent agent state with automatic checkpointing. Resume workflows and maintain context across sessions."
+              index={3}
+            />
+            <FeatureCard
+              icon={Terminal}
+              title="Developer Experience"
+              description="CLI-first design with hot reload, type safety, and intelligent autocomplete. Built by developers, for developers."
+              index={4}
+            />
+            <FeatureCard
+              icon={Network}
+              title="Extensible Tooling"
+              description="Integrate with any API, database, or service. Create custom tools with our plugin architecture in minutes."
+              index={5}
+            />
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-32 px-6 border-t border-border">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-32 px-6 border-t border-border relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-blue/5 to-transparent" />
+        <div className="max-w-5xl mx-auto relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-semibold mb-4">
-              Simple by design
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              Get Started in Minutes
             </h2>
-            <p className="text-zinc-400 text-lg">
-              Three steps to your custom agent
+            <p className="text-zinc-400 text-xl">
+              From zero to production-ready agents
             </p>
           </div>
           
-          <div className="space-y-8">
+          <div className="space-y-12">
             {/* Step 1 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple font-semibold">
+            <div className="flex gap-8 items-start glass-morphic p-8 rounded-lg">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent-blue/20 border-2 border-accent-blue flex items-center justify-center text-accent-blue font-bold text-xl">
                 1
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Define Your Agent</h3>
-                <p className="text-zinc-400 mb-4">
-                  Create a JSON config with name, description, instructions, and available tools.
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold mb-3">Install stick.ai</h3>
+                <p className="text-zinc-400 mb-6 text-lg">
+                  One command to install the framework globally
                 </p>
-                <div className="p-4 bg-surface border border-border rounded-lg font-mono text-sm overflow-x-auto">
-                  <pre className="text-zinc-300">
-{`{
-  "name": "build_architect",
-  "description": "Technical build architect...",
-  "instructions": "You are the Build Architect...",
-  "tools": ["bash", "view", "edit", "create"]
-}`}
+                <div className="p-6 bg-black/40 border border-border/50 rounded-lg terminal-text text-sm overflow-x-auto">
+                  <div className="flex items-center gap-2 mb-2 text-zinc-500">
+                    <Terminal className="w-4 h-4" />
+                    <span>bash</span>
+                  </div>
+                  <pre className="text-accent-cyan">
+{`$ npm install -g stick-ai
+✓ Installing dependencies...
+✓ Setting up agent framework...
+✓ stick.ai is ready`}
                   </pre>
                 </div>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center text-accent-blue font-semibold">
+            <div className="flex gap-8 items-start glass-morphic p-8 rounded-lg">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent-cyan/20 border-2 border-accent-cyan flex items-center justify-center text-accent-cyan font-bold text-xl">
                 2
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Register It</h3>
-                <p className="text-zinc-400 mb-4">
-                  Place your config in the agents directory where your CLI can find it.
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold mb-3">Configure Your Agent</h3>
+                <p className="text-zinc-400 mb-6 text-lg">
+                  Define behavior, tools, and capabilities with declarative JSON
                 </p>
-                <div className="p-4 bg-surface border border-border rounded-lg font-mono text-sm">
-                  <pre className="text-zinc-300">~/.config/github-copilot-cli/agents/your-agent/</pre>
+                <div className="p-6 bg-black/40 border border-border/50 rounded-lg terminal-text text-sm overflow-x-auto">
+                  <div className="flex items-center gap-2 mb-2 text-zinc-500">
+                    <Terminal className="w-4 h-4" />
+                    <span>agent.config.json</span>
+                  </div>
+                  <pre className="text-zinc-300">
+{`{
+  "name": "customer_support",
+  "version": "1.0.0",
+  "description": "24/7 customer support agent",
+  "capabilities": ["chat", "email", "tickets"],
+  "tools": ["database", "crm", "analytics"],
+  "instructions": "Provide helpful support..."
+}`}
+                  </pre>
                 </div>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="flex gap-6 items-start">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-cyan/10 border border-accent-cyan/20 flex items-center justify-center text-accent-cyan font-semibold">
+            <div className="flex gap-8 items-start glass-morphic p-8 rounded-lg">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent-blue/20 border-2 border-accent-blue flex items-center justify-center text-accent-blue font-bold text-xl">
                 3
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Use It</h3>
-                <p className="text-zinc-400 mb-4">
-                  Invoke your agent and let it execute with its specialized knowledge.
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold mb-3">Deploy & Scale</h3>
+                <p className="text-zinc-400 mb-6 text-lg">
+                  Launch locally or deploy to your infrastructure
                 </p>
-                <div className="p-4 bg-surface border border-border rounded-lg font-mono text-sm">
-                  <pre className="text-zinc-300">$ gh copilot --agent your_agent "build something"</pre>
+                <div className="p-6 bg-black/40 border border-border/50 rounded-lg terminal-text text-sm overflow-x-auto">
+                  <div className="flex items-center gap-2 mb-2 text-zinc-500">
+                    <Terminal className="w-4 h-4" />
+                    <span>bash</span>
+                  </div>
+                  <pre className="text-accent-cyan">
+{`$ stick deploy
+✓ Building agent...
+✓ Running health checks...
+✓ Agent deployed at localhost:3000
+✓ Ready to serve requests`}
+                  </pre>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-32 px-6 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-zinc-400 text-xl">
+              Start free, scale as you grow
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Free Tier */}
+            <div className="holographic-card p-8 rounded-lg border border-border/50">
+              <h3 className="text-2xl font-bold mb-2">Open Source</h3>
+              <div className="text-4xl font-bold mb-6">$0<span className="text-xl text-zinc-400 font-normal">/mo</span></div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Unlimited local agents</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Core tooling & CLI</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Community support</span>
+                </li>
+              </ul>
+              <button className="w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all">
+                Start Building
+              </button>
+            </div>
+
+            {/* Pro Tier */}
+            <div className="relative holographic-card p-8 rounded-lg border-2 border-accent-blue shadow-xl shadow-accent-blue/20">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-accent-blue text-white text-sm font-semibold rounded-full">
+                Most Popular
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Professional</h3>
+              <div className="text-4xl font-bold mb-6">$49<span className="text-xl text-zinc-400 font-normal">/mo</span></div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Everything in Open Source</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Cloud deployment options</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Advanced monitoring & analytics</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Priority support</span>
+                </li>
+              </ul>
+              <button className="w-full px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all shadow-lg shadow-accent-blue/20">
+                Get Started
+              </button>
+            </div>
+
+            {/* Enterprise Tier */}
+            <div className="holographic-card p-8 rounded-lg border border-border/50">
+              <h3 className="text-2xl font-bold mb-2">Enterprise</h3>
+              <div className="text-4xl font-bold mb-6">Custom</div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Everything in Professional</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Dedicated infrastructure</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">Custom integrations & SLAs</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-accent-blue/20 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-accent-blue" />
+                  </div>
+                  <span className="text-zinc-300">24/7 enterprise support</span>
+                </li>
+              </ul>
+              <button className="w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all">
+                Contact Sales
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 px-6 border-t border-border">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-semibold mb-6">
-            Ready to build your agent?
+      <section className="py-32 px-6 border-t border-border relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-accent-blue/10 via-transparent to-transparent" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+            Ready to Transform Your Workflow?
           </h2>
-          <p className="text-zinc-400 text-lg mb-12 max-w-2xl mx-auto">
-            Start creating specialized AI agents that understand your preferences and execute with precision.
+          <p className="text-zinc-400 text-xl mb-12 max-w-2xl mx-auto">
+            Join thousands of developers building the next generation of AI-powered applications with stick.ai
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 bg-accent-purple hover:bg-accent-purple/90 text-white rounded-md font-medium transition-all text-lg">
-              Get Started
+            <button className="px-10 py-5 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-bold transition-all text-lg shadow-lg shadow-accent-blue/20">
+              Start Building Free
             </button>
-            <button className="px-8 py-4 bg-transparent hover:bg-surface border border-border text-white rounded-md font-medium transition-all text-lg">
-              Read Docs
+            <button className="px-10 py-5 glass-morphic hover:bg-surface text-white rounded-md font-bold transition-all text-lg">
+              Schedule Demo
             </button>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-zinc-400 text-sm">
-            © 2024 Agent Builder Framework. Built for AI creators.
+      <footer className="py-16 px-6 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Terminal className="w-6 h-6 text-accent-blue" />
+                <span className="text-xl font-bold">stick.ai</span>
+              </div>
+              <p className="text-zinc-400 text-sm">
+                Enterprise-grade AI agent orchestration framework.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-sm text-zinc-400">
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#docs" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Examples</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-zinc-400">
+                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm text-zinc-400">
+                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-6 text-sm text-zinc-400">
-            <a href="#" className="hover:text-white transition-colors">Documentation</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
-            <a href="#" className="hover:text-white transition-colors">Examples</a>
+          <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-zinc-400 text-sm">
+              © 2024 stick.ai. All rights reserved.
+            </div>
+            <div className="flex gap-6">
+              <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                <Github className="w-5 h-5" />
+              </a>
+              <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                <Terminal className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>

@@ -88,37 +88,37 @@ export default function Home() {
           
           <div className="grid md:grid-cols-3 gap-6">
             <FeatureCard
-              icon={Terminal}
+              iconName="terminal"
               title="Local-First Architecture"
               description="Zero cloud dependencies. Run agents entirely on your infrastructure with complete data sovereignty and privacy."
               index={0}
             />
             <FeatureCard
-              icon={Cpu}
+              iconName="cpu"
               title="Multi-Agent Orchestration"
               description="Coordinate multiple specialized agents working together. Define dependencies, workflows, and handoffs declaratively."
               index={1}
             />
             <FeatureCard
-              icon={Network}
+              iconName="network"
               title="Real-Time Monitoring"
               description="Track agent performance, resource usage, and execution flows with built-in observability and debugging tools."
               index={2}
             />
             <FeatureCard
-              icon={Database}
+              iconName="database"
               title="State Management"
               description="Persistent agent state with automatic checkpointing. Resume workflows and maintain context across sessions."
               index={3}
             />
             <FeatureCard
-              icon={Terminal}
+              iconName="terminal"
               title="Developer Experience"
               description="CLI-first design with hot reload, type safety, and intelligent autocomplete. Built by developers, for developers."
               index={4}
             />
             <FeatureCard
-              icon={Network}
+              iconName="network"
               title="Extensible Tooling"
               description="Integrate with any API, database, or service. Create custom tools with our plugin architecture in minutes."
               index={5}

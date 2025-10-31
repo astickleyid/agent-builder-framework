@@ -1,18 +1,26 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
+import { Terminal, Cpu, Network, Database } from 'lucide-react';
 import { useState } from 'react';
 
 interface FeatureCardProps {
-  icon: LucideIcon;
+  iconName: 'terminal' | 'cpu' | 'network' | 'database';
   title: string;
   description: string;
   index: number;
 }
 
-export default function FeatureCard({ icon: Icon, title, description, index }: FeatureCardProps) {
+const iconMap = {
+  terminal: Terminal,
+  cpu: Cpu,
+  network: Network,
+  database: Database,
+};
+
+export default function FeatureCard({ iconName, title, description, index }: FeatureCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const Icon = iconMap[iconName];
 
   return (
     <motion.div

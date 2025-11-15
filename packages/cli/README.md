@@ -64,6 +64,30 @@ export OLLAMA_HOST="http://localhost:11434"
 
 **📚 Full Guide**: See [LLM Integration Guide](../../docs/llm-integration.md) for detailed setup instructions.
 
+## Tool System (NEW in Phase 2)
+
+stick.ai now includes a powerful tool system for agent capabilities:
+
+### Built-in Tools
+- **bash** - Execute shell commands securely
+- **file-ops** - Read, write, list files
+- **http** - Make HTTP/HTTPS requests
+- **json** - Parse and manipulate JSON data
+
+### Quick Example
+
+```bash
+# List available tools
+curl http://localhost:3000/tools
+
+# Execute a tool
+curl -X POST http://localhost:3000/tools/execute \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "bash", "params": {"command": "echo Hello"}}'
+```
+
+**📚 Full Guide**: See [Tool System Documentation](../../docs/tools.md) for detailed information.
+
 ## Commands
 
 ### `stick init [name]`
@@ -96,6 +120,8 @@ stick deploy -p 3001
 - `GET /health` - Health check endpoint
 - `GET /config` - Get agent configuration
 - `POST /chat` - Send messages to the agent
+- `GET /tools` - List available tools (if tools are enabled)
+- `POST /tools/execute` - Execute a tool (if tools are enabled)
 
 ### `stick list`
 

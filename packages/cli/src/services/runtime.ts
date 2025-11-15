@@ -1,6 +1,7 @@
 import { AgentConfig } from './registry';
 import inquirer from 'inquirer';
 import { createLLMProvider, LLMProvider } from './llm';
+import { initializeBuiltinTools, getTool, listTools, ToolExecutionResult } from './tools';
 
 export interface Message {
   role: 'user' | 'agent' | 'system';
@@ -16,12 +17,19 @@ export interface AgentContext {
 export class AgentRuntime {
   private context: AgentContext;
   private llmProvider: LLMProvider | null = null;
+  private toolsEnabled: boolean = false;
 
   constructor(config: AgentConfig) {
     this.context = {
       config,
       conversationHistory: [],
     };
+
+    // Initialize tools system if agent has tools configured
+    if (config.tools && config.tools.length > 0) {
+      initializeBuiltinTools();
+      this.toolsEnabled = true;
+    }
 
     // Initialize LLM provider if configured
     if (config.llm && config.llm.provider !== 'none') {
@@ -98,7 +106,19 @@ export class AgentRuntime {
     }
     
     if (lowerInput.includes('tools')) {
+      const availableTools = this.getAvailableTools();
+      if (availableTools.length > 0) {
+        const toolList = availableTools
+          .map((t) => `  - ${t.name}: ${t.description}`)
+          .join('\n');
+        return `I have access to the following tools:\n${toolList}`;
+      }
       return `I have access to the following tools: ${this.context.config.tools.join(', ')}`;
+    }
+    
+    // Check for tool execution requests (simple pattern matching)
+    if (lowerInput.includes('use tool') || lowerInput.includes('execute')) {
+      return `To execute a tool, please configure an LLM provider that supports tool calling, or use the tool execution API directly.`;
     }
     
     // Default response
@@ -136,6 +156,61 @@ Conversation History: ${this.context.conversationHistory.length} messages`;
 
   clearHistory(): void {
     this.context.conversationHistory = [];
+  }
+
+  /**
+   * Execute a tool by name with given parameters
+   */
+  async executeTool(
+    toolName: string,
+    params: Record<string, any>,
+    context?: any
+  ): Promise<ToolExecutionResult> {
+    if (!this.toolsEnabled) {
+      return {
+        success: false,
+        error: 'Tools are not enabled for this agent',
+      };
+    }
+
+    // Check if tool is in agent's allowed tools
+    if (!this.context.config.tools.includes(toolName)) {
+      return {
+        success: false,
+        error: `Tool "${toolName}" is not allowed for this agent`,
+      };
+    }
+
+    const tool = getTool(toolName);
+    if (!tool) {
+      return {
+        success: false,
+        error: `Tool "${toolName}" not found`,
+      };
+    }
+
+    try {
+      return await tool.execute(params, context);
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message || 'Tool execution failed',
+      };
+    }
+  }
+
+  /**
+   * List available tools for this agent
+   */
+  getAvailableTools() {
+    if (!this.toolsEnabled) {
+      return [];
+    }
+
+    const allTools = listTools();
+    return allTools.filter((tool) =>
+      this.context.config.tools.includes(tool.name)
+    );
   }
 
   async processMessageStream(

@@ -79,6 +79,12 @@ export async function deployCommand(options?: any) {
       console.log(chalk.dim(`  GET  http://localhost:${port}/health`));
       console.log(chalk.dim(`  GET  http://localhost:${port}/config`));
       console.log(chalk.dim(`  POST http://localhost:${port}/chat`));
+      
+      // Show tool endpoints if agent has tools configured
+      if (config.tools && config.tools.length > 0) {
+        console.log(chalk.dim(`  GET  http://localhost:${port}/tools`));
+        console.log(chalk.dim(`  POST http://localhost:${port}/tools/execute`));
+      }
     }
 
     console.log(chalk.green('\n✓ Deployment complete\n'));

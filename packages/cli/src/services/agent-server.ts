@@ -55,6 +55,41 @@ export async function startAgentServer(config: AgentConfig, port: number): Promi
       return;
     }
 
+    if (req.url === '/tools' && req.method === 'GET') {
+      const tools = runtime.getAvailableTools();
+      res.writeHead(200);
+      res.end(JSON.stringify({ tools }));
+      return;
+    }
+
+    if (req.url === '/tools/execute' && req.method === 'POST') {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk.toString();
+      });
+      req.on('end', async () => {
+        try {
+          const { tool, params, context } = JSON.parse(body);
+          
+          if (!tool) {
+            res.writeHead(400);
+            res.end(JSON.stringify({ error: 'Tool name is required' }));
+            return;
+          }
+
+          const result = await runtime.executeTool(tool, params || {}, context);
+          
+          res.writeHead(result.success ? 200 : 400);
+          res.end(JSON.stringify(result));
+        } catch (error: any) {
+          res.writeHead(400);
+          res.end(JSON.stringify({ error: 'Invalid request', message: error.message }));
+        }
+      });
+      return;
+    }
+
+
     res.writeHead(404);
     res.end(JSON.stringify({ error: 'Not found' }));
   });

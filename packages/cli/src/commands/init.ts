@@ -8,7 +8,9 @@ export async function initCommand(name?: string, options?: any) {
   const spinner = ora();
 
   try {
-    if (!name) {
+    let projectName: string = name || '';
+    
+    if (!projectName) {
       const answers = await inquirer.prompt([
         {
           type: 'input',
@@ -17,13 +19,13 @@ export async function initCommand(name?: string, options?: any) {
           default: 'my-agent',
         },
       ]);
-      name = answers.projectName;
+      projectName = answers.projectName;
     }
 
-    const projectPath = path.join(process.cwd(), name);
+    const projectPath = path.join(process.cwd(), projectName);
 
     if (await fs.pathExists(projectPath)) {
-      console.log(chalk.red(`✗ Directory ${name} already exists`));
+      console.log(chalk.red(`✗ Directory ${projectName} already exists`));
       process.exit(1);
     }
 
@@ -35,12 +37,12 @@ export async function initCommand(name?: string, options?: any) {
     await fs.ensureDir(path.join(projectPath, 'workflows'));
 
     const agentConfig = {
-      name: name,
+      name: projectName,
       version: '1.0.0',
-      description: `${name} AI agent`,
+      description: `${projectName} AI agent`,
       capabilities: ['chat', 'task-execution'],
       tools: ['bash', 'file-ops', 'http'],
-      instructions: `You are ${name}, an AI agent designed to help with tasks.`,
+      instructions: `You are ${projectName}, an AI agent designed to help with tasks.`,
       environment: {
         maxTokens: 4000,
         temperature: 0.7,
@@ -53,16 +55,16 @@ export async function initCommand(name?: string, options?: any) {
       { spaces: 2 }
     );
 
-    const readme = `# ${name}
+    const readme = `# ${projectName}
 
 AI Agent powered by stick.ai
 
 ## Getting Started
 
 \`\`\`bash
-cd ${name}
+cd ${projectName}
 stick deploy
-stick run ${name}
+stick run ${projectName}
 \`\`\`
 
 ## Configuration
@@ -83,18 +85,18 @@ dist/
     await fs.writeFile(path.join(projectPath, '.gitignore'), gitignore);
 
     const envExample = `# Agent Configuration
-AGENT_NAME=${name}
+AGENT_NAME=${projectName}
 AGENT_PORT=3000
 `;
 
     await fs.writeFile(path.join(projectPath, '.env.example'), envExample);
 
-    spinner.succeed(chalk.green(`✓ Agent project "${name}" created successfully`));
+    spinner.succeed(chalk.green(`✓ Agent project "${projectName}" created successfully`));
 
     console.log('\n' + chalk.bold('Next steps:'));
-    console.log(chalk.cyan(`  cd ${name}`));
+    console.log(chalk.cyan(`  cd ${projectName}`));
     console.log(chalk.cyan('  stick deploy'));
-    console.log(chalk.cyan('  stick run ' + name));
+    console.log(chalk.cyan('  stick run ' + projectName));
     console.log('\n' + chalk.dim('Learn more: https://stick.ai/docs'));
   } catch (error) {
     spinner.fail(chalk.red('✗ Failed to create agent project'));

@@ -6,6 +6,7 @@ import { initCommand } from './commands/init';
 import { deployCommand } from './commands/deploy';
 import { listCommand } from './commands/list';
 import { runCommand } from './commands/run';
+import { stopCommand } from './commands/stop';
 
 const program = new Command();
 
@@ -37,5 +38,10 @@ program
   .description('Run a specific agent')
   .option('-i, --interactive', 'Run in interactive mode')
   .action(runCommand);
+
+program
+  .command('stop <agent>')
+  .description('Stop a running agent')
+  .action(stopCommand);
 
 program.parse();

@@ -13,6 +13,13 @@ export interface AgentConfig {
     maxTokens: number;
     temperature: number;
   };
+  llm?: {
+    provider: 'openai' | 'anthropic' | 'ollama' | 'none';
+    model?: string;
+    apiKey?: string;
+    baseURL?: string;
+    stream?: boolean;
+  };
   port?: number;
   status?: 'running' | 'stopped';
   pid?: number;

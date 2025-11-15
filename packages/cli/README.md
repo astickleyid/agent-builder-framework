@@ -31,6 +31,39 @@ stick list
 stick stop my-agent
 ```
 
+## LLM Integration (NEW in Phase 1)
+
+stick.ai now supports real LLM providers for intelligent agent responses:
+
+### Supported Providers
+- **OpenAI** - GPT-4, GPT-4o, GPT-3.5-turbo
+- **Anthropic** - Claude 3.5 Sonnet, Claude 3 Opus/Sonnet/Haiku
+- **Ollama** - Local models (Llama 3.2, Mistral, etc.)
+
+### Quick Setup
+
+Edit your agent's `config/agent.json`:
+
+```json
+{
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "apiKey": "your-api-key",
+    "stream": true
+  }
+}
+```
+
+Or use environment variables:
+```bash
+export OPENAI_API_KEY="your-key"
+export ANTHROPIC_API_KEY="your-key"
+export OLLAMA_HOST="http://localhost:11434"
+```
+
+**📚 Full Guide**: See [LLM Integration Guide](../../docs/llm-integration.md) for detailed setup instructions.
+
 ## Commands
 
 ### `stick init [name]`

@@ -26,13 +26,15 @@ export class ServerManager {
   async startServer(agentName: string, config: AgentConfig, port: number): Promise<ServerProcess> {
     await this.ensurePidDir();
 
-    // Create a simple HTTP server script
-    const serverScript = this.generateServerScript(config, port);
-    const scriptPath = path.join(this.pidDir, `${agentName}-server.js`);
-    await fs.writeFile(scriptPath, serverScript);
+    // Save agent config for the server to use
+    const configPath = path.join(this.pidDir, `${agentName}-config.json`);
+    await fs.writeJson(configPath, config);
+
+    // Get the path to the compiled agent-server.js
+    const serverScriptPath = path.join(__dirname, 'agent-server.js');
 
     // Start the server process
-    const serverProcess = spawn('node', [scriptPath], {
+    const serverProcess = spawn('node', [serverScriptPath, configPath, port.toString()], {
       detached: true,
       stdio: 'ignore',
     });
@@ -55,75 +57,6 @@ export class ServerManager {
     return processInfo;
   }
 
-  private generateServerScript(config: AgentConfig, port: number): string {
-    return `
-const http = require('http');
-
-const agentConfig = ${JSON.stringify(config, null, 2)};
-
-const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-
-  if (req.url === '/health') {
-    res.writeHead(200);
-    res.end(JSON.stringify({ status: 'healthy', agent: agentConfig.name }));
-    return;
-  }
-
-  if (req.url === '/config') {
-    res.writeHead(200);
-    res.end(JSON.stringify(agentConfig));
-    return;
-  }
-
-  if (req.url === '/chat' && req.method === 'POST') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      try {
-        const { message } = JSON.parse(body);
-        const response = {
-          agent: agentConfig.name,
-          response: \`I received your message: "\${message}". \${agentConfig.instructions}\`,
-          timestamp: new Date().toISOString()
-        };
-        res.writeHead(200);
-        res.end(JSON.stringify(response));
-      } catch (error) {
-        res.writeHead(400);
-        res.end(JSON.stringify({ error: 'Invalid request' }));
-      }
-    });
-    return;
-  }
-
-  res.writeHead(404);
-  res.end(JSON.stringify({ error: 'Not found' }));
-});
-
-server.listen(${port}, () => {
-  console.log(\`Agent "\${agentConfig.name}" listening on port ${port}\`);
-});
-
-process.on('SIGTERM', () => {
-  server.close(() => {
-    process.exit(0);
-  });
-});
-`;
-  }
-
   async stopServer(agentName: string): Promise<void> {
     const pidFile = path.join(this.pidDir, `${agentName}.pid`);
     
@@ -139,9 +72,10 @@ process.on('SIGTERM', () => {
       }
     }
 
-    const scriptPath = path.join(this.pidDir, `${agentName}-server.js`);
-    if (await fs.pathExists(scriptPath)) {
-      await fs.remove(scriptPath);
+    // Clean up config file
+    const configPath = path.join(this.pidDir, `${agentName}-config.json`);
+    if (await fs.pathExists(configPath)) {
+      await fs.remove(configPath);
     }
 
     this.processes.delete(agentName);

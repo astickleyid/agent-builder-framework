@@ -21,17 +21,20 @@
   "author": "stick.ai",
   "license": "MIT",
   "dependencies": {
-    "commander": "^11.1.0",
+    "@anthropic-ai/sdk": "^0.27.3",
     "chalk": "^5.3.0",
-    "ora": "^7.0.1",
-    "inquirer": "^9.2.12",
+    "commander": "^11.1.0",
     "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
+    "ollama": "^0.5.9",
+    "openai": "^4.63.0",
+    "ora": "^7.0.1",
     "yaml": "^2.3.4"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
     "@types/fs-extra": "^11.0.4",
     "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.10.0",
     "typescript": "^5.3.3"
   },
   "engines": {

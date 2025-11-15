@@ -80,6 +80,41 @@ export class ConfigValidator {
       }
     }
 
+    // LLM configuration validation
+    if (config.llm) {
+      if (typeof config.llm !== 'object') {
+        errors.push('llm must be an object');
+      } else {
+        const validProviders = ['openai', 'anthropic', 'ollama', 'none'];
+        if (!config.llm.provider) {
+          warnings.push('llm.provider is not set, agent will use fallback responses');
+        } else if (!validProviders.includes(config.llm.provider)) {
+          errors.push(`llm.provider must be one of: ${validProviders.join(', ')}`);
+        }
+
+        if (config.llm.provider && config.llm.provider !== 'none') {
+          if (!config.llm.model && !process.env.LLM_MODEL) {
+            warnings.push(`llm.model is recommended for ${config.llm.provider} provider`);
+          }
+
+          // API key validation based on provider
+          if (config.llm.provider === 'openai' && !config.llm.apiKey && !process.env.OPENAI_API_KEY) {
+            warnings.push('OpenAI API key not found. Set llm.apiKey or OPENAI_API_KEY environment variable');
+          }
+
+          if (config.llm.provider === 'anthropic' && !config.llm.apiKey && !process.env.ANTHROPIC_API_KEY) {
+            warnings.push('Anthropic API key not found. Set llm.apiKey or ANTHROPIC_API_KEY environment variable');
+          }
+
+          if (config.llm.provider === 'ollama' && !config.llm.baseURL && !process.env.OLLAMA_HOST) {
+            warnings.push('Ollama host not configured. Using default http://localhost:11434');
+          }
+        }
+      }
+    } else {
+      warnings.push('llm configuration not found, agent will use fallback responses');
+    }
+
     return {
       valid: errors.length === 0,
       errors,

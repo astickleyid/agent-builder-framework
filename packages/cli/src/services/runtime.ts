@@ -1,5 +1,6 @@
 import { AgentConfig } from './registry';
 import inquirer from 'inquirer';
+import { createLLMProvider, LLMProvider } from './llm';
 
 export interface Message {
   role: 'user' | 'agent' | 'system';
@@ -14,12 +15,30 @@ export interface AgentContext {
 
 export class AgentRuntime {
   private context: AgentContext;
+  private llmProvider: LLMProvider | null = null;
 
   constructor(config: AgentConfig) {
     this.context = {
       config,
       conversationHistory: [],
     };
+
+    // Initialize LLM provider if configured
+    if (config.llm && config.llm.provider !== 'none') {
+      try {
+        this.llmProvider = createLLMProvider({
+          provider: config.llm.provider,
+          model: config.llm.model,
+          apiKey: config.llm.apiKey,
+          baseURL: config.llm.baseURL,
+          temperature: config.environment.temperature,
+          maxTokens: config.environment.maxTokens,
+          stream: config.llm.stream ?? false,
+        });
+      } catch (error) {
+        console.warn('Failed to initialize LLM provider:', error);
+      }
+    }
   }
 
   async processMessage(userInput: string): Promise<string> {
@@ -44,6 +63,21 @@ export class AgentRuntime {
   }
 
   private async generateResponse(input: string): Promise<string> {
+    // Use LLM provider if available
+    if (this.llmProvider) {
+      try {
+        const response = await this.llmProvider.generateResponse(
+          this.context.conversationHistory,
+          this.context.config.instructions
+        );
+        return response.content;
+      } catch (error: any) {
+        console.error('LLM provider error:', error.message);
+        return `Error: Failed to get response from LLM provider. ${error.message}`;
+      }
+    }
+
+    // Fallback to rule-based responses if no LLM provider configured
     const lowerInput = input.toLowerCase();
     
     // Basic rule-based responses for demonstration
@@ -68,7 +102,7 @@ export class AgentRuntime {
     }
     
     // Default response
-    return `I received your message: "${input}". ${this.context.config.instructions}\n\nNote: This is a demonstration runtime. For production use, integrate with actual LLM providers like OpenAI, Anthropic, or local models.`;
+    return `I received your message: "${input}". ${this.context.config.instructions}\n\nNote: This is a demonstration runtime. For production use, configure an LLM provider (OpenAI, Anthropic, or Ollama) in your agent configuration.`;
   }
 
   private getHelpResponse(): string {
@@ -102,6 +136,54 @@ Conversation History: ${this.context.conversationHistory.length} messages`;
 
   clearHistory(): void {
     this.context.conversationHistory = [];
+  }
+
+  async processMessageStream(
+    userInput: string,
+    onChunk: (content: string) => void
+  ): Promise<void> {
+    // Add user message to history
+    this.context.conversationHistory.push({
+      role: 'user',
+      content: userInput,
+      timestamp: new Date(),
+    });
+
+    // Use LLM provider streaming if available
+    if (this.llmProvider) {
+      try {
+        let fullResponse = '';
+        await this.llmProvider.streamResponse(
+          this.context.conversationHistory,
+          (chunk) => {
+            if (!chunk.done && chunk.content) {
+              fullResponse += chunk.content;
+              onChunk(chunk.content);
+            }
+          },
+          this.context.config.instructions
+        );
+
+        // Add complete response to history
+        this.context.conversationHistory.push({
+          role: 'agent',
+          content: fullResponse,
+          timestamp: new Date(),
+        });
+      } catch (error: any) {
+        const errorMsg = `Error: Failed to get streaming response from LLM provider. ${error.message}`;
+        onChunk(errorMsg);
+        this.context.conversationHistory.push({
+          role: 'agent',
+          content: errorMsg,
+          timestamp: new Date(),
+        });
+      }
+    } else {
+      // Fallback to non-streaming
+      const response = await this.generateResponse(userInput);
+      onChunk(response);
+    }
   }
 }
 

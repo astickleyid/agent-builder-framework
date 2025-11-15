@@ -47,6 +47,12 @@ export async function initCommand(name?: string, options?: any) {
         maxTokens: 4000,
         temperature: 0.7,
       },
+      llm: {
+        provider: 'none',
+        model: '',
+        apiKey: '',
+        stream: false,
+      },
     };
 
     await fs.writeJson(
@@ -70,6 +76,55 @@ stick run ${projectName}
 ## Configuration
 
 Edit \`config/agent.json\` to customize your agent's behavior.
+
+### LLM Provider Setup
+
+To use AI capabilities, configure an LLM provider in \`config/agent.json\`:
+
+#### OpenAI
+\`\`\`json
+{
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "apiKey": "your-api-key",
+    "stream": true
+  }
+}
+\`\`\`
+
+#### Anthropic
+\`\`\`json
+{
+  "llm": {
+    "provider": "anthropic",
+    "model": "claude-3-5-sonnet-20241022",
+    "apiKey": "your-api-key",
+    "stream": true
+  }
+}
+\`\`\`
+
+#### Ollama (Local Models)
+\`\`\`json
+{
+  "llm": {
+    "provider": "ollama",
+    "model": "llama3.2",
+    "baseURL": "http://localhost:11434",
+    "stream": true
+  }
+}
+\`\`\`
+
+**Note**: You can also set API keys via environment variables:
+- \`OPENAI_API_KEY\` for OpenAI
+- \`ANTHROPIC_API_KEY\` for Anthropic
+- \`OLLAMA_HOST\` for Ollama
+
+## Learn More
+
+Visit https://stick.ai/docs for full documentation.
 `;
 
     await fs.writeFile(path.join(projectPath, 'README.md'), readme);
@@ -87,6 +142,24 @@ dist/
     const envExample = `# Agent Configuration
 AGENT_NAME=${projectName}
 AGENT_PORT=3000
+
+# LLM Provider Configuration
+# Uncomment and configure one of the following providers:
+
+# OpenAI
+# OPENAI_API_KEY=your-api-key-here
+# LLM_PROVIDER=openai
+# LLM_MODEL=gpt-4o-mini
+
+# Anthropic
+# ANTHROPIC_API_KEY=your-api-key-here
+# LLM_PROVIDER=anthropic
+# LLM_MODEL=claude-3-5-sonnet-20241022
+
+# Ollama (Local)
+# OLLAMA_HOST=http://localhost:11434
+# LLM_PROVIDER=ollama
+# LLM_MODEL=llama3.2
 `;
 
     await fs.writeFile(path.join(projectPath, '.env.example'), envExample);

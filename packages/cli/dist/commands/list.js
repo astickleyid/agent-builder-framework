@@ -4,34 +4,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listCommand = listCommand;
-const fs_extra_1 = __importDefault(require("fs-extra"));
-const path_1 = __importDefault(require("path"));
 const chalk_1 = __importDefault(require("chalk"));
-const os_1 = __importDefault(require("os"));
+const registry_1 = require("../services/registry");
 async function listCommand() {
     try {
-        const configDir = path_1.default.join(os_1.default.homedir(), '.config', 'stick-ai', 'agents');
-        if (!(await fs_extra_1.default.pathExists(configDir))) {
+        const registry = new registry_1.AgentRegistryService();
+        const agents = await registry.getAllAgents();
+        if (agents.length === 0) {
             console.log(chalk_1.default.yellow('No agents configured yet.'));
             console.log(chalk_1.default.dim('Run "stick init" to create your first agent.'));
             return;
         }
-        const agents = await fs_extra_1.default.readdir(configDir);
-        if (agents.length === 0) {
-            console.log(chalk_1.default.yellow('No agents found.'));
-            return;
-        }
         console.log(chalk_1.default.bold('\nConfigured Agents:\n'));
         for (const agent of agents) {
-            const agentPath = path_1.default.join(configDir, agent, 'config', 'agent.json');
-            if (await fs_extra_1.default.pathExists(agentPath)) {
-                const config = await fs_extra_1.default.readJson(agentPath);
-                console.log(chalk_1.default.cyan('●') + ' ' + chalk_1.default.bold(config.name));
-                console.log(chalk_1.default.dim(`  ${config.description}`));
-                console.log(chalk_1.default.dim(`  Version: ${config.version}`));
-                console.log();
+            const statusIcon = agent.status === 'running' ? chalk_1.default.green('●') : chalk_1.default.gray('○');
+            const statusText = agent.status === 'running' ? chalk_1.default.green('running') : chalk_1.default.gray('stopped');
+            console.log(statusIcon + ' ' + chalk_1.default.bold(agent.name) + chalk_1.default.dim(` (${statusText})`));
+            console.log(chalk_1.default.dim(`  ${agent.description}`));
+            console.log(chalk_1.default.dim(`  Version: ${agent.version}`));
+            if (agent.status === 'running' && agent.port) {
+                console.log(chalk_1.default.dim(`  URL: http://localhost:${agent.port}`));
+                if (agent.pid) {
+                    console.log(chalk_1.default.dim(`  PID: ${agent.pid}`));
+                }
             }
+            if (agent.deployedAt) {
+                const deployedDate = new Date(agent.deployedAt);
+                console.log(chalk_1.default.dim(`  Deployed: ${deployedDate.toLocaleString()}`));
+            }
+            console.log();
         }
+        const runningCount = agents.filter(a => a.status === 'running').length;
+        console.log(chalk_1.default.dim(`Total: ${agents.length} agent(s), ${runningCount} running\n`));
     }
     catch (error) {
         console.error(chalk_1.default.red('✗ Failed to list agents'));

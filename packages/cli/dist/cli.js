@@ -6,6 +6,7 @@ const init_1 = require("./commands/init");
 const deploy_1 = require("./commands/deploy");
 const list_1 = require("./commands/list");
 const run_1 = require("./commands/run");
+const stop_1 = require("./commands/stop");
 const program = new commander_1.Command();
 program
     .name('stick')
@@ -31,5 +32,9 @@ program
     .description('Run a specific agent')
     .option('-i, --interactive', 'Run in interactive mode')
     .action(run_1.runCommand);
+program
+    .command('stop <agent>')
+    .description('Stop a running agent')
+    .action(stop_1.stopCommand);
 program.parse();
 //# sourceMappingURL=cli.js.map

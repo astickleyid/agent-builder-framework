@@ -20,7 +20,7 @@
 - **🏠 Local-First Architecture** - Zero cloud dependencies, complete data sovereignty
 - **⚡ Lightning Fast Setup** - Production-ready agents in under 60 seconds
 - **🎯 Multi-Agent Orchestration** - Coordinate complex agent workflows
-- **🔧 Extensible Tooling** - 40+ built-in tools, easy custom tool creation
+- **🔧 Extensible Tooling** - 14 built-in production tools, easy custom tool creation
 - **📊 Real-Time Monitoring** - Built-in observability and debugging
 - **🔒 Enterprise Security** - Sandboxed execution, rate limiting, audit logs
 - **🌐 Cloud Ready** - Deploy anywhere: local, AWS, GCP, Azure, Kubernetes
@@ -127,14 +127,16 @@ Define your agent's behavior with a simple JSON config:
 }
 ```
 
-## 🛠️ Built-In Tools
+## 🛠️ Built-In Tools (14 Production Tools)
 
-- **System**: `bash`, `python`, `node`, `file-ops`
-- **Web**: `http`, `browser`, `scraper`, `api`
+- **System**: `bash`, `python`, `file-ops`
+- **Web**: `http`, `web-scraper`
 - **Data**: `database`, `csv`, `json`, `xml`
-- **AI**: `openai`, `anthropic`, `huggingface`
-- **Communication**: `email`, `slack`, `discord`
-- **Development**: `git`, `github`, `docker`, `kubernetes`
+- **Communication**: `email`, `slack`
+- **Development**: `github`
+- **Utilities**: `datetime`, `text`
+
+[View all tools](./packages/runtime/README.md#built-in-tools)
 
 ## 🔐 Security
 

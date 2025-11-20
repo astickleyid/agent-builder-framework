@@ -43,22 +43,26 @@ export default function Navbar() {
             <a href="#features" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Features
             </a>
-            <a href="#docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
+            <a href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Docs
+            </a>
+            <a href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Examples
             </a>
             <a href="#pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Pricing
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer">
               <Github className="w-5 h-5 text-zinc-400 hover:text-white transition-colors" />
             </a>
-            <motion.button
+            <motion.a
+              href="/docs/getting-started"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all"
             >
               Get Started
-            </motion.button>
+            </motion.a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -83,15 +87,18 @@ export default function Navbar() {
                 <a href="#features" className="text-zinc-400 hover:text-white transition-colors">
                   Features
                 </a>
-                <a href="#docs" className="text-zinc-400 hover:text-white transition-colors">
+                <a href="/docs" className="text-zinc-400 hover:text-white transition-colors">
                   Docs
+                </a>
+                <a href="/examples" className="text-zinc-400 hover:text-white transition-colors">
+                  Examples
                 </a>
                 <a href="#pricing" className="text-zinc-400 hover:text-white transition-colors">
                   Pricing
                 </a>
-                <button className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all">
+                <a href="/docs/getting-started" className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all text-center">
                   Get Started
-                </button>
+                </a>
               </div>
             </motion.div>
           )}

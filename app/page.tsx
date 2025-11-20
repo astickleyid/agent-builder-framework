@@ -47,14 +47,14 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="group px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all flex items-center gap-2 shadow-lg shadow-accent-blue/20">
+            <a href="/docs/getting-started" className="group px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all flex items-center gap-2 shadow-lg shadow-accent-blue/20">
               Start Building
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="px-8 py-4 glass-morphic hover:bg-surface text-white rounded-md font-semibold transition-all flex items-center gap-2">
+            </a>
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="px-8 py-4 glass-morphic hover:bg-surface text-white rounded-md font-semibold transition-all flex items-center gap-2">
               <Github className="w-5 h-5" />
               View on GitHub
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -261,15 +261,15 @@ export default function Home() {
                   <span className="text-zinc-300">Community support</span>
                 </li>
               </ul>
-              <button className="w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all">
+              <a href="/docs/getting-started" className="block w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all text-center">
                 Start Building
-              </button>
+              </a>
             </div>
 
             {/* Pro Tier */}
             <div className="relative holographic-card p-8 rounded-lg border-2 border-accent-blue shadow-xl shadow-accent-blue/20">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-accent-blue text-white text-sm font-semibold rounded-full">
-                Most Popular
+                Coming Soon
               </div>
               <h3 className="text-2xl font-bold mb-2">Professional</h3>
               <div className="text-4xl font-bold mb-6">$49<span className="text-xl text-zinc-400 font-normal">/mo</span></div>
@@ -299,9 +299,9 @@ export default function Home() {
                   <span className="text-zinc-300">Priority support</span>
                 </li>
               </ul>
-              <button className="w-full px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all shadow-lg shadow-accent-blue/20">
-                Get Started
-              </button>
+              <a href="mailto:hello@stick.ai?subject=Professional Plan Interest" className="block w-full px-6 py-3 bg-accent-blue/50 cursor-not-allowed text-white rounded-md font-semibold text-center">
+                Notify Me
+              </a>
             </div>
 
             {/* Enterprise Tier */}
@@ -334,9 +334,9 @@ export default function Home() {
                   <span className="text-zinc-300">24/7 enterprise support</span>
                 </li>
               </ul>
-              <button className="w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all">
+              <a href="mailto:hello@stick.ai?subject=Enterprise Inquiry" className="block w-full px-6 py-3 glass-morphic hover:bg-surface border border-border text-white rounded-md font-semibold transition-all text-center">
                 Contact Sales
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -353,12 +353,12 @@ export default function Home() {
             Join thousands of developers building the next generation of AI-powered applications with stick.ai
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-10 py-5 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-bold transition-all text-lg shadow-lg shadow-accent-blue/20">
+            <a href="/docs/getting-started" className="px-10 py-5 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-bold transition-all text-lg shadow-lg shadow-accent-blue/20">
               Start Building Free
-            </button>
-            <button className="px-10 py-5 glass-morphic hover:bg-surface text-white rounded-md font-bold transition-all text-lg">
+            </a>
+            <a href="mailto:hello@stick.ai?subject=Schedule Demo" className="px-10 py-5 glass-morphic hover:bg-surface text-white rounded-md font-bold transition-all text-lg">
               Schedule Demo
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -381,25 +381,26 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-zinc-400">
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#docs" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Examples</a></li>
+                <li><a href="/docs" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="/examples" className="hover:text-white transition-colors">Examples</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
+              <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="/docs/getting-started" className="hover:text-white transition-colors">Getting Started</a></li>
+                <li><a href="/docs/reference/cli" className="hover:text-white transition-colors">CLI Reference</a></li>
+                <li><a href="/docs/guides/tools" className="hover:text-white transition-colors">Tools Guide</a></li>
+                <li><a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
+              <h4 className="font-semibold mb-4">Community</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                <li><a href="https://discord.gg/stickai" className="hover:text-white transition-colors">Discord</a></li>
+                <li><a href="https://npmjs.com/package/@stick-ai/cli" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">npm</a></li>
+                <li><a href="https://github.com/astickleyid/agent-builder-framework/issues" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Report Issue</a></li>
+                <li><a href="mailto:hello@stick.ai" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -408,10 +409,10 @@ export default function Home() {
               © 2024 stick.ai. All rights reserved.
             </div>
             <div className="flex gap-6">
-              <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+              <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
                 <Github className="w-5 h-5" />
               </a>
-              <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+              <a href="https://npmjs.com/package/@stick-ai/cli" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
                 <Terminal className="w-5 h-5" />
               </a>
             </div>

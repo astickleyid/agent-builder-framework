@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const commands = [
-  { cmd: '$ npm install -g stick-ai', delay: 0 },
+  { cmd: '$ npm install -g @stick-ai/cli', delay: 0 },
   { cmd: '✓ Installing dependencies...', delay: 1000 },
   { cmd: '✓ Setting up agent framework...', delay: 2000 },
-  { cmd: '$ stick init my-agent', delay: 3500 },
-  { cmd: '✓ Created agent configuration', delay: 4500 },
-  { cmd: '✓ Ready to build', delay: 5500 },
+  { cmd: '$ stick', delay: 3500 },
+  { cmd: '✓ Launching interactive mode...', delay: 4500 },
+  { cmd: '✓ Ready to build your AI agents', delay: 5500 },
 ];
 
 export default function TerminalAnimation() {

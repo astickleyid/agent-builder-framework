@@ -8,8 +8,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Phase](https://img.shields.io/badge/Phase-2%20Complete-success)](./PROJECT_STATUS.md)
+[![Build](https://img.shields.io/badge/Build-Passing-brightgreen)](./PROJECT_STATUS.md)
 
-[Website](https://stick.ai) • [Documentation](./docs) • [Examples](./examples) • [Discord](https://discord.gg/stickai)
+[Website](https://stick.ai) • [Documentation](./docs) • [Status](./PROJECT_STATUS.md) • [Roadmap](./PHASE3_PLAN.md) • [Discord](https://discord.gg/stickai)
 
 </div>
 
@@ -156,6 +158,28 @@ stick metrics
 # View logs
 stick logs --agent=my-agent --tail
 ```
+
+## 📊 Project Status
+
+**Current Phase**: Phase 2 Complete ✅  
+**Next Phase**: [Phase 3 - Advanced Features](./PHASE3_PLAN.md)
+
+📈 **[View Full Project Status](./PROJECT_STATUS.md)** - Detailed progress, metrics, and achievements  
+🗺️ **[View Phase 3 Roadmap](./PHASE3_PLAN.md)** - What's coming next
+
+### What's Working Now
+- ✅ Complete CLI with 6 commands
+- ✅ 17 production-ready tools
+- ✅ AI-powered intelligent agents
+- ✅ OpenAI, Anthropic, and Ollama support
+- ✅ Beautiful documentation and website
+
+### Coming in Phase 3
+- 🚀 Multi-agent orchestration
+- 🚀 Streaming responses
+- 🚀 Function calling
+- 🚀 Vector databases & memory
+- 🚀 Real-time monitoring dashboard
 
 ## 🤝 Contributing
 

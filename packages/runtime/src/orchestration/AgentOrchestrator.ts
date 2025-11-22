@@ -11,7 +11,7 @@ export interface WorkflowResult {
 export interface Message {
   from: string;
   to: string;
-  content: any;
+  content: string | Record<string, unknown> | unknown[];
   timestamp: number;
 }
 
@@ -52,7 +52,7 @@ export class AgentOrchestrator {
     this.sharedState.clear();
   }
 
-  sendMessage(from: string, to: string, content: any): void {
+  sendMessage(from: string, to: string, content: string | Record<string, unknown> | unknown[]): void {
     this.messageQueue.push({ from, to, content, timestamp: Date.now() });
   }
 
@@ -78,7 +78,14 @@ export class AgentOrchestrator {
 
         const result = await agent.run(currentInput);
         results.push(result);
-        currentInput = typeof result === 'string' ? result : JSON.stringify(result);
+        
+        // Safely serialize result for next agent, handling circular references
+        try {
+          currentInput = typeof result === 'string' ? result : JSON.stringify(result);
+        } catch (error) {
+          // Fallback for circular references or non-serializable objects
+          currentInput = String(result);
+        }
       }
 
       return { success: true, results, result: results[results.length - 1], duration: Date.now() - startTime };
@@ -153,7 +160,10 @@ export class AgentOrchestrator {
       );
 
       const workerPromises = workerNames.map(workerName => {
-        const worker = this.agents.get(workerName)!;
+        const worker = this.agents.get(workerName);
+        if (!worker) {
+          throw new Error(`Worker agent not found during execution: ${workerName}`);
+        }
         return worker.run(task);
       });
 

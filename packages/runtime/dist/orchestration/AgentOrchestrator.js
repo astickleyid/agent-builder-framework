@@ -51,7 +51,14 @@ class AgentOrchestrator {
                 }
                 const result = await agent.run(currentInput);
                 results.push(result);
-                currentInput = typeof result === 'string' ? result : JSON.stringify(result);
+                // Safely serialize result for next agent, handling circular references
+                try {
+                    currentInput = typeof result === 'string' ? result : JSON.stringify(result);
+                }
+                catch (error) {
+                    // Fallback for circular references or non-serializable objects
+                    currentInput = String(result);
+                }
             }
             return { success: true, results, result: results[results.length - 1], duration: Date.now() - startTime };
         }
@@ -110,6 +117,9 @@ class AgentOrchestrator {
             const supervisorDecision = await supervisor.run(`Task: ${task}\nWorkers available: ${workerNames.join(', ')}\nDecide how to distribute the work.`);
             const workerPromises = workerNames.map(workerName => {
                 const worker = this.agents.get(workerName);
+                if (!worker) {
+                    throw new Error(`Worker agent not found during execution: ${workerName}`);
+                }
                 return worker.run(task);
             });
             const workerResults = await Promise.all(workerPromises);

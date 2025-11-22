@@ -9,7 +9,7 @@ export interface WorkflowResult {
 export interface Message {
     from: string;
     to: string;
-    content: any;
+    content: string | Record<string, unknown> | unknown[];
     timestamp: number;
 }
 /**
@@ -27,7 +27,7 @@ export declare class AgentOrchestrator {
     setState(key: string, value: any): void;
     getState(key: string): any;
     clearState(): void;
-    sendMessage(from: string, to: string, content: any): void;
+    sendMessage(from: string, to: string, content: string | Record<string, unknown> | unknown[]): void;
     getMessages(agentName: string): Message[];
     clearMessages(): void;
     sequential(agentNames: string[], initialInput: string): Promise<WorkflowResult>;

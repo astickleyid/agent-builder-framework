@@ -43,6 +43,9 @@ class Agent {
     getHistory() {
         return this.conversationHistory;
     }
+    getName() {
+        return this.config.name;
+    }
     getConfig() {
         return this.config;
     }

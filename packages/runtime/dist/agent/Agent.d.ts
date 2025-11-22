@@ -42,6 +42,7 @@ export declare class Agent {
     private processInput;
     registerTool(name: string, tool: any): void;
     getHistory(): Message[];
+    getName(): string;
     getConfig(): AgentConfig;
 }
 //# sourceMappingURL=Agent.d.ts.map

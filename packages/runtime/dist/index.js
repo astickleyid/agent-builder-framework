@@ -36,13 +36,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERSION = exports.IntelligentAgent = exports.Agent = void 0;
+exports.VERSION = exports.AgentOrchestrator = exports.IntelligentAgent = exports.Agent = void 0;
 exports.createAgent = createAgent;
 exports.createIntelligentAgent = createIntelligentAgent;
 var Agent_1 = require("./agent/Agent");
 Object.defineProperty(exports, "Agent", { enumerable: true, get: function () { return Agent_1.Agent; } });
 var IntelligentAgent_1 = require("./agent/IntelligentAgent");
 Object.defineProperty(exports, "IntelligentAgent", { enumerable: true, get: function () { return IntelligentAgent_1.IntelligentAgent; } });
+var AgentOrchestrator_1 = require("./orchestration/AgentOrchestrator");
+Object.defineProperty(exports, "AgentOrchestrator", { enumerable: true, get: function () { return AgentOrchestrator_1.AgentOrchestrator; } });
 __exportStar(require("./tools"), exports);
 // Version info
 exports.VERSION = '1.1.0';

@@ -44,6 +44,7 @@ Object.defineProperty(exports, "Agent", { enumerable: true, get: function () { r
 var IntelligentAgent_1 = require("./agent/IntelligentAgent");
 Object.defineProperty(exports, "IntelligentAgent", { enumerable: true, get: function () { return IntelligentAgent_1.IntelligentAgent; } });
 __exportStar(require("./tools"), exports);
+__exportStar(require("./mcp"), exports);
 // Version info
 exports.VERSION = '1.1.0';
 // Easy agent creation

@@ -1,5 +1,6 @@
 import { Agent, AgentConfig, Message } from './Agent';
 import { createTool } from '../tools';
+import { MCPClient, MCPServerConfig, MCPToolWrapper } from '../mcp';
 
 export interface LLMConfig {
   provider: 'openai' | 'anthropic' | 'ollama';
@@ -13,11 +14,40 @@ export interface LLMConfig {
 export class IntelligentAgent extends Agent {
   private llmConfig: LLMConfig;
   private systemPrompt: string;
+  private mcpClient: MCPClient | null = null;
 
   constructor(config: AgentConfig, llmConfig: LLMConfig) {
     super(config);
     this.llmConfig = llmConfig;
     this.systemPrompt = this.buildSystemPrompt();
+    
+    // Initialize MCP client if servers are configured
+    if (config.mcp && config.mcp.servers && config.mcp.servers.length > 0) {
+      this.mcpClient = new MCPClient();
+      this.initializeMCP(config.mcp.servers).catch(err => {
+        console.error('[MCP] Initialization failed:', err.message);
+      });
+    }
+  }
+
+  private async initializeMCP(servers: MCPServerConfig[]): Promise<void> {
+    if (!this.mcpClient) return;
+
+    for (const server of servers) {
+      try {
+        await this.mcpClient.connect(server);
+        
+        // Register MCP tools as regular tools
+        const mcpTools = this.mcpClient.getTools();
+        for (const toolInfo of mcpTools) {
+          const wrapper = new MCPToolWrapper(this.mcpClient, toolInfo);
+          this.registerTool(toolInfo.name, wrapper);
+          console.log(`[Agent] Registered MCP tool: ${toolInfo.name}`);
+        }
+      } catch (error: any) {
+        console.error(`[MCP] Failed to connect to ${server.name}:`, error.message);
+      }
+    }
   }
 
   private buildSystemPrompt(): string {

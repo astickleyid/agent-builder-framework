@@ -1,6 +1,7 @@
 export { Agent, AgentConfig, Message } from './agent/Agent';
 export { IntelligentAgent, LLMConfig } from './agent/IntelligentAgent';
 export * from './tools';
+export * from './mcp';
 
 // Version info
 export const VERSION = '1.1.0';

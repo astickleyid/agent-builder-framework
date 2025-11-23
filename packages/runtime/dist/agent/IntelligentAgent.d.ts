@@ -10,7 +10,9 @@ export interface LLMConfig {
 export declare class IntelligentAgent extends Agent {
     private llmConfig;
     private systemPrompt;
+    private mcpClient;
     constructor(config: AgentConfig, llmConfig: LLMConfig);
+    private initializeMCP;
     private buildSystemPrompt;
     run(input: string): Promise<string>;
     private callLLM;

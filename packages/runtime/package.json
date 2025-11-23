@@ -18,6 +18,7 @@
   "author": "stick.ai",
   "license": "MIT",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "node-fetch": "^2.7.0",

@@ -3,13 +3,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntelligentAgent = void 0;
 const Agent_1 = require("./Agent");
 const tools_1 = require("../tools");
+const mcp_1 = require("../mcp");
 class IntelligentAgent extends Agent_1.Agent {
     llmConfig;
     systemPrompt;
+    mcpClient = null;
     constructor(config, llmConfig) {
         super(config);
         this.llmConfig = llmConfig;
         this.systemPrompt = this.buildSystemPrompt();
+        // Initialize MCP client if servers are configured
+        if (config.mcp && config.mcp.servers && config.mcp.servers.length > 0) {
+            this.mcpClient = new mcp_1.MCPClient();
+            this.initializeMCP(config.mcp.servers).catch(err => {
+                console.error('[MCP] Initialization failed:', err.message);
+            });
+        }
+    }
+    async initializeMCP(servers) {
+        if (!this.mcpClient)
+            return;
+        for (const server of servers) {
+            try {
+                await this.mcpClient.connect(server);
+                // Register MCP tools as regular tools
+                const mcpTools = this.mcpClient.getTools();
+                for (const toolInfo of mcpTools) {
+                    const wrapper = new mcp_1.MCPToolWrapper(this.mcpClient, toolInfo);
+                    this.registerTool(toolInfo.name, wrapper);
+                    console.log(`[Agent] Registered MCP tool: ${toolInfo.name}`);
+                }
+            }
+            catch (error) {
+                console.error(`[MCP] Failed to connect to ${server.name}:`, error.message);
+            }
+        }
     }
     buildSystemPrompt() {
         const toolsList = this.config.tools.join(', ');

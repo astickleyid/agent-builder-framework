@@ -1,3 +1,10 @@
+export interface MCPServerConfig {
+  name: string;
+  command: string;
+  args?: string[];
+  env?: Record<string, string>;
+}
+
 export interface AgentConfig {
   name: string;
   version: string;
@@ -25,6 +32,9 @@ export interface AgentConfig {
       requestsPerMinute?: number;
       requestsPerHour?: number;
     };
+  };
+  mcp?: {
+    servers: MCPServerConfig[];
   };
 }
 

@@ -47,7 +47,14 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a href="/docs/getting-started" className="group px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all flex items-center gap-2 shadow-lg shadow-accent-blue/20">
+            <a href="/playground" className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20">
+              🎨 Try Agent Builder
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a href="/dashboard" className="group px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-semibold transition-all flex items-center gap-2">
+              💬 Chat Dashboard
+            </a>
+            <a href="/docs" className="group px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all flex items-center gap-2 shadow-lg shadow-accent-blue/20">
               Start Building
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>

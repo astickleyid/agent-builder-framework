@@ -1,166 +1,146 @@
 'use client';
 
-import { Terminal, Book, Code, Cpu, Wrench, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
-export default function DocsHome() {
+const documentation = [
+  {
+    category: 'Getting Started',
+    icon: '🚀',
+    docs: [
+      { title: 'Quick Start', slug: 'quick-start', description: 'Get up and running in 5 minutes' },
+      { title: 'Installation', slug: 'installation', description: 'Install the framework and CLI' },
+      { title: 'Your First Agent', slug: 'first-agent', description: 'Build your first AI agent' },
+      { title: 'Configuration', slug: 'configuration', description: 'Configure agents and settings' }
+    ]
+  },
+  {
+    category: 'Core Concepts',
+    icon: '🧠',
+    docs: [
+      { title: 'Agents', slug: 'agents', description: 'Understanding AI agents' },
+      { title: 'Tools', slug: 'tools', description: '17 built-in tools explained' },
+      { title: 'LLM Providers', slug: 'llm-providers', description: 'OpenAI, Anthropic, Ollama' },
+      { title: 'Memory System', slug: 'memory', description: 'Persistent and vector memory' }
+    ]
+  },
+  {
+    category: 'Advanced',
+    icon: '⚡',
+    docs: [
+      { title: 'Multi-Agent Systems', slug: 'multi-agent', description: 'Orchestrate multiple agents' },
+      { title: 'MCP Integration', slug: 'mcp', description: 'Model Context Protocol servers' },
+      { title: 'Security', slug: 'security', description: 'Sandboxing and rate limiting' },
+      { title: 'Deployment', slug: 'deployment', description: 'Deploy to production' }
+    ]
+  },
+  {
+    category: 'API Reference',
+    icon: '📚',
+    docs: [
+      { title: 'REST API', slug: 'api-reference', description: 'Complete API documentation' },
+      { title: 'CLI Commands', slug: 'cli', description: 'Command line interface' },
+      { title: 'SDK Reference', slug: 'sdk', description: 'TypeScript/JavaScript SDK' },
+      { title: 'Configuration Schema', slug: 'schema', description: 'JSON configuration reference' }
+    ]
+  },
+  {
+    category: 'Guides',
+    icon: '📖',
+    docs: [
+      { title: 'Building a Chatbot', slug: 'guide-chatbot', description: 'Create a conversational agent' },
+      { title: 'Research Pipeline', slug: 'guide-research', description: 'Multi-agent research system' },
+      { title: 'Code Review Bot', slug: 'guide-code-review', description: 'Automated code reviewer' },
+      { title: 'Docker Deployment', slug: 'guide-docker', description: 'Deploy with Docker' }
+    ]
+  }
+];
+
+export default function Documentation() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       {/* Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Terminal className="w-6 h-6 text-accent-blue" />
-            <span className="text-xl font-bold">stick.ai</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-white font-semibold">
-              Docs
-            </Link>
-            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Examples
-            </Link>
-            <a 
-              href="https://github.com/astickleyid/agent-builder-framework" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-zinc-400 hover:text-white transition-colors"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </nav>
+      <div className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-8 py-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Documentation
+          </h1>
+          <p className="text-gray-600 mt-2 text-lg">
+            Everything you need to build amazing AI agents
+          </p>
 
-      <div className="pt-24 pb-20">
-        <div className="max-w-6xl mx-auto px-6">
-          {/* Hero */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
-              <Book className="w-4 h-4 text-accent-blue" />
-              Documentation
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="gradient-text">stick.ai</span> Documentation
-            </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Everything you need to build, deploy, and scale AI agents
-            </p>
-          </div>
-
-          {/* Quick Start */}
-          <div className="mb-16 p-8 glass-morphic rounded-lg border border-accent-blue/20">
-            <h2 className="text-2xl font-bold mb-4">Quick Start</h2>
-            <p className="text-zinc-400 mb-6">
-              Get up and running in less than 5 minutes
-            </p>
-            <pre className="bg-surface/50 border border-border rounded-md p-4 mb-6">
-              <code className="text-accent-cyan">$ npm install -g @stick-ai/cli{'\n'}$ stick</code>
-            </pre>
-            <Link 
-              href="/docs/getting-started"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all"
-            >
-              Get Started
-              <Sparkles className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Main Sections */}
-          <div className="grid md:grid-cols-2 gap-6 mb-16">
-            <Link href="/docs/getting-started" className="p-6 glass-morphic rounded-lg border border-border hover:border-accent-blue/50 transition-all group">
-              <Sparkles className="w-10 h-10 text-accent-blue mb-4" />
-              <h3 className="text-xl font-bold mb-2 group-hover:text-accent-blue transition-colors">
-                Getting Started
-              </h3>
-              <p className="text-zinc-400 text-sm mb-4">
-                Installation, first agent, and basic concepts
-              </p>
-              <ul className="space-y-2 text-sm text-zinc-500">
-                <li>• Installation</li>
-                <li>• Creating your first agent</li>
-                <li>• Configuration basics</li>
-              </ul>
-            </Link>
-
-            <Link href="/docs/reference/cli" className="p-6 glass-morphic rounded-lg border border-border hover:border-accent-cyan/50 transition-all group">
-              <Terminal className="w-10 h-10 text-accent-cyan mb-4" />
-              <h3 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">
-                CLI Reference
-              </h3>
-              <p className="text-zinc-400 text-sm mb-4">
-                Complete command-line interface documentation
-              </p>
-              <ul className="space-y-2 text-sm text-zinc-500">
-                <li>• All CLI commands</li>
-                <li>• Options and flags</li>
-                <li>• Interactive mode</li>
-              </ul>
-            </Link>
-
-            <Link href="/docs/guides/tools" className="p-6 glass-morphic rounded-lg border border-border hover:border-accent-blue/50 transition-all group">
-              <Wrench className="w-10 h-10 text-accent-blue mb-4" />
-              <h3 className="text-xl font-bold mb-2 group-hover:text-accent-blue transition-colors">
-                Tools Guide
-              </h3>
-              <p className="text-zinc-400 text-sm mb-4">
-                Learn about all 17 built-in tools
-              </p>
-              <ul className="space-y-2 text-sm text-zinc-500">
-                <li>• System tools (bash, python)</li>
-                <li>• Data tools (json, csv, database)</li>
-                <li>• AI providers</li>
-              </ul>
-            </Link>
-
-            <Link href="/docs/guides/mcp" className="p-6 glass-morphic rounded-lg border border-border hover:border-accent-cyan/50 transition-all group">
-              <Cpu className="w-10 h-10 text-accent-cyan mb-4" />
-              <h3 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">
-                MCP Integration
-              </h3>
-              <p className="text-zinc-400 text-sm mb-4">
-                Connect external tools and services
-              </p>
-              <ul className="space-y-2 text-sm text-zinc-500">
-                <li>• Model Context Protocol</li>
-                <li>• Adding MCP servers</li>
-                <li>• Common integrations</li>
-              </ul>
-            </Link>
-          </div>
-
-          {/* Additional Resources */}
-          <div className="grid md:grid-cols-3 gap-4">
-            <Link href="/examples" className="p-4 glass-morphic rounded-md border border-border hover:border-accent-blue/30 transition-all">
-              <Code className="w-6 h-6 text-accent-blue mb-2" />
-              <h4 className="font-semibold mb-1">Examples</h4>
-              <p className="text-sm text-zinc-400">Working agent examples</p>
-            </Link>
-
-            <a 
-              href="https://github.com/astickleyid/agent-builder-framework" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-4 glass-morphic rounded-md border border-border hover:border-accent-cyan/30 transition-all"
-            >
-              <Terminal className="w-6 h-6 text-accent-cyan mb-2" />
-              <h4 className="font-semibold mb-1">GitHub</h4>
-              <p className="text-sm text-zinc-400">View source code</p>
-            </a>
-
-            <a 
-              href="https://npmjs.com/package/@stick-ai/cli" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-4 glass-morphic rounded-md border border-border hover:border-accent-blue/30 transition-all"
-            >
-              <Book className="w-6 h-6 text-accent-blue mb-2" />
-              <h4 className="font-semibold mb-1">npm Package</h4>
-              <p className="text-sm text-zinc-400">CLI on npm</p>
-            </a>
+          {/* Search */}
+          <div className="mt-6">
+            <input
+              type="text"
+              placeholder="Search documentation..."
+              className="w-full max-w-2xl px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-lg"
+            />
           </div>
         </div>
       </div>
-    </main>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-8 py-12">
+        <div className="grid gap-8">
+          {documentation.map((section) => (
+            <div key={section.category} className="bg-white rounded-xl shadow-lg p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-4xl">{section.icon}</span>
+                <h2 className="text-2xl font-bold text-gray-800">{section.category}</h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {section.docs.map((doc) => (
+                  <Link
+                    key={doc.slug}
+                    href={`/docs/${doc.slug}`}
+                    className="group p-6 border-2 border-gray-100 rounded-xl hover:border-purple-500 hover:shadow-md transition-all"
+                  >
+                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
+                      {doc.title}
+                    </h3>
+                    <p className="text-gray-600 mt-2 text-sm">{doc.description}</p>
+                    <div className="flex items-center gap-2 mt-4 text-purple-600 text-sm font-medium">
+                      <span>Read more</span>
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Quick Links */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+            <div className="text-3xl mb-3">💬</div>
+            <h3 className="text-xl font-bold mb-2">Community</h3>
+            <p className="text-blue-100 mb-4">Join our Discord community</p>
+            <button className="px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50">
+              Join Discord
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+            <div className="text-3xl mb-3">💻</div>
+            <h3 className="text-xl font-bold mb-2">GitHub</h3>
+            <p className="text-purple-100 mb-4">View source code and contribute</p>
+            <button className="px-4 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-purple-50">
+              View on GitHub
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-6 text-white">
+            <div className="text-3xl mb-3">🎓</div>
+            <h3 className="text-xl font-bold mb-2">Examples</h3>
+            <p className="text-pink-100 mb-4">Explore example projects</p>
+            <button className="px-4 py-2 bg-white text-pink-600 rounded-lg font-medium hover:bg-pink-50">
+              Browse Examples
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

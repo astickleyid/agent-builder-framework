@@ -9,20 +9,24 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Website](https://stick.ai) • [Documentation](./docs) • [Examples](./examples) • [Discord](https://discord.gg/stickai)
+[Website](https://stick.ai) • [Documentation](./docs) • [Demo](./DEMO.md) • [Discord](https://discord.gg/stickai)
 
 </div>
 
 ---
 
+## ✨ NEW: Core Execution Engine is LIVE!
+
+The framework now has **real agent execution** with LLM integration and tool orchestration! [See the demo →](./DEMO.md)
+
 ## 🚀 Features
 
 - **🏠 Local-First Architecture** - Zero cloud dependencies, complete data sovereignty
 - **⚡ Lightning Fast Setup** - Production-ready agents in under 60 seconds
-- **🎯 Multi-Agent Orchestration** - Coordinate complex agent workflows
-- **🔧 Extensible Tooling** - 14 built-in production tools, easy custom tool creation
-- **📊 Real-Time Monitoring** - Built-in observability and debugging
-- **🔒 Enterprise Security** - Sandboxed execution, rate limiting, audit logs
+- **🤖 Real Agent Execution** - Actually works with GPT-4, Claude, and Ollama
+- **🔧 Extensible Tooling** - 17 built-in production tools, easy custom tool creation
+- **💬 Interactive REPL** - Chat with your agents in real-time
+- **🎯 Multi-Provider Support** - OpenAI, Anthropic, Ollama out of the box
 - **🌐 Cloud Ready** - Deploy anywhere: local, AWS, GCP, Azure, Kubernetes
 - **💎 Type-Safe** - Full TypeScript support with intelligent autocomplete
 
@@ -31,24 +35,50 @@
 ### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/stickai/framework.git
+cd framework
+
+# Build packages
+cd packages/runtime && npm install && npm run build
+cd ../cli && npm install && npm run build
+cd ../..
+
+# Or install from npm (when published)
 npm install -g @stick-ai/cli
 ```
 
 ### Create Your First Agent
 
 ```bash
-# Initialize a new agent
-stick init my-agent
+# Navigate to CLI directory
+cd packages/cli/test-agent
 
-# Deploy locally
-cd my-agent
-stick deploy
+# Create a simple agent config
+cat > my-agent.json << 'EOF'
+{
+  "name": "my-assistant",
+  "version": "1.0.0",
+  "description": "My first AI agent",
+  "capabilities": ["chat"],
+  "tools": ["datetime", "text", "http"],
+  "instructions": "You are a helpful assistant.",
+  "aiProvider": "ollama",
+  "llm": {
+    "provider": "ollama",
+    "model": "llama2"
+  },
+  "environment": {
+    "temperature": 0.7
+  }
+}
+EOF
 
-# Run your agent
-stick run my-agent --interactive
+# Run your agent!
+node ../dist/cli.js run my-agent --interactive
 ```
 
-**That's it!** Your agent is now running at `localhost:3000`
+**That's it!** Your agent is now running in interactive mode. Try asking it questions!
 
 ## 🎯 Use Cases
 
@@ -87,10 +117,47 @@ stick run my-agent --interactive
 └─────────────────────────────────────────────────────────┘
 ```
 
+## 🎮 Usage Examples
+
+### With OpenAI (GPT-4, GPT-3.5)
+```bash
+export OPENAI_API_KEY="sk-..."
+node dist/cli.js run my-agent --provider openai --model gpt-4 --interactive
+```
+
+### With Anthropic (Claude)
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+node dist/cli.js run my-agent --provider anthropic --model claude-3-sonnet-20240229 --interactive
+```
+
+### With Ollama (Local, Free)
+```bash
+# Start Ollama: ollama serve
+node dist/cli.js run my-agent --provider ollama --model llama2 --interactive
+```
+
+### Single Input Execution
+```bash
+node dist/cli.js run my-agent --input "What's the weather today?"
+```
+
+### Custom Configuration
+```bash
+node dist/cli.js run my-agent \
+  --provider openai \
+  --model gpt-4 \
+  --temperature 0.9 \
+  --max-tokens 2000 \
+  --interactive
+```
+
 ## 📚 Documentation
 
-- [Getting Started](./docs/getting-started.md)
-- [Configuration Guide](./docs/configuration.md)
+- [Live Demo Guide](./DEMO.md) - Complete walkthrough
+- [Implementation Status](./IMPLEMENTATION_STATUS.md) - What's working
+- [Getting Started](./docs/getting-started.md) - Detailed setup
+- [Configuration Guide](./docs/configuration.md) - Config options
 - [Privacy Policy](./docs/PRIVACY.md)
 - [Terms of Service](./docs/TERMS.md)
 

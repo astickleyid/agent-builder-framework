@@ -1,0 +1,120 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install root dependencies
+        run: npm ci
+      
+      - name: Install runtime dependencies
+        working-directory: packages/runtime
+        run: npm ci
+      
+      - name: Install CLI dependencies
+        working-directory: packages/cli
+        run: npm ci
+      
+      - name: Lint
+        working-directory: packages/runtime
+        run: npm run lint || echo "No lint script configured"
+      
+      - name: Build Runtime
+        working-directory: packages/runtime
+        run: npm run build
+      
+      - name: Build CLI
+        working-directory: packages/cli
+        run: npm run build
+      
+      - name: Run Tests
+        working-directory: packages/runtime
+        run: npm test
+      
+      - name: Generate Coverage Report
+        working-directory: packages/runtime
+        run: npm run test:coverage
+      
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: packages/runtime/coverage/lcov.info
+          flags: runtime
+          name: runtime-coverage
+          fail_ci_if_error: false
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      
+      - name: Install dependencies
+        working-directory: packages/runtime
+        run: npm ci
+      
+      - name: Run security audit
+        working-directory: packages/runtime
+        run: npm audit --audit-level=moderate || true
+      
+      - name: Check for vulnerabilities
+        working-directory: packages/runtime
+        run: npm audit --audit-level=high
+
+  type-check:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install runtime dependencies
+        working-directory: packages/runtime
+        run: npm ci
+      
+      - name: Type check runtime
+        working-directory: packages/runtime
+        run: npx tsc --noEmit
+      
+      - name: Install CLI dependencies
+        working-directory: packages/cli
+        run: npm ci
+      
+      - name: Type check CLI
+        working-directory: packages/cli
+        run: npx tsc --noEmit

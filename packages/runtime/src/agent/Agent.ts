@@ -99,6 +99,10 @@ export class Agent {
     return this.conversationHistory;
   }
 
+  public getName(): string {
+    return this.config.name;
+  }
+
   public getConfig(): AgentConfig {
     return this.config;
   }

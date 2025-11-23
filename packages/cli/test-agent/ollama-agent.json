@@ -1,0 +1,30 @@
+{
+  "name": "ollama-assistant",
+  "version": "1.0.0",
+  "description": "Local AI assistant powered by Ollama",
+  "capabilities": ["chat", "reasoning", "tool-use"],
+  "tools": ["bash", "http", "datetime", "text", "file-ops", "json"],
+  "instructions": "You are a helpful AI assistant running locally via Ollama. You can help with various tasks, use tools when needed, and provide accurate information. Be concise and helpful.",
+  "aiProvider": "ollama",
+  "llm": {
+    "provider": "ollama",
+    "model": "mistral:7b",
+    "host": "http://localhost:11434"
+  },
+  "environment": {
+    "maxTokens": 2000,
+    "temperature": 0.7,
+    "topP": 0.9
+  },
+  "memory": {
+    "enabled": true,
+    "maxHistory": 50,
+    "contextWindow": 4096
+  },
+  "security": {
+    "sandboxed": false,
+    "rateLimiting": {
+      "requestsPerMinute": 60
+    }
+  }
+}

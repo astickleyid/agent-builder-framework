@@ -1,5 +1,6 @@
 export { Agent, AgentConfig, Message } from './agent/Agent';
 export { IntelligentAgent, LLMConfig } from './agent/IntelligentAgent';
+export { AgentOrchestrator, WorkflowResult } from './orchestration/AgentOrchestrator';
 export * from './tools';
 
 // Version info

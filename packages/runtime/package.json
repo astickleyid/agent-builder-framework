@@ -23,12 +23,19 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.22.0",
     "axios": "^1.6.2",
-    "dotenv": "^16.3.1",
+    "chromadb": "^3.1.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
     "node-fetch": "^2.7.0",
+    "uuid": "^13.0.0",
     "ws": "^8.14.2"
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.25",
     "@types/ws": "^8.5.9",

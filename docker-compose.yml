@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Agent server
+  agent-server:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - ./agent-configs:/app/configs
+      - ./logs:/app/logs
+      - ./.stick-memory:/app/.stick-memory
+    restart: unless-stopped
+    networks:
+      - stick-network
+
+  # ChromaDB for vector memory
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma-data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+    restart: unless-stopped
+    networks:
+      - stick-network
+
+  # Ollama for local LLM
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - stick-network
+
+volumes:
+  chroma-data:
+  ollama-data:
+
+networks:
+  stick-network:
+    driver: bridge

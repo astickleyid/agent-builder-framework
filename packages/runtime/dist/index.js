@@ -47,6 +47,9 @@ var AgentOrchestrator_1 = require("./orchestration/AgentOrchestrator");
 Object.defineProperty(exports, "AgentOrchestrator", { enumerable: true, get: function () { return AgentOrchestrator_1.AgentOrchestrator; } });
 __exportStar(require("./tools"), exports);
 __exportStar(require("./mcp"), exports);
+__exportStar(require("./memory"), exports);
+__exportStar(require("./deployment"), exports);
+__exportStar(require("./security"), exports);
 // Version info
 exports.VERSION = '1.1.0';
 // Easy agent creation

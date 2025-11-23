@@ -3,6 +3,9 @@ export { IntelligentAgent, LLMConfig } from './agent/IntelligentAgent';
 export { AgentOrchestrator, WorkflowResult } from './orchestration/AgentOrchestrator';
 export * from './tools';
 export * from './mcp';
+export * from './memory';
+export * from './deployment';
+export * from './security';
 
 // Version info
 export const VERSION = '1.1.0';

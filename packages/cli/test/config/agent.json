@@ -1,0 +1,47 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "test AI agent",
+  "template": "custom",
+  "capabilities": [
+    "chat",
+    "task-execution",
+    "tool-use"
+  ],
+  "tools": [
+    "bash",
+    "file-ops",
+    "http",
+    "json",
+    "text",
+    "python",
+    "web-scraper",
+    "csv",
+    "xml",
+    "database",
+    "email",
+    "github",
+    "datetime",
+    "ollama"
+  ],
+  "instructions": "You are test, an AI agent designed to help with tasks.",
+  "ai": {
+    "provider": "ollama",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.7,
+    "maxTokens": 4000
+  },
+  "mcp": {
+    "servers": [
+      {
+        "name": "Context7",
+        "type": "websocket",
+        "endpoint": "Context7"
+      }
+    ]
+  },
+  "environment": {
+    "nodeEnv": "development",
+    "port": 3000
+  }
+}

@@ -47,6 +47,13 @@ if (process.argv.length === 2) {
     .command('run <agent>')
     .description('Run a specific agent')
     .option('-i, --interactive', 'Run in interactive mode')
+    .option('--input <text>', 'Single input to process')
+    .option('-p, --provider <provider>', 'AI provider (openai, anthropic, ollama)')
+    .option('-m, --model <model>', 'Model to use')
+    .option('-t, --temperature <temp>', 'Temperature (0-1)', parseFloat)
+    .option('--max-tokens <tokens>', 'Max tokens to generate', parseInt)
+    .option('--ollama-host <host>', 'Ollama host URL')
+    .option('-v, --verbose', 'Verbose output')
     .action(runCommand);
 
   program

@@ -1,0 +1,30 @@
+{
+  "name": "test-assistant",
+  "version": "1.0.0",
+  "description": "A helpful test assistant that can execute commands and answer questions",
+  "capabilities": ["chat", "execute-commands", "file-operations"],
+  "tools": ["bash", "http", "json", "file-ops", "datetime", "text"],
+  "instructions": "You are a helpful assistant. You can help users with various tasks including running commands, making HTTP requests, working with files, and answering questions. Be concise and helpful.",
+  "aiProvider": "ollama",
+  "llm": {
+    "provider": "ollama",
+    "model": "llama2",
+    "host": "http://localhost:11434"
+  },
+  "environment": {
+    "maxTokens": 2000,
+    "temperature": 0.7,
+    "topP": 1.0
+  },
+  "memory": {
+    "enabled": true,
+    "maxHistory": 50,
+    "contextWindow": 4096
+  },
+  "security": {
+    "sandboxed": false,
+    "rateLimiting": {
+      "requestsPerMinute": 60
+    }
+  }
+}

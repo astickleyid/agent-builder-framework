@@ -1,0 +1,13 @@
+{
+  "name": "basic-test",
+  "version": "1.0.0",
+  "description": "A basic test agent without LLM",
+  "capabilities": ["execute-commands"],
+  "tools": ["bash", "datetime", "text"],
+  "instructions": "Basic agent for testing tool execution",
+  "aiProvider": "none",
+  "environment": {
+    "maxTokens": 1000,
+    "temperature": 0.7
+  }
+}

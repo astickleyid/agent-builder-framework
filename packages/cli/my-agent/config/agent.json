@@ -1,0 +1,50 @@
+{
+  "name": "my-agent",
+  "version": "1.0.0",
+  "description": "my-agent AI agent",
+  "template": "developer",
+  "capabilities": [
+    "chat",
+    "task-execution",
+    "tool-use"
+  ],
+  "tools": [
+    "bash",
+    "python",
+    "file-ops",
+    "github",
+    "json",
+    "http",
+    "web-scraper",
+    "csv",
+    "xml",
+    "database",
+    "email",
+    "slack",
+    "datetime",
+    "text",
+    "openai",
+    "anthropic",
+    "ollama"
+  ],
+  "instructions": "You are my-agent, a coding assistant. Help with code generation, debugging, and technical tasks.",
+  "ai": {
+    "provider": "ollama",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.7,
+    "maxTokens": 4000
+  },
+  "mcp": {
+    "servers": [
+      {
+        "name": "?",
+        "type": "http",
+        "endpoint": " ddfdsfdsaf"
+      }
+    ]
+  },
+  "environment": {
+    "nodeEnv": "development",
+    "port": 3000
+  }
+}

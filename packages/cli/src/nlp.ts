@@ -15,17 +15,33 @@ interface Intent {
 }
 
 const patterns = {
+  assistant: [
+    /assistant|ai|guide|help me|walk me through/i,
+    /build|create|make/i
+  ],
   create: [
     /create|make|new|init|initialize|start|build/i,
     /agent|bot|assistant/i
   ],
+  mcp: [
+    /mcp|server|tool|integration/i,
+    /create|build|make|install/i
+  ],
+  'multi-agent': [
+    /multi-agent|multi agent|multiple agents|agent system/i,
+    /create|build|make/i
+  ],
+  workflow: [
+    /workflow|pipeline|automation|process/i,
+    /create|build|make/i
+  ],
   list: [
     /list|show|display|view|get|see/i,
-    /agents|bots|assistants|all/i
+    /agents|bots|assistants|all|systems/i
   ],
   run: [
     /run|execute|start|launch|use/i,
-    /agent|bot|assistant/i
+    /agent|bot|assistant|system/i
   ],
   deploy: [
     /deploy|publish|release|ship/i,
@@ -55,11 +71,35 @@ const patterns = {
 };
 
 const examples: Record<string, string[]> = {
+  assistant: [
+    'help me build an agent',
+    'guide me through creating a chatbot',
+    'I want to make something',
+    'walk me through this'
+  ],
   create: [
     'create a new agent',
     'make a chatbot',
     'initialize an assistant',
     'build a new bot'
+  ],
+  mcp: [
+    'create an MCP server',
+    'build a custom tool',
+    'make an integration',
+    'install MCP server'
+  ],
+  'multi-agent': [
+    'create multi-agent system',
+    'build multiple agents',
+    'make an agent team',
+    'coordinate agents'
+  ],
+  workflow: [
+    'create a workflow',
+    'build automation pipeline',
+    'make a process',
+    'automate tasks'
   ],
   list: [
     'list all agents',

@@ -10,6 +10,9 @@ import { metricsCommand } from './commands/metrics';
 import { logsCommand } from './commands/logs';
 import { interactiveMode } from './interactive';
 import { parseIntent, suggestCommand, explainIntent, clarifyIntent, showExamples } from './nlp';
+import { startAssistant } from './ai-assistant';
+import { mcpCommand } from './commands/mcp';
+import { multiAgentCommand } from './commands/multi-agent';
 
 const program = new Command();
 
@@ -90,6 +93,38 @@ if (process.argv.length === 2) {
       showExamples();
     });
 
+  program
+    .command('assistant')
+    .alias('ai')
+    .description('Start AI assistant - guided agent building')
+    .action(async () => {
+      await startAssistant();
+    });
+
+  program
+    .command('mcp')
+    .description('MCP server management')
+    .argument('[action]', 'Action: create, install, list, test, publish')
+    .argument('[name]', 'Server name')
+    .action(mcpCommand);
+
+  program
+    .command('multi-agent')
+    .alias('multi')
+    .description('Multi-agent system builder')
+    .argument('[action]', 'Action: create, list, run, diagram')
+    .argument('[name]', 'System name')
+    .action(multiAgentCommand);
+
+  program
+    .command('workflow')
+    .description('Workflow pipeline builder')
+    .argument('[action]', 'Action: create, list, run')
+    .argument('[name]', 'Workflow name')
+    .action(async (action, name) => {
+      console.log(chalk.cyan('\n⚙️  Workflow builder coming soon!\n'));
+    });
+
   program.parse();
   }
 }
@@ -120,9 +155,21 @@ async function handleNaturalLanguage(input: string) {
   
   try {
     switch (action) {
+      case 'assistant':
+        await startAssistant();
+        break;
       case 'create':
       case 'init':
         await initCommand(entity, params);
+        break;
+      case 'mcp':
+        await mcpCommand(params?.action, entity, params);
+        break;
+      case 'multi-agent':
+        await multiAgentCommand(params?.action, entity);
+        break;
+      case 'workflow':
+        console.log(chalk.cyan('\n⚙️  Workflow builder coming soon!\n'));
         break;
       case 'list':
         await listCommand();

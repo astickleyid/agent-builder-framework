@@ -1,12 +1,19 @@
 import type { NextConfig } from "next";
 
+// Only use basePath for GitHub Pages, not Vercel
+const isGitHubPages = process.env.GITHUB_PAGES === 'true';
+
 const nextConfig: NextConfig = {
-  output: 'export',
+  // Only export for GitHub Pages
+  ...(isGitHubPages && { output: 'export' }),
+  
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/agent-builder-framework' : '',
-  // Disable API routes for static export
+  
+  // Only add basePath for GitHub Pages
+  basePath: isGitHubPages ? '/agent-builder-framework' : '',
+  
   trailingSlash: true,
 };
 

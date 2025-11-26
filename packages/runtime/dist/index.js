@@ -36,9 +36,10 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VERSION = exports.AgentOrchestrator = exports.IntelligentAgent = exports.Agent = void 0;
+exports.VERSION = exports.StickAgent = exports.AgentOrchestrator = exports.IntelligentAgent = exports.Agent = void 0;
 exports.createAgent = createAgent;
 exports.createIntelligentAgent = createIntelligentAgent;
+exports.createStickAgent = createStickAgent;
 var Agent_1 = require("./agent/Agent");
 Object.defineProperty(exports, "Agent", { enumerable: true, get: function () { return Agent_1.Agent; } });
 var IntelligentAgent_1 = require("./agent/IntelligentAgent");
@@ -50,6 +51,9 @@ __exportStar(require("./mcp"), exports);
 __exportStar(require("./memory"), exports);
 __exportStar(require("./deployment"), exports);
 __exportStar(require("./security"), exports);
+// Alias: Stick Agent = Intelligent Agent
+var IntelligentAgent_2 = require("./agent/IntelligentAgent");
+Object.defineProperty(exports, "StickAgent", { enumerable: true, get: function () { return IntelligentAgent_2.IntelligentAgent; } });
 // Version info
 exports.VERSION = '1.1.0';
 // Easy agent creation
@@ -57,9 +61,13 @@ async function createAgent(config) {
     const { Agent } = await Promise.resolve().then(() => __importStar(require('./agent/Agent')));
     return new Agent(config);
 }
-// Create intelligent agent with LLM
+// Create intelligent agent with LLM (Stick Agent)
 async function createIntelligentAgent(config, llmConfig) {
     const { IntelligentAgent } = await Promise.resolve().then(() => __importStar(require('./agent/IntelligentAgent')));
     return new IntelligentAgent(config, llmConfig);
+}
+// Alias for creating Stick Agent
+async function createStickAgent(config, llmConfig) {
+    return createIntelligentAgent(config, llmConfig);
 }
 //# sourceMappingURL=index.js.map

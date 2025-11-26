@@ -15,19 +15,21 @@
 
 ---
 
-## ✨ NEW: Core Execution Engine is LIVE!
+## ✨ NEW: Intelligent Natural Language CLI!
 
-The framework now has **real agent execution** with LLM integration and tool orchestration! [See the demo →](./DEMO.md)
+The Stick CLI now features **Stick Agent** - your AI guide that helps you build anything through natural conversation! No memorization, no confusion - just describe what you want. [See the CLI guide →](./CLI_GUIDE.md)
 
 ## 🚀 Features
 
+- **🤖 Natural Language Interface** - Just describe what you want: "create a chatbot", "deploy as API"
+- **🧠 AI-Powered Guidance** - Stick Agent walks you through building anything step-by-step
 - **🏠 Local-First Architecture** - Zero cloud dependencies, complete data sovereignty
 - **⚡ Lightning Fast Setup** - Production-ready agents in under 60 seconds
-- **🤖 Real Agent Execution** - Actually works with GPT-4, Claude, and Ollama
-- **🔧 Extensible Tooling** - 17 built-in production tools, easy custom tool creation
-- **💬 Interactive REPL** - Chat with your agents in real-time
-- **🎯 Multi-Provider Support** - OpenAI, Anthropic, Ollama out of the box
-- **🌐 Cloud Ready** - Deploy anywhere: local, AWS, GCP, Azure, Kubernetes
+- **🔧 Real Agent Execution** - Works with GPT-4, Claude, and Ollama out of the box
+- **🛠️ Extensible Tooling** - 17 built-in production tools, easy custom MCP server creation
+- **💬 Interactive Chat Mode** - Test your agents in real-time conversations
+- **🎯 Multi-Provider Support** - OpenAI, Anthropic, Ollama - switch anytime
+- **🌐 Real Deployment** - Actually deploys as HTTP API with REST endpoints
 - **💎 Type-Safe** - Full TypeScript support with intelligent autocomplete
 
 ## 📦 Quick Start
@@ -50,11 +52,39 @@ npm install -g @stick-ai/cli
 
 ### Create Your First Agent
 
+#### Method 1: Natural Language (Recommended)
+
+```bash
+# Just run stick and describe what you want!
+stick
+
+# Then type: "I want to build a chatbot"
+# Stick Agent will guide you through the entire process
+```
+
+#### Method 2: Direct Commands
+
+```bash
+# Create an agent
+stick create a chatbot
+
+# Or use traditional syntax
+stick init my-agent
+
+# Run with Ollama (local AI - no API keys needed!)
+stick run my-agent --provider ollama --model mistral:7b --interactive
+
+# Deploy as HTTP API
+stick deploy
+```
+
+#### Method 3: Manual Configuration
+
 ```bash
 # Navigate to CLI directory
 cd packages/cli/test-agent
 
-# Create a simple agent config
+# Create agent config
 cat > my-agent.json << 'EOF'
 {
   "name": "my-assistant",
@@ -63,10 +93,9 @@ cat > my-agent.json << 'EOF'
   "capabilities": ["chat"],
   "tools": ["datetime", "text", "http"],
   "instructions": "You are a helpful assistant.",
-  "aiProvider": "ollama",
   "llm": {
     "provider": "ollama",
-    "model": "llama2"
+    "model": "mistral:7b"
   },
   "environment": {
     "temperature": 0.7
@@ -74,11 +103,11 @@ cat > my-agent.json << 'EOF'
 }
 EOF
 
-# Run your agent!
-node ../dist/cli.js run my-agent --interactive
+# Run it!
+stick run my-agent --interactive
 ```
 
-**That's it!** Your agent is now running in interactive mode. Try asking it questions!
+**That's it!** Your agent is now running. Try asking it questions!
 
 ## 🎯 Use Cases
 

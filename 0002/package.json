@@ -1,0 +1,16 @@
+{
+  "name": "0002",
+  "version": "1.0.0",
+  "description": "0002 AI agent",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@stick-ai/runtime": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

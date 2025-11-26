@@ -1,0 +1,16 @@
+{
+  "name": "my-agbrute4ent",
+  "version": "1.0.0",
+  "description": "my-agbrute4ent AI agent",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@stick-ai/runtime": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

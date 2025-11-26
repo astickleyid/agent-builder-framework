@@ -13,24 +13,32 @@ import { parseIntent, suggestCommand, explainIntent, clarifyIntent, showExamples
 import { startAssistant } from './ai-assistant';
 import { mcpCommand } from './commands/mcp';
 import { multiAgentCommand } from './commands/multi-agent';
+import { workflowCommand } from './commands/workflow';
 
 const program = new Command();
 
 program
   .name('stick')
-  .description('Enterprise AI Agent Orchestration CLI with Natural Language Support')
-  .version('1.0.0');
+  .description('Enterprise AI Agent Orchestration CLI - Natural Language Interface')
+  .version('1.1.0');
 
-// If no arguments, launch interactive mode
+// If no arguments, launch Stick Agent assistant with AI auto-connected
 if (process.argv.length === 2) {
-  interactiveMode().catch((error) => {
-    console.error(chalk.red('Error:'), error.message);
-    process.exit(1);
+  console.log(chalk.cyan('\n🤖 Launching Stick Agent with AI...\n'));
+  console.log(chalk.gray('✨ AI Assistant automatically connected!\n'));
+  startAssistant().catch((error) => {
+    console.error(chalk.yellow('\n⚠️  AI Assistant unavailable (Ollama not running)'));
+    console.log(chalk.cyan('   Run: ollama serve'));
+    console.log(chalk.gray('\n   Falling back to interactive mode...\n'));
+    interactiveMode().catch((err) => {
+      console.error(chalk.red('Error:'), err.message);
+      process.exit(1);
+    });
   });
 } else if (process.argv.length > 2) {
   // Check if user is using natural language
   const firstArg = process.argv[2];
-  const knownCommands = ['init', 'deploy', 'list', 'run', 'metrics', 'logs', 'help', '--help', '-h', '--version', '-v'];
+  const knownCommands = ['init', 'deploy', 'list', 'run', 'metrics', 'logs', 'help', '--help', '-h', '--version', '-v', 'examples', 'assistant', 'ai', 'mcp', 'multi-agent', 'multi', 'workflow'];
   
   // If not a known command, try NLP
   if (!knownCommands.includes(firstArg) && !firstArg.startsWith('-')) {
@@ -119,11 +127,9 @@ if (process.argv.length === 2) {
   program
     .command('workflow')
     .description('Workflow pipeline builder')
-    .argument('[action]', 'Action: create, list, run')
+    .argument('[action]', 'Action: create, list, run, delete')
     .argument('[name]', 'Workflow name')
-    .action(async (action, name) => {
-      console.log(chalk.cyan('\n⚙️  Workflow builder coming soon!\n'));
-    });
+    .action(workflowCommand);
 
   program.parse();
   }

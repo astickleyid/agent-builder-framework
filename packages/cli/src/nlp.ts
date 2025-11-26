@@ -75,61 +75,84 @@ const examples: Record<string, string[]> = {
     'help me build an agent',
     'guide me through creating a chatbot',
     'I want to make something',
-    'walk me through this'
+    'walk me through building an AI system',
+    'show me how to create agents',
+    'I need help getting started'
   ],
   create: [
     'create a new agent',
     'make a chatbot',
-    'initialize an assistant',
-    'build a new bot'
+    'initialize an assistant called mybot',
+    'build a new bot',
+    'new agent for customer support',
+    'create agent with web search'
   ],
   mcp: [
     'create an MCP server',
     'build a custom tool',
     'make an integration',
-    'install MCP server'
+    'install MCP server',
+    'create GitHub integration tool',
+    'build a database connector',
+    'make a custom API tool'
   ],
   'multi-agent': [
     'create multi-agent system',
-    'build multiple agents',
+    'build multiple agents that work together',
     'make an agent team',
-    'coordinate agents'
+    'coordinate agents',
+    'create agents that collaborate',
+    'build a swarm of agents'
   ],
   workflow: [
     'create a workflow',
     'build automation pipeline',
     'make a process',
-    'automate tasks'
+    'automate tasks',
+    'create automated workflow',
+    'build data processing pipeline'
   ],
   list: [
     'list all agents',
     'show my bots',
     'what agents do I have',
-    'see all assistants'
+    'see all assistants',
+    'show configured agents',
+    'display my projects'
   ],
   run: [
     'run my agent',
     'execute the chatbot',
     'start the assistant',
-    'use my-agent'
+    'use my-agent',
+    'run mybot with ollama',
+    'start agent in interactive mode',
+    'execute my-assistant'
   ],
   deploy: [
     'deploy my agent',
     'publish the bot',
     'ship to production',
-    'deploy as API'
+    'deploy as API',
+    'start agent as server',
+    'deploy to cloud',
+    'make my agent available as API'
   ],
   metrics: [
     'show metrics',
     'view performance',
     'get statistics',
-    'monitor agents'
+    'monitor agents',
+    'show agent stats',
+    'performance dashboard'
   ],
   logs: [
     'show logs',
     'view output',
     'see agent history',
-    'tail logs'
+    'tail logs',
+    'show recent activity',
+    'what did my agent do'
   ]
 };
 
@@ -366,17 +389,28 @@ export async function clarifyIntent(input: string, intent: Intent): Promise<Inte
  * Show example commands
  */
 export function showExamples() {
-  console.log(chalk.cyan.bold('\n💡 Natural Language Examples:\n'));
+  console.log(chalk.cyan.bold('\n╔═══════════════════════════════════════════════════════════════════╗'));
+  console.log(chalk.cyan.bold('║                                                                   ║'));
+  console.log(chalk.cyan.bold('║           💡 Stick CLI - Natural Language Examples 💡            ║'));
+  console.log(chalk.cyan.bold('║                                                                   ║'));
+  console.log(chalk.cyan.bold('╚═══════════════════════════════════════════════════════════════════╝\n'));
+  
+  console.log(chalk.white('The Stick CLI understands natural language! Just type what you want to do.\n'));
   
   for (const [action, exampleList] of Object.entries(examples)) {
-    console.log(chalk.yellow(`\n${action.toUpperCase()}:`));
-    exampleList.forEach(ex => {
+    console.log(chalk.yellow.bold(`\n${action.toUpperCase().replace('-', ' ')}:`));
+    exampleList.slice(0, 3).forEach(ex => {
       const intent = parseIntent(ex);
       const cmd = suggestCommand(intent);
-      console.log(chalk.gray(`  "${ex}"`));
-      console.log(chalk.green(`  → ${cmd}`));
+      console.log(chalk.gray(`  💬 "${ex}"`));
+      console.log(chalk.green(`     → ${cmd}`));
     });
   }
   
-  console.log(chalk.cyan('\n✨ Just type naturally and I\'ll understand!\n'));
+  console.log(chalk.cyan.bold('\n✨ Tips:\n'));
+  console.log(chalk.white('  • Just type what you want: ') + chalk.gray('stick create a chatbot'));
+  console.log(chalk.white('  • Use the guided assistant: ') + chalk.gray('stick assistant'));
+  console.log(chalk.white('  • Get help anytime: ') + chalk.gray('stick help'));
+  console.log(chalk.white('  • Traditional commands work too: ') + chalk.gray('stick init my-agent'));
+  console.log(chalk.cyan('\n✨ The CLI learns from your patterns and gets smarter over time!\n'));
 }

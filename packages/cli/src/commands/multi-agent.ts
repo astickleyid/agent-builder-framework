@@ -305,12 +305,19 @@ async function generateSystem(system: MultiAgentSystem) {
 
 async function generateAgent(systemDir: string, agent: AgentConfig, isCoordinator: boolean) {
   const agentCode = `
-import { StickAIAgent } from '@stickai/core';
+import { IntelligentAgent } from '@stick-ai/runtime';
 
-export const ${agent.name} = new StickAIAgent({
-  name: '${agent.name}',
-  description: '${agent.role}',
-  provider: {
+export const ${agent.name} = new IntelligentAgent(
+  {
+    name: '${agent.name}',
+    version: '1.0.0',
+    description: '${agent.role}',
+    capabilities: ['chat'],
+    tools: ['datetime', 'text'],
+    instructions: '${agent.role}'
+  },
+  {
+    provider: 'ollama',
     model: '${agent.model}',
     temperature: ${agent.temperature || 0.7}
   },

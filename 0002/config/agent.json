@@ -1,0 +1,37 @@
+{
+  "name": "0002",
+  "version": "1.0.0",
+  "description": "0002 AI agent",
+  "template": "chatbot",
+  "capabilities": [
+    "chat",
+    "task-execution",
+    "tool-use"
+  ],
+  "tools": [
+    "http",
+    "json",
+    "text",
+    "datetime"
+  ],
+  "instructions": "You are 0002, a helpful AI chatbot. Answer questions clearly and helpfully.",
+  "ai": {
+    "provider": "ollama",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.7,
+    "maxTokens": 4000
+  },
+  "mcp": {
+    "servers": [
+      {
+        "name": "no",
+        "type": "stdio",
+        "endpoint": "no "
+      }
+    ]
+  },
+  "environment": {
+    "nodeEnv": "development",
+    "port": 3000
+  }
+}

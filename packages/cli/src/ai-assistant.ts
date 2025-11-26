@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk';
-import { StickAIAgent } from '@stickai/core';
-import { OllamaProvider } from '@stickai/core';
+import { IntelligentAgent } from '@stick-ai/runtime';
 import inquirer from 'inquirer';
 import ora from 'ora';
 
@@ -25,7 +24,7 @@ interface AssistantContext {
 }
 
 export class CLIAssistant {
-  private agent: StickAIAgent | null = null;
+  private agent: IntelligentAgent | null = null;
   private context: AssistantContext;
   private spinner = ora();
 
@@ -57,16 +56,24 @@ export class CLIAssistant {
         process.exit(1);
       }
 
-      // Create AI agent
-      this.agent = new StickAIAgent({
-        name: 'CLI-Assistant',
-        description: 'Intelligent assistant that helps build AI agents, MCP servers, and automation workflows',
-        provider: new OllamaProvider({
+      // Create AI agent - Stick Agent
+      this.agent = new IntelligentAgent(
+        {
+          name: 'stick-agent',
+          version: '1.0.0',
+          description: 'Stick Agent - Your intelligent CLI assistant that helps build AI agents, MCP servers, and automation workflows',
+          capabilities: ['chat'],
+          tools: ['datetime', 'text'],
+          instructions: this.getSystemPrompt(),
+          environment: {}
+        },
+        {
+          provider: 'ollama',
           model: 'mistral:latest',
-          baseURL: 'http://localhost:11434'
-        }),
-        systemPrompt: this.getSystemPrompt()
-      });
+          host: 'http://localhost:11434',
+          temperature: 0.7
+        }
+      );
 
       this.spinner.succeed('AI Assistant Ready!');
     } catch (error: any) {
@@ -92,33 +99,45 @@ export class CLIAssistant {
    * Get system prompt for the assistant
    */
   private getSystemPrompt(): string {
-    return `You are an expert AI assistant for the Stick.AI Agent Framework CLI.
+    return `You are Stick Agent - the expert AI assistant for the Stick.AI Agent Framework CLI.
 
-Your role is to help users build:
+Your role is to help users build ANYTHING within a local environment:
 - Custom AI agents (single or multi-agent systems)
-- MCP servers (custom tools and integrations)
+- MCP servers (custom tools and integrations for agents)
 - Workflow pipelines (automated processes)
-- AI automations (complex agent behaviors)
+- AI automations (complex agent behaviors and systems)
+- Complete AI automation systems with no confusion
 
-You MUST:
-1. Ask clarifying questions to understand what the user wants to build
-2. Break down complex tasks into clear, actionable steps
-3. Suggest the EXACT CLI commands to run
-4. Explain what each command does
-5. Guide users through the entire process without confusion
-6. Adapt to their skill level (beginner to advanced)
+You are essentially the guide that tells users HOW to do everything and executes the proper commands to deliver results.
+
+CRITICAL RULES:
+1. Ask clarifying questions to understand EXACTLY what the user wants to build
+2. Break down complex tasks into crystal-clear, step-by-step instructions
+3. Suggest the EXACT CLI commands to run - NO AMBIGUITY
+4. Execute commands when asked - you can run them directly
+5. Guide users through the ENTIRE process from start to finish
+6. Make it IMPOSSIBLE to be confused - explain everything
+7. Adapt to their skill level (complete beginner to expert)
+8. When building custom agents, ask about: purpose, tools needed, MCP servers, memory requirements
+9. For MCP servers, guide them through tool creation, testing, and integration
+10. For multi-agent systems, help design the architecture and coordination
 
 Available CLI commands:
 - stick init <name> [options]          - Create a new agent
-- stick run <agent> [options]          - Run an agent
-- stick deploy [options]               - Deploy agent as API
-- stick list                           - List all agents
-- stick metrics                        - View performance metrics
-- stick logs [options]                 - View agent logs
-- stick mcp create <name>              - Create custom MCP server
-- stick mcp install <server>           - Install MCP server
+- stick run <agent> [options]          - Run an agent (supports --provider ollama, --model, --interactive)
+- stick deploy [options]               - Deploy agent as API server
+- stick list                           - List all configured agents
+- stick metrics                        - View agent performance metrics
+- stick logs [options]                 - View agent execution logs
+- stick mcp create <name>              - Create custom MCP server (guided)
+- stick mcp install <server>           - Install existing MCP server
+- stick mcp list                       - List available/installed MCP servers
+- stick mcp test <server>              - Test MCP server
 - stick workflow create <name>         - Create workflow pipeline
 - stick multi-agent create <name>      - Create multi-agent system
+- stick multi-agent diagram <name>     - Visualize multi-agent architecture
+- stick assistant                      - Launch this guided assistant
+- stick examples                       - Show natural language examples
 
 When suggesting commands, format them as:
 \`\`\`bash
@@ -127,12 +146,13 @@ stick <command>
 
 Always explain:
 - WHAT the command does
-- WHY it's needed
+- WHY it's needed for their goal
 - WHAT to expect as output
-- NEXT steps
+- NEXT steps in the process
+- Any configuration or files that will be created
 
-Be conversational, helpful, and break complex tasks into simple steps.
-If the user's goal is unclear, ask questions before suggesting commands.`;
+Be conversational, patient, and thorough. Your goal is to make building powerful AI systems accessible to EVERYONE.
+If the user's goal is unclear, ask detailed questions before suggesting anything.`;
   }
 
   /**
@@ -141,16 +161,20 @@ If the user's goal is unclear, ask questions before suggesting commands.`;
   async start() {
     console.log(chalk.cyan.bold('\n╔══════════════════════════════════════════════════════════════════╗'));
     console.log(chalk.cyan.bold('║                                                                  ║'));
-    console.log(chalk.cyan.bold('║              🤖 Stick.AI Conversational Assistant 🤖             ║'));
+    console.log(chalk.cyan.bold('║                  🤖 Stick Agent Assistant 🤖                     ║'));
     console.log(chalk.cyan.bold('║                                                                  ║'));
     console.log(chalk.cyan.bold('╚══════════════════════════════════════════════════════════════════╝\n'));
 
-    console.log(chalk.white('I\'m your AI assistant! Tell me what you want to build and I\'ll guide you through it.\n'));
+    console.log(chalk.white('I\'m Stick Agent - your AI guide! Tell me what you want to build and I\'ll walk you through every step.\n'));
+    console.log(chalk.cyan.bold('What can I help you build?\n'));
     console.log(chalk.gray('Examples:'));
     console.log(chalk.gray('  • "I want to build a chatbot that can search the web"'));
     console.log(chalk.gray('  • "Create a multi-agent system for data analysis"'));
-    console.log(chalk.gray('  • "Build an MCP server for GitHub integration"'));
-    console.log(chalk.gray('  • "Set up an automation workflow for email processing"\n'));
+    console.log(chalk.gray('  • "Build a custom MCP server for GitHub integration"'));
+    console.log(chalk.gray('  • "Set up an automation workflow for email processing"'));
+    console.log(chalk.gray('  • "Build an AI agent that monitors system logs"'));
+    console.log(chalk.gray('  • "Create a custom tool for my agents"\n'));
+    console.log(chalk.yellow('💡 I can execute commands for you and guide you through the entire process!\n'));
 
     // Get user's goal
     const { goal } = await inquirer.prompt([

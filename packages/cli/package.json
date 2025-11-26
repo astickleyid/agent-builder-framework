@@ -21,6 +21,7 @@
   "author": "stick.ai",
   "license": "MIT",
   "dependencies": {
+    "@stick-ai/runtime": "file:../runtime",
     "boxen": "^5.1.2",
     "chalk": "^4.1.2",
     "cli-table3": "^0.6.5",

@@ -13,6 +13,10 @@ export declare class CLIAssistant {
      */
     private checkOllama;
     /**
+     * Get first available Ollama model
+     */
+    private getAvailableModel;
+    /**
      * Get system prompt for the assistant
      */
     private getSystemPrompt;

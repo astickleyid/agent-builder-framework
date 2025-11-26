@@ -14,6 +14,7 @@ import { startAssistant } from './ai-assistant';
 import { mcpCommand } from './commands/mcp';
 import { multiAgentCommand } from './commands/multi-agent';
 import { workflowCommand } from './commands/workflow';
+import { guideCommand } from './commands/guide';
 
 const program = new Command();
 
@@ -93,6 +94,70 @@ if (process.argv.length === 2) {
     .option('-n, --lines <number>', 'Number of lines to show', '50')
     .option('-f, --follow', 'Follow log output')
     .action(logsCommand);
+
+  // Override help to show detailed info
+  program.addHelpText('after', `
+
+${chalk.bold.cyan('DETAILED COMMAND REFERENCE:')}
+
+${chalk.yellow('Basic Agent Commands:')}
+  ${chalk.white('stick init <name> [options]')}           Create new agent project
+    ${chalk.gray('-t, --template <name>           Use specific template')}
+    
+  ${chalk.white('stick run <agent> [options]')}           Run an agent
+    ${chalk.gray('-i, --interactive              Interactive chat mode')}
+    ${chalk.gray('--input <text>                 Single input to process')}
+    ${chalk.gray('-p, --provider <name>          AI provider (openai/anthropic/ollama)')}
+    ${chalk.gray('-m, --model <name>             Specific model to use')}
+    ${chalk.gray('-t, --temperature <0-1>        Temperature for responses')}
+    ${chalk.gray('--max-tokens <number>          Max tokens to generate')}
+    ${chalk.gray('--ollama-host <url>            Ollama server URL')}
+    ${chalk.gray('-v, --verbose                  Verbose output')}
+    
+  ${chalk.white('stick list')}                             List all agents
+  ${chalk.white('stick metrics')}                          View performance metrics
+  ${chalk.white('stick logs [options]')}                   View agent logs
+    ${chalk.gray('-a, --agent <name>             Specific agent')}
+    ${chalk.gray('-n, --lines <number>           Number of lines')}
+    ${chalk.gray('-f, --follow                   Follow log output')}
+
+${chalk.yellow('Deployment:')}
+  ${chalk.white('stick deploy [options]')}                 Deploy as HTTP API
+    ${chalk.gray('-p, --port <port>              Port number (default: 3000)')}
+    ${chalk.gray('-c, --cloud                    Deploy to cloud')}
+
+${chalk.yellow('Advanced Features:')}
+  ${chalk.white('stick mcp <action> [name]')}              MCP Server Management
+    ${chalk.gray('Actions: create, list, connect, disconnect, test')}
+    
+  ${chalk.white('stick multi-agent <action> [name]')}      Multi-Agent Systems
+    ${chalk.gray('Actions: create, add-agent, run, status')}
+    
+  ${chalk.white('stick workflow <action> [name]')}         Workflow Pipelines
+    ${chalk.gray('Actions: create, add-step, run, visualize')}
+
+${chalk.yellow('AI Assistant:')}
+  ${chalk.white('stick')}                                  Launch AI assistant (default)
+  ${chalk.white('stick ai')} or ${chalk.white('stick assistant')}           Start AI assistant
+  ${chalk.white('stick examples')}                         Show usage examples
+
+${chalk.cyan('Examples:')}
+  ${chalk.gray('stick init my-agent')}
+  ${chalk.gray('stick run my-agent --interactive')}
+  ${chalk.gray('stick run my-agent --provider ollama --model llama3.2:1b')}
+  ${chalk.gray('stick deploy --port 8080')}
+  ${chalk.gray('stick mcp create my-tool')}
+  ${chalk.gray('stick multi-agent create research-team')}
+
+${chalk.dim('For AI-guided setup, just run:')} ${chalk.bold.cyan('stick')}
+  `);
+
+  program
+    .command('guide')
+    .description('📖 Interactive guide - learn everything step-by-step')
+    .action(async () => {
+      await guideCommand();
+    });
 
   program
     .command('examples')

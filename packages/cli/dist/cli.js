@@ -18,6 +18,7 @@ const ai_assistant_1 = require("./ai-assistant");
 const mcp_1 = require("./commands/mcp");
 const multi_agent_1 = require("./commands/multi-agent");
 const workflow_1 = require("./commands/workflow");
+const guide_1 = require("./commands/guide");
 const program = new commander_1.Command();
 program
     .name('stick')
@@ -90,6 +91,68 @@ else if (process.argv.length > 2) {
             .option('-n, --lines <number>', 'Number of lines to show', '50')
             .option('-f, --follow', 'Follow log output')
             .action(logs_1.logsCommand);
+        // Override help to show detailed info
+        program.addHelpText('after', `
+
+${chalk_1.default.bold.cyan('DETAILED COMMAND REFERENCE:')}
+
+${chalk_1.default.yellow('Basic Agent Commands:')}
+  ${chalk_1.default.white('stick init <name> [options]')}           Create new agent project
+    ${chalk_1.default.gray('-t, --template <name>           Use specific template')}
+    
+  ${chalk_1.default.white('stick run <agent> [options]')}           Run an agent
+    ${chalk_1.default.gray('-i, --interactive              Interactive chat mode')}
+    ${chalk_1.default.gray('--input <text>                 Single input to process')}
+    ${chalk_1.default.gray('-p, --provider <name>          AI provider (openai/anthropic/ollama)')}
+    ${chalk_1.default.gray('-m, --model <name>             Specific model to use')}
+    ${chalk_1.default.gray('-t, --temperature <0-1>        Temperature for responses')}
+    ${chalk_1.default.gray('--max-tokens <number>          Max tokens to generate')}
+    ${chalk_1.default.gray('--ollama-host <url>            Ollama server URL')}
+    ${chalk_1.default.gray('-v, --verbose                  Verbose output')}
+    
+  ${chalk_1.default.white('stick list')}                             List all agents
+  ${chalk_1.default.white('stick metrics')}                          View performance metrics
+  ${chalk_1.default.white('stick logs [options]')}                   View agent logs
+    ${chalk_1.default.gray('-a, --agent <name>             Specific agent')}
+    ${chalk_1.default.gray('-n, --lines <number>           Number of lines')}
+    ${chalk_1.default.gray('-f, --follow                   Follow log output')}
+
+${chalk_1.default.yellow('Deployment:')}
+  ${chalk_1.default.white('stick deploy [options]')}                 Deploy as HTTP API
+    ${chalk_1.default.gray('-p, --port <port>              Port number (default: 3000)')}
+    ${chalk_1.default.gray('-c, --cloud                    Deploy to cloud')}
+
+${chalk_1.default.yellow('Advanced Features:')}
+  ${chalk_1.default.white('stick mcp <action> [name]')}              MCP Server Management
+    ${chalk_1.default.gray('Actions: create, list, connect, disconnect, test')}
+    
+  ${chalk_1.default.white('stick multi-agent <action> [name]')}      Multi-Agent Systems
+    ${chalk_1.default.gray('Actions: create, add-agent, run, status')}
+    
+  ${chalk_1.default.white('stick workflow <action> [name]')}         Workflow Pipelines
+    ${chalk_1.default.gray('Actions: create, add-step, run, visualize')}
+
+${chalk_1.default.yellow('AI Assistant:')}
+  ${chalk_1.default.white('stick')}                                  Launch AI assistant (default)
+  ${chalk_1.default.white('stick ai')} or ${chalk_1.default.white('stick assistant')}           Start AI assistant
+  ${chalk_1.default.white('stick examples')}                         Show usage examples
+
+${chalk_1.default.cyan('Examples:')}
+  ${chalk_1.default.gray('stick init my-agent')}
+  ${chalk_1.default.gray('stick run my-agent --interactive')}
+  ${chalk_1.default.gray('stick run my-agent --provider ollama --model llama3.2:1b')}
+  ${chalk_1.default.gray('stick deploy --port 8080')}
+  ${chalk_1.default.gray('stick mcp create my-tool')}
+  ${chalk_1.default.gray('stick multi-agent create research-team')}
+
+${chalk_1.default.dim('For AI-guided setup, just run:')} ${chalk_1.default.bold.cyan('stick')}
+  `);
+        program
+            .command('guide')
+            .description('📖 Interactive guide - learn everything step-by-step')
+            .action(async () => {
+            await (0, guide_1.guideCommand)();
+        });
         program
             .command('examples')
             .description('Show natural language examples')

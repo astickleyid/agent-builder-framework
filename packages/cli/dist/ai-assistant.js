@@ -39,6 +39,15 @@ class CLIAssistant {
                 process.exit(1);
             }
             // Create AI agent - Stick Agent
+            // Try to find an available model
+            const availableModel = await this.getAvailableModel();
+            if (!availableModel) {
+                this.spinner.fail('No Ollama models found');
+                console.log(chalk_1.default.yellow('\n⚠️  No models installed. Please pull a model:'));
+                console.log(chalk_1.default.cyan('  ollama pull llama3.2:1b   (fast, 1GB)'));
+                console.log(chalk_1.default.cyan('  ollama pull mistral:7b    (better, 4GB)'));
+                process.exit(1);
+            }
             this.agent = new runtime_1.IntelligentAgent({
                 name: 'stick-agent',
                 version: '1.0.0',
@@ -49,7 +58,7 @@ class CLIAssistant {
                 environment: {}
             }, {
                 provider: 'ollama',
-                model: 'mistral:latest',
+                model: availableModel,
                 host: 'http://localhost:11434',
                 temperature: 0.7
             });
@@ -71,6 +80,22 @@ class CLIAssistant {
         }
         catch {
             return false;
+        }
+    }
+    /**
+     * Get first available Ollama model
+     */
+    async getAvailableModel() {
+        try {
+            const response = await fetch('http://localhost:11434/api/tags');
+            const data = await response.json();
+            if (data.models && data.models.length > 0) {
+                return data.models[0].name;
+            }
+            return null;
+        }
+        catch {
+            return null;
         }
     }
     /**
@@ -100,12 +125,41 @@ CRITICAL RULES:
 9. For MCP servers, guide them through tool creation, testing, and integration
 10. For multi-agent systems, help design the architecture and coordination
 
-Available CLI commands:
-- stick init <name> [options]          - Create a new agent
-- stick run <agent> [options]          - Run an agent (supports --provider ollama, --model, --interactive)
-- stick deploy [options]               - Deploy agent as API server
-- stick list                           - List all configured agents
-- stick metrics                        - View agent performance metrics
+Available CLI commands (ALL OF THEM):
+
+BASIC COMMANDS:
+- stick init <name> [options]                    - Create a new agent project
+  Options: -t, --template <template>
+  
+- stick run <agent> [options]                    - Run a specific agent
+  Options: -i, --interactive, --input <text>, -p, --provider <provider>,
+           -m, --model <model>, -t, --temperature <temp>, --max-tokens <tokens>,
+           --ollama-host <host>, -v, --verbose
+           
+- stick list                                     - List all configured agents
+
+- stick deploy [options]                         - Deploy agent as HTTP API server
+  Options: -p, --port <port>, -c, --cloud
+  
+- stick metrics                                  - View agent performance metrics
+
+- stick logs [options]                           - View agent logs
+  Options: -a, --agent <agent>, -t, --tail, -n, --lines <number>, -f, --follow
+
+ADVANCED COMMANDS:
+- stick mcp [action] [name]                      - MCP server management
+  Actions: create, list, connect, disconnect, test
+  
+- stick multi-agent [action] [name]              - Multi-agent system builder
+  Actions: create, add-agent, run, status
+  
+- stick workflow [action] [name]                 - Workflow pipeline builder
+  Actions: create, add-step, run, visualize
+
+ASSISTANT:
+- stick assistant (or 'stick ai')                - Start AI assistant (this mode!)
+- stick examples                                 - Show natural language examples
+- stick                                          - Launch with AI auto-connected (default)
 - stick logs [options]                 - View agent execution logs
 - stick mcp create <name>              - Create custom MCP server (guided)
 - stick mcp install <server>           - Install existing MCP server

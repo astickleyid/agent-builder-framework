@@ -51,34 +51,34 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Basic Configuration */}
-      <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
+      <div className="holographic-card rounded-xl border border-border p-6 space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Basic Configuration</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Basic Configuration</h2>
         </div>
 
         {/* Agent Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
             Agent Name
           </label>
           <input
             type="text"
             value={config.name}
             onChange={(e) => updateConfig('name', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none"
             placeholder="my-awesome-agent"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
             Description
           </label>
           <textarea
             value={config.description}
             onChange={(e) => updateConfig('description', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none"
             rows={3}
             placeholder="Describe what your agent does..."
           />
@@ -86,13 +86,13 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
 
         {/* LLM Provider */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
             LLM Provider
           </label>
           <select
             value={config.provider}
             onChange={(e) => updateConfig('provider', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white focus:border-accent-blue focus:outline-none"
           >
             {PROVIDERS.map((provider) => (
               <option key={provider.id} value={provider.id}>
@@ -104,13 +104,13 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
 
         {/* Model */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
             Model
           </label>
           <select
             value={config.model}
             onChange={(e) => updateConfig('model', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white focus:border-accent-blue focus:outline-none"
           >
             {PROVIDERS.find(p => p.id === config.provider)?.models.map((model) => (
               <option key={model} value={model}>
@@ -122,13 +122,13 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
 
         {/* Instructions */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-zinc-400 mb-2">
             System Instructions
           </label>
           <textarea
             value={config.instructions}
             onChange={(e) => updateConfig('instructions', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none"
             rows={5}
             placeholder="You are a helpful AI assistant..."
           />
@@ -138,8 +138,8 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
       {/* Tools & Advanced */}
       <div className="space-y-6">
         {/* Native Tools */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Native Tools</h3>
+        <div className="holographic-card rounded-xl border border-border p-6">
+          <h3 className="text-xl font-bold text-white mb-4">Native Tools</h3>
           <div className="grid grid-cols-2 gap-3">
             {AVAILABLE_TOOLS.map((tool) => (
               <button
@@ -147,8 +147,8 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
                 onClick={() => toggleTool(tool)}
                 className={`px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                   config.tools.includes(tool)
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                    : 'bg-surface text-zinc-400 hover:bg-surface-hover hover:text-white border border-border'
                 }`}
               >
                 {tool}
@@ -158,24 +158,24 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
         </div>
 
         {/* MCP Servers */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">MCP Servers</h3>
+        <div className="holographic-card rounded-xl border border-border p-6">
+          <h3 className="text-xl font-bold text-white mb-4">MCP Servers</h3>
           <div className="space-y-3">
             {MCP_SERVERS.map((server) => (
               <div
                 key={server.id}
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors"
+                className="flex items-center justify-between p-3 border border-border rounded-lg hover:border-accent-blue/50 transition-colors"
               >
                 <div>
-                  <div className="font-medium text-gray-800">{server.name}</div>
-                  <div className="text-sm text-gray-500">{server.description}</div>
+                  <div className="font-medium text-white">{server.name}</div>
+                  <div className="text-sm text-zinc-500">{server.description}</div>
                 </div>
                 <button
                   onClick={() => addMCPServer(server.id)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     config.mcpServers?.find((s: any) => s.id === server.id)
-                      ? 'bg-green-600 text-white'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-accent-cyan text-white'
+                      : 'bg-accent-blue text-white hover:bg-accent-blue/90'
                   }`}
                 >
                   {config.mcpServers?.find((s: any) => s.id === server.id) ? '✓ Added' : '+ Add'}
@@ -186,20 +186,20 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
         </div>
 
         {/* Advanced Settings */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="holographic-card rounded-xl border border-border p-6">
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="flex items-center justify-between w-full text-xl font-bold text-gray-800 mb-4"
+            className="flex items-center justify-between w-full text-xl font-bold text-white mb-4"
           >
             <span>Advanced Settings</span>
-            <span>{showAdvanced ? '▼' : '▶'}</span>
+            <span className="text-accent-blue">{showAdvanced ? '▼' : '▶'}</span>
           </button>
 
           {showAdvanced && (
             <div className="space-y-4">
               {/* Temperature */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-zinc-400 mb-2">
                   Temperature: {config.temperature}
                 </label>
                 <input
@@ -209,9 +209,9 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
                   step="0.1"
                   value={config.temperature}
                   onChange={(e) => updateConfig('temperature', parseFloat(e.target.value))}
-                  className="w-full"
+                  className="w-full accent-accent-blue"
                 />
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <div className="flex justify-between text-xs text-zinc-500 mt-1">
                   <span>Focused</span>
                   <span>Balanced</span>
                   <span>Creative</span>
@@ -220,14 +220,14 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
 
               {/* Max Tokens */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-zinc-400 mb-2">
                   Max Tokens
                 </label>
                 <input
                   type="number"
                   value={config.maxTokens}
                   onChange={(e) => updateConfig('maxTokens', parseInt(e.target.value))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-3 bg-surface border border-border rounded-lg text-white focus:border-accent-blue focus:outline-none"
                   min="100"
                   max="8000"
                   step="100"
@@ -238,18 +238,18 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="holographic-card rounded-xl border border-border p-6">
           <div className="grid grid-cols-2 gap-4">
-            <button className="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
+            <button className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20">
               💾 Save Agent
             </button>
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            <button className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20">
               🚀 Deploy
             </button>
-            <button className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
+            <button className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all">
               📋 Export JSON
             </button>
-            <button className="px-6 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors">
+            <button className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all">
               🔄 Reset
             </button>
           </div>

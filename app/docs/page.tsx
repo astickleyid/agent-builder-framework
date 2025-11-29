@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Terminal, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 
 const documentation = [
   {
@@ -57,36 +58,66 @@ const documentation = [
 
 export default function Documentation() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      {/* Header */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Documentation
-          </h1>
-          <p className="text-gray-600 mt-2 text-lg">
-            Everything you need to build amazing AI agents
-          </p>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Fixed Header */}
+      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative">
+              <Terminal className="w-6 h-6 text-accent-blue" />
+              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+            </div>
+            <span className="text-xl font-bold">stick.ai</span>
+          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/docs" className="text-sm text-white font-semibold">
+              Docs
+            </Link>
+            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Examples
+            </Link>
+            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Playground
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <div className="pt-24 pb-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
+              <BookOpen className="w-4 h-4 text-accent-blue" />
+              Complete Documentation
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              <span className="gradient-text">Documentation</span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+              Everything you need to build amazing AI agents
+            </p>
+          </div>
 
           {/* Search */}
-          <div className="mt-6">
+          <div className="max-w-2xl mx-auto">
             <input
               type="text"
               placeholder="Search documentation..."
-              className="w-full max-w-2xl px-6 py-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-lg"
+              className="w-full px-6 py-4 bg-surface border border-border rounded-xl text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none text-lg transition-all"
             />
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
-        <div className="grid gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="space-y-8">
           {documentation.map((section) => (
-            <div key={section.category} className="bg-white rounded-xl shadow-lg p-8">
+            <div key={section.category} className="holographic-card rounded-xl border border-border p-8">
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-4xl">{section.icon}</span>
-                <h2 className="text-2xl font-bold text-gray-800">{section.category}</h2>
+                <span className="text-3xl">{section.icon}</span>
+                <h2 className="text-2xl font-bold text-white">{section.category}</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -94,15 +125,15 @@ export default function Documentation() {
                   <Link
                     key={doc.slug}
                     href={`/docs/${doc.slug}`}
-                    className="group p-6 border-2 border-gray-100 rounded-xl hover:border-purple-500 hover:shadow-md transition-all"
+                    className="group p-5 border border-border rounded-xl hover:border-accent-blue/50 hover:bg-surface/50 transition-all"
                   >
-                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
+                    <h3 className="text-lg font-bold text-white group-hover:text-accent-blue transition-colors">
                       {doc.title}
                     </h3>
-                    <p className="text-gray-600 mt-2 text-sm">{doc.description}</p>
-                    <div className="flex items-center gap-2 mt-4 text-purple-600 text-sm font-medium">
+                    <p className="text-zinc-400 mt-2 text-sm">{doc.description}</p>
+                    <div className="flex items-center gap-2 mt-3 text-accent-blue text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                       <span>Read more</span>
-                      <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </Link>
                 ))}
@@ -113,31 +144,37 @@ export default function Documentation() {
 
         {/* Quick Links */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-            <div className="text-3xl mb-3">💬</div>
-            <h3 className="text-xl font-bold mb-2">Community</h3>
-            <p className="text-blue-100 mb-4">Join our Discord community</p>
-            <button className="px-4 py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50">
+          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
+              <span className="text-2xl">💬</span>
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-white">Community</h3>
+            <p className="text-zinc-400 mb-4 text-sm">Join our Discord community</p>
+            <button className="px-4 py-2 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all text-sm">
               Join Discord
             </button>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-            <div className="text-3xl mb-3">💻</div>
-            <h3 className="text-xl font-bold mb-2">GitHub</h3>
-            <p className="text-purple-100 mb-4">View source code and contribute</p>
-            <button className="px-4 py-2 bg-white text-purple-600 rounded-lg font-medium hover:bg-purple-50">
+          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-cyan/50 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center mb-4">
+              <span className="text-2xl">💻</span>
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-white">GitHub</h3>
+            <p className="text-zinc-400 mb-4 text-sm">View source code and contribute</p>
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
               View on GitHub
-            </button>
+            </a>
           </div>
 
-          <div className="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-6 text-white">
-            <div className="text-3xl mb-3">🎓</div>
-            <h3 className="text-xl font-bold mb-2">Examples</h3>
-            <p className="text-pink-100 mb-4">Explore example projects</p>
-            <button className="px-4 py-2 bg-white text-pink-600 rounded-lg font-medium hover:bg-pink-50">
+          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
+              <span className="text-2xl">🎓</span>
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-white">Examples</h3>
+            <p className="text-zinc-400 mb-4 text-sm">Explore example projects</p>
+            <Link href="/examples" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
               Browse Examples
-            </button>
+            </Link>
           </div>
         </div>
       </div>

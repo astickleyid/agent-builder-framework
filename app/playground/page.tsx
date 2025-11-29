@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { Terminal, Sparkles } from 'lucide-react';
 import AgentBuilder from '@/components/builder/AgentBuilder';
 import AgentPreview from '@/components/builder/AgentPreview';
 import AgentTester from '@/components/builder/AgentTester';
@@ -21,57 +23,87 @@ export default function Playground() {
   const [activeTab, setActiveTab] = useState<'builder' | 'preview' | 'test'>('builder');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="max-w-7xl mx-auto px-8 py-6">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Agent Builder Playground
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Build, configure, and test AI agents visually
-          </p>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Fixed Header */}
+      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative">
+              <Terminal className="w-6 h-6 text-accent-blue" />
+              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+            </div>
+            <span className="text-xl font-bold">stick.ai</span>
+          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Docs
+            </Link>
+            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Examples
+            </Link>
+            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Dashboard
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <div className="pt-24 pb-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
+              <Sparkles className="w-4 h-4 text-accent-blue" />
+              Visual Agent Builder
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              Agent Builder <span className="gradient-text">Playground</span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+              Build, configure, and test AI agents visually with our intuitive interface
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-8 py-4">
-        <div className="bg-white rounded-lg shadow-sm p-2 flex gap-2">
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="glass-morphic rounded-xl p-2 flex gap-2">
           <button
             onClick={() => setActiveTab('builder')}
-            className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
               activeTab === 'builder'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            🛠️ Builder
+            <span className="text-lg">🛠️</span> Builder
           </button>
           <button
             onClick={() => setActiveTab('preview')}
-            className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
               activeTab === 'preview'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            👁️ Preview
+            <span className="text-lg">👁️</span> Preview
           </button>
           <button
             onClick={() => setActiveTab('test')}
-            className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
               activeTab === 'test'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            🧪 Test
+            <span className="text-lg">🧪</span> Test
           </button>
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="max-w-7xl mx-auto px-8 pb-8">
+      <div className="max-w-7xl mx-auto px-6 pb-12">
         {activeTab === 'builder' && (
           <AgentBuilder config={agentConfig} onChange={setAgentConfig} />
         )}

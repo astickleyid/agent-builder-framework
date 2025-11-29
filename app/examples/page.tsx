@@ -1,6 +1,6 @@
 'use client';
 
-import { Terminal, Bot, Search, Code, BarChart, MessageSquare, Copy, Check } from 'lucide-react';
+import { Terminal, Bot, Search, Code, BarChart, MessageSquare, Copy, Check, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -102,10 +102,14 @@ export default function Examples() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      {/* Fixed Header */}
       <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Terminal className="w-6 h-6 text-accent-blue" />
+            <div className="relative">
+              <Terminal className="w-6 h-6 text-accent-blue" />
+              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+            </div>
             <span className="text-xl font-bold">stick.ai</span>
           </Link>
           <div className="flex items-center gap-6">
@@ -115,18 +119,22 @@ export default function Examples() {
             <Link href="/examples" className="text-sm text-white font-semibold">
               Examples
             </Link>
+            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Playground
+            </Link>
           </div>
         </div>
       </nav>
 
-      <div className="pt-24 pb-20">
+      {/* Hero Section */}
+      <div className="pt-24 pb-8">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <Bot className="w-4 h-4 text-accent-blue" />
               Example Agents
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
               Agent <span className="gradient-text">Examples</span>
             </h1>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
@@ -134,21 +142,21 @@ export default function Examples() {
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {examples.map((ex, i) => {
               const Icon = ex.icon;
               return (
-                <div key={i} className="glass-morphic rounded-lg border border-border overflow-hidden">
+                <div key={i} className="holographic-card rounded-xl border border-border overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-lg bg-accent-blue/20 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center border border-accent-blue/30">
                         <Icon className="w-6 h-6 text-accent-blue" />
                       </div>
                       <div className="flex-1">
-                        <h2 className="text-2xl font-bold mb-2">{ex.name}</h2>
+                        <h2 className="text-2xl font-bold mb-1">{ex.name}</h2>
                         <p className="text-zinc-400">{ex.description}</p>
                       </div>
-                      <div className="px-3 py-1 rounded-full bg-surface/50 text-xs text-accent-cyan">
+                      <div className="px-3 py-1 rounded-full bg-accent-cyan/20 text-xs text-accent-cyan font-medium border border-accent-cyan/30">
                         {ex.template}
                       </div>
                     </div>
@@ -156,16 +164,16 @@ export default function Examples() {
                     <div className="relative group">
                       <button
                         onClick={() => copyCode(ex.code, i)}
-                        className="absolute right-4 top-4 p-2 rounded-md bg-surface/80 hover:bg-surface opacity-0 group-hover:opacity-100 transition-all z-10"
+                        className="absolute right-4 top-4 p-2 rounded-lg bg-surface/80 hover:bg-surface border border-border opacity-0 group-hover:opacity-100 transition-all z-10"
                       >
                         {copied === i ? (
-                          <Check className="w-4 h-4 text-green-500" />
+                          <Check className="w-4 h-4 text-accent-cyan" />
                         ) : (
                           <Copy className="w-4 h-4 text-zinc-400" />
                         )}
                       </button>
-                      <pre className="bg-surface/50 border border-border rounded-md p-4 overflow-x-auto text-sm">
-                        <code className="text-zinc-300">{ex.code}</code>
+                      <pre className="bg-black/40 border border-border rounded-xl p-5 overflow-x-auto text-sm">
+                        <code className="text-zinc-300 terminal-text">{ex.code}</code>
                       </pre>
                     </div>
 
@@ -174,7 +182,7 @@ export default function Examples() {
                         href={`https://github.com/astickleyid/agent-builder-framework/tree/main/examples/${ex.template}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-accent-blue hover:underline"
+                        className="text-sm text-accent-blue hover:text-accent-cyan transition-colors font-medium"
                       >
                         View Full Example →
                       </a>
@@ -185,26 +193,29 @@ export default function Examples() {
             })}
           </div>
 
-          <div className="mt-16 text-center p-8 glass-morphic rounded-lg border border-accent-blue/20">
-            <h3 className="text-2xl font-bold mb-4">Create Your Own Agent</h3>
+          <div className="mt-12 text-center p-8 holographic-card rounded-xl border border-border">
+            <div className="w-16 h-16 rounded-2xl bg-accent-blue/20 flex items-center justify-center mx-auto mb-4 border border-accent-blue/30">
+              <Sparkles className="w-8 h-8 text-accent-blue" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3">Create Your Own Agent</h3>
             <p className="text-zinc-400 mb-6">
               Start building with the interactive CLI
             </p>
-            <pre className="bg-surface/50 border border-border rounded-md p-4 mb-6 inline-block">
-              <code className="text-accent-cyan">$ npm install -g @stick-ai/cli{'\n'}$ stick</code>
+            <pre className="bg-black/40 border border-border rounded-xl p-4 mb-6 inline-block">
+              <code className="text-accent-cyan terminal-text">$ npm install -g @stick-ai/cli{'\n'}$ stick</code>
             </pre>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/docs/getting-started"
-                className="px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md font-semibold transition-all"
+                className="px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-xl font-semibold transition-all shadow-lg shadow-accent-blue/20"
               >
                 Get Started
               </Link>
               <Link
-                href="/docs"
-                className="px-6 py-3 glass-morphic hover:bg-surface text-white rounded-md font-semibold transition-all"
+                href="/playground"
+                className="px-6 py-3 glass-morphic hover:bg-surface text-white rounded-xl font-semibold transition-all"
               >
-                Read Docs
+                Try Playground
               </Link>
             </div>
           </div>

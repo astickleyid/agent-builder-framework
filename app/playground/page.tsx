@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { Terminal, ArrowLeft } from 'lucide-react';
 import AgentBuilder from '@/components/builder/AgentBuilder';
 import AgentPreview from '@/components/builder/AgentPreview';
 import AgentTester from '@/components/builder/AgentTester';
@@ -21,14 +23,21 @@ export default function Playground() {
   const [activeTab, setActiveTab] = useState<'builder' | 'preview' | 'test'>('builder');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <div className="bg-white border-b shadow-sm">
+      <div className="glass-morphic border-b border-border">
         <div className="max-w-7xl mx-auto px-8 py-6">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <div className="flex items-center gap-4 mb-4">
+            <Link href="/" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              <Terminal className="w-5 h-5 text-accent-blue" />
+              <span className="font-semibold">stick.ai</span>
+            </Link>
+          </div>
+          <h1 className="text-4xl font-bold gradient-text">
             Agent Builder Playground
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-zinc-400 mt-2">
             Build, configure, and test AI agents visually
           </p>
         </div>
@@ -36,13 +45,13 @@ export default function Playground() {
 
       {/* Navigation Tabs */}
       <div className="max-w-7xl mx-auto px-8 py-4">
-        <div className="bg-white rounded-lg shadow-sm p-2 flex gap-2">
+        <div className="glass-morphic rounded-lg p-2 flex gap-2">
           <button
             onClick={() => setActiveTab('builder')}
             className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
               activeTab === 'builder'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
             🛠️ Builder
@@ -51,8 +60,8 @@ export default function Playground() {
             onClick={() => setActiveTab('preview')}
             className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
               activeTab === 'preview'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
             👁️ Preview
@@ -61,8 +70,8 @@ export default function Playground() {
             onClick={() => setActiveTab('test')}
             className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
               activeTab === 'test'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
+                : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
             🧪 Test

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Terminal, ArrowLeft } from 'lucide-react';
+import { Terminal, MessageSquare, Sparkles } from 'lucide-react';
 
 export default function Dashboard() {
   const [agents, setAgents] = useState<any[]>([]);
@@ -109,27 +109,64 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
-          <Link href="/" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <Terminal className="w-5 h-5 text-accent-blue" />
-            <span className="font-semibold">stick.ai</span>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Fixed Header */}
+      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative">
+              <Terminal className="w-6 h-6 text-accent-blue" />
+              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+            </div>
+            <span className="text-xl font-bold">stick.ai</span>
           </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Docs
+            </Link>
+            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Examples
+            </Link>
+            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
+              Playground
+            </Link>
+          </div>
         </div>
-        <h1 className="text-4xl font-bold mb-8 gradient-text">stick.ai Dashboard</h1>
+      </nav>
 
+      {/* Hero Section */}
+      <div className="pt-24 pb-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
+              <MessageSquare className="w-4 h-4 text-accent-blue" />
+              Chat with Your Agents
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              Agent <span className="gradient-text">Dashboard</span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+              Chat with your AI agents and manage conversations
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Agent Selection */}
-            <div className="holographic-card rounded-lg border border-border p-6">
-              <h2 className="text-xl font-semibold mb-4 text-white">Select Agent</h2>
+            <div className="holographic-card rounded-xl border border-border p-6">
+              <h2 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-accent-blue" />
+                Select Agent
+              </h2>
               <select
                 value={selectedAgent}
                 onChange={(e) => setSelectedAgent(e.target.value)}
-                className="w-full p-3 bg-surface border border-border rounded-lg text-white focus:border-accent-blue focus:outline-none"
+                className="w-full p-3 bg-surface border border-border rounded-lg text-white focus:border-accent-blue focus:outline-none transition-all"
               >
                 {agents.map((agent) => (
                   <option key={agent.name} value={agent.name}>
@@ -139,100 +176,123 @@ export default function Dashboard() {
               </select>
 
               {selectedAgent && (
-                <div className="mt-4 text-sm text-zinc-400">
+                <div className="mt-4 text-sm text-zinc-400 p-3 bg-surface/50 rounded-lg border border-border">
                   {agents.find(a => a.name === selectedAgent)?.description}
                 </div>
               )}
             </div>
 
             {/* Conversations */}
-            <div className="holographic-card rounded-lg border border-border p-6">
-              <h2 className="text-xl font-semibold mb-4 text-white">Conversations</h2>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {conversations.map((conv) => (
-                  <div
-                    key={conv.id}
-                    className="p-3 border border-border rounded-lg hover:bg-surface cursor-pointer transition-colors"
-                  >
-                    <div className="font-medium text-white">{conv.agentName}</div>
-                    <div className="text-sm text-zinc-400">
-                      {conv.messageCount} messages
-                    </div>
-                    <div className="text-xs text-zinc-500">
-                      {new Date(conv.lastUpdate).toLocaleString()}
-                    </div>
+            <div className="holographic-card rounded-xl border border-border p-6">
+              <h2 className="text-xl font-bold mb-4 text-white">Conversations</h2>
+              <div className="space-y-2 max-h-80 overflow-y-auto">
+                {conversations.length === 0 ? (
+                  <div className="text-center py-8 text-zinc-500">
+                    <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No conversations yet</p>
                   </div>
-                ))}
+                ) : (
+                  conversations.map((conv) => (
+                    <div
+                      key={conv.id}
+                      className="p-3 border border-border rounded-lg hover:bg-surface hover:border-accent-blue/50 cursor-pointer transition-all"
+                    >
+                      <div className="font-medium text-white">{conv.agentName}</div>
+                      <div className="text-sm text-zinc-400">
+                        {conv.messageCount} messages
+                      </div>
+                      <div className="text-xs text-zinc-500 mt-1">
+                        {new Date(conv.lastUpdate).toLocaleString()}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
 
           {/* Chat Area */}
           <div className="lg:col-span-2">
-            <div className="holographic-card rounded-lg border border-border h-[600px] flex flex-col">
+            <div className="holographic-card rounded-xl border border-border h-[600px] flex flex-col overflow-hidden">
               {/* Chat Header */}
-              <div className="p-4 border-b border-border flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-white">
-                  Chat with {selectedAgent}
+              <div className="p-4 border-b border-border flex justify-between items-center bg-surface/30">
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <div className="w-2 h-2 bg-accent-cyan rounded-full animate-pulse" />
+                  Chat with {selectedAgent || 'Agent'}
                 </h2>
                 <button
                   onClick={saveConversation}
                   disabled={chatHistory.length === 0}
-                  className="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 disabled:opacity-50 transition-all"
+                  className="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-medium"
                 >
-                  Save
+                  💾 Save
                 </button>
               </div>
 
               {/* Chat Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {chatHistory.map((msg, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[70%] p-3 rounded-lg ${
-                        msg.role === 'user'
-                          ? 'bg-accent-blue text-white'
-                          : 'bg-surface border border-border text-white'
-                      }`}
-                    >
-                      <div className="text-sm font-medium mb-1 opacity-80">
-                        {msg.role === 'user' ? 'You' : selectedAgent}
-                      </div>
-                      <div>{msg.content}</div>
-                      <div className="text-xs opacity-70 mt-1">
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </div>
+                {chatHistory.length === 0 ? (
+                  <div className="flex items-center justify-center h-full text-zinc-500">
+                    <div className="text-center">
+                      <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                      <p>Start a conversation with your agent</p>
+                      <p className="text-sm mt-1 text-zinc-600">Type a message below to begin</p>
                     </div>
                   </div>
-                ))}
+                ) : (
+                  chatHistory.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[70%] p-4 rounded-xl ${
+                          msg.role === 'user'
+                            ? 'bg-accent-blue text-white'
+                            : 'bg-surface border border-border text-white'
+                        }`}
+                      >
+                        <div className="text-xs font-medium mb-2 opacity-70">
+                          {msg.role === 'user' ? 'You' : selectedAgent}
+                        </div>
+                        <div className="text-sm leading-relaxed">{msg.content}</div>
+                        <div className="text-xs opacity-50 mt-2">
+                          {new Date(msg.timestamp).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
                 {loading && (
                   <div className="flex justify-start">
-                    <div className="bg-surface border border-border p-3 rounded-lg">
-                      <div className="animate-pulse text-zinc-400">Thinking...</div>
+                    <div className="bg-surface border border-border p-4 rounded-xl">
+                      <div className="flex items-center gap-2 text-zinc-400">
+                        <div className="w-2 h-2 bg-accent-blue rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-accent-blue rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                        <div className="w-2 h-2 bg-accent-blue rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <span className="ml-2 text-sm">Thinking...</span>
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Chat Input */}
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2">
+              <div className="p-4 border-t border-border bg-surface/30">
+                <div className="flex gap-3">
                   <input
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder="Type your message..."
-                    className="flex-1 p-3 bg-surface border border-border rounded-lg text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none"
+                    className="flex-1 p-3 bg-surface border border-border rounded-xl text-white placeholder-zinc-500 focus:border-accent-blue focus:outline-none transition-all"
                     disabled={loading}
                   />
                   <button
                     onClick={sendMessage}
                     disabled={loading || !message.trim()}
-                    className="px-6 py-2 bg-accent-blue text-white rounded-lg hover:bg-accent-blue/90 disabled:opacity-50 transition-all"
+                    className="px-6 py-3 bg-accent-blue text-white rounded-xl hover:bg-accent-blue/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
                   >
                     Send
                   </button>

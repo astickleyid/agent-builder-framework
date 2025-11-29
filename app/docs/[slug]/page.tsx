@@ -12,6 +12,55 @@ const documentationContent: Record<string, {
   prev?: { slug: string; title: string };
   next?: { slug: string; title: string };
 }> = {
+  'getting-started': {
+    title: 'Getting Started',
+    description: 'Get up and running with stick.ai in 5 minutes',
+    prev: undefined,
+    next: { slug: 'installation', title: 'Installation' },
+    content: (
+      <>
+        <h2>Getting Started Guide</h2>
+        <p>Welcome to stick.ai! This guide will help you get up and running in just 5 minutes.</p>
+        
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>Node.js 18.0.0 or higher</li>
+          <li>npm or yarn package manager</li>
+          <li>Basic understanding of AI agents</li>
+        </ul>
+
+        <h3>Step 1: Install the CLI</h3>
+        <pre><code>{`npm install -g @stick-ai/cli`}</code></pre>
+
+        <h3>Step 2: Create Your First Agent</h3>
+        <pre><code>{`stick init my-first-agent`}</code></pre>
+
+        <h3>Step 3: Configure Your Agent</h3>
+        <p>Edit the generated <code>agent.json</code> file:</p>
+        <pre><code>{`{
+  "name": "my-first-agent",
+  "version": "1.0.0",
+  "description": "My first AI agent",
+  "capabilities": ["chat"],
+  "tools": ["datetime", "text"],
+  "instructions": "You are a helpful assistant."
+}`}</code></pre>
+
+        <h3>Step 4: Run Your Agent</h3>
+        <pre><code>{`stick run my-first-agent --interactive`}</code></pre>
+
+        <p>That's it! Your agent is now running and ready to chat.</p>
+
+        <h3>Next Steps</h3>
+        <ul>
+          <li><strong>Installation:</strong> See detailed installation options</li>
+          <li><strong>Your First Agent:</strong> Build a more complete agent</li>
+          <li><strong>Configuration:</strong> Learn all configuration options</li>
+          <li><strong>Tools:</strong> Explore the 17 built-in tools</li>
+        </ul>
+      </>
+    )
+  },
   'quick-start': {
     title: 'Quick Start',
     description: 'Get up and running with stick.ai in 5 minutes',

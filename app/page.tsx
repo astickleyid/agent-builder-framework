@@ -396,8 +396,8 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
                 <li><a href="/docs/getting-started" className="hover:text-white transition-colors">Getting Started</a></li>
-                <li><a href="/docs/reference/cli" className="hover:text-white transition-colors">CLI Reference</a></li>
-                <li><a href="/docs/guides/tools" className="hover:text-white transition-colors">Tools Guide</a></li>
+                <li><a href="/docs/cli" className="hover:text-white transition-colors">CLI Reference</a></li>
+                <li><a href="/docs/tools" className="hover:text-white transition-colors">Tools Guide</a></li>
                 <li><a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
               </ul>
             </div>

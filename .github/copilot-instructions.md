@@ -8,7 +8,7 @@ You are working on the **stick.ai Enterprise AI Agent Orchestration Framework** 
 
 ### Build Commands
 ```bash
-# Build the entire project
+# Build the website (Next.js)
 npm run build
 
 # Build CLI package specifically
@@ -16,9 +16,6 @@ cd packages/cli && npm run build
 
 # Build runtime package
 cd packages/runtime && npm run build
-
-# Build website
-npm run build
 ```
 
 ### Development Commands
@@ -54,7 +51,7 @@ npm run lint
 ## Project Structure
 
 ```
-agent-builder-framework/
+stick.ai-framework/ (repository root)
 ├── .github/              # GitHub workflows and configurations
 ├── app/                  # Next.js website pages (App Router)
 ├── components/           # React UI components

@@ -1,14 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AIAssistant from '@/components/AIAssistant';
 import TerminalAnimation from '@/components/TerminalAnimation';
 import HolographicNodes from '@/components/HolographicNodes';
 import FeatureCard from '@/components/FeatureCard';
-import AgentIcon from '@/components/icons/AgentIcon';
-import OrchestrationIcon from '@/components/icons/OrchestrationIcon';
-import WorkflowIcon from '@/components/icons/WorkflowIcon';
-import { Terminal, Cpu, Network, Database, ArrowRight, Github, Sparkles } from 'lucide-react';
+import { Terminal, ArrowRight, Github, Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -47,20 +45,20 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
-            <a 
+            <Link 
               href="/docs/getting-started" 
               className="group px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all flex items-center gap-3 shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105"
             >
               Start Building Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/playground" 
               className="group px-10 py-4 glass-morphic hover:bg-white/10 border border-white/20 text-white rounded-xl font-semibold transition-all flex items-center gap-3 hover:scale-105"
             >
               <Sparkles className="w-5 h-5" />
               Try Interactive Demo
-            </a>
+            </Link>
             <a 
               href="https://github.com/astickleyid/agent-builder-framework" 
               target="_blank" 
@@ -309,9 +307,9 @@ export default function Home() {
                   <span className="text-zinc-300">Complete documentation access</span>
                 </li>
               </ul>
-              <a href="/docs/getting-started" className="block w-full px-6 py-4 glass-morphic hover:bg-surface border border-border text-white rounded-xl font-semibold transition-all text-center hover:scale-105">
+              <Link href="/docs/getting-started" className="block w-full px-6 py-4 glass-morphic hover:bg-surface border border-border text-white rounded-xl font-semibold transition-all text-center hover:scale-105">
                 Start Building Free
-              </a>
+              </Link>
             </div>
 
             {/* Pro Tier */}
@@ -423,12 +421,12 @@ export default function Home() {
             Join innovative teams already leveraging stick.ai to build production-grade AI agents. Start free—no credit card required.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a 
+            <Link 
               href="/docs/getting-started" 
               className="px-12 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold transition-all text-lg shadow-2xl shadow-accent-blue/40 hover:scale-105 hover:shadow-accent-blue/60"
             >
               Start Building Free →
-            </a>
+            </Link>
             <a 
               href="mailto:hello@stick.ai?subject=Schedule Enterprise Demo" 
               className="px-12 py-5 glass-morphic hover:bg-surface border border-white/20 text-white rounded-xl font-bold transition-all text-lg hover:scale-105"
@@ -460,16 +458,16 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-zinc-400">
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="/docs" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="/examples" className="hover:text-white transition-colors">Examples</a></li>
+                <li><Link href="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
+                <li><Link href="/examples" className="hover:text-white transition-colors">Examples</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
-                <li><a href="/docs/getting-started" className="hover:text-white transition-colors">Getting Started</a></li>
-                <li><a href="/docs/cli" className="hover:text-white transition-colors">CLI Reference</a></li>
-                <li><a href="/docs/tools" className="hover:text-white transition-colors">Tools Guide</a></li>
+                <li><Link href="/docs/getting-started" className="hover:text-white transition-colors">Getting Started</Link></li>
+                <li><Link href="/docs/cli" className="hover:text-white transition-colors">CLI Reference</Link></li>
+                <li><Link href="/docs/tools" className="hover:text-white transition-colors">Tools Guide</Link></li>
                 <li><a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
               </ul>
             </div>

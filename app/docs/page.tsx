@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Terminal, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
+import { Terminal, ArrowRight, BookOpen } from 'lucide-react';
 
 const documentation = [
   {

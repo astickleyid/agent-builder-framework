@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Menu, X, Terminal, Github } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -43,26 +44,29 @@ export default function Navbar() {
             <a href="#features" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Features
             </a>
-            <a href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
+            <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Docs
-            </a>
-            <a href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
+            </Link>
+            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Examples
-            </a>
+            </Link>
             <a href="#pricing" className="text-sm text-zinc-400 hover:text-white transition-colors">
               Pricing
             </a>
             <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer">
               <Github className="w-5 h-5 text-zinc-400 hover:text-white transition-colors" />
             </a>
-            <motion.a
-              href="/docs/getting-started"
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all"
             >
-              Get Started
-            </motion.a>
+              <Link
+                href="/docs/getting-started"
+                className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all block"
+              >
+                Get Started
+              </Link>
+            </motion.div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -87,18 +91,18 @@ export default function Navbar() {
                 <a href="#features" className="text-zinc-400 hover:text-white transition-colors">
                   Features
                 </a>
-                <a href="/docs" className="text-zinc-400 hover:text-white transition-colors">
+                <Link href="/docs" className="text-zinc-400 hover:text-white transition-colors">
                   Docs
-                </a>
-                <a href="/examples" className="text-zinc-400 hover:text-white transition-colors">
+                </Link>
+                <Link href="/examples" className="text-zinc-400 hover:text-white transition-colors">
                   Examples
-                </a>
+                </Link>
                 <a href="#pricing" className="text-zinc-400 hover:text-white transition-colors">
                   Pricing
                 </a>
-                <a href="/docs/getting-started" className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all text-center">
+                <Link href="/docs/getting-started" className="px-4 py-2 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-md text-sm font-medium transition-all text-center block">
                   Get Started
-                </a>
+                </Link>
               </div>
             </motion.div>
           )}

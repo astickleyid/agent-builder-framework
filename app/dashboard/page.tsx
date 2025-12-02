@@ -140,13 +140,13 @@ export default function Dashboard() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <MessageSquare className="w-4 h-4 text-accent-blue" />
-              Chat with Your Agents
+              Interactive Agent Chat
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
               Agent <span className="gradient-text">Dashboard</span>
             </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Chat with your AI agents and manage conversations
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              Interact with your AI agents in real-time and manage conversation history
             </p>
           </div>
         </div>

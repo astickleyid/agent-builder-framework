@@ -89,13 +89,13 @@ export default function Documentation() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <BookOpen className="w-4 h-4 text-accent-blue" />
-              Complete Documentation
+              Comprehensive Documentation
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              <span className="gradient-text">Documentation</span>
+              <span className="gradient-text">Documentation Hub</span>
             </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Everything you need to build amazing AI agents
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              Complete guides, API references, and tutorials to master AI agent development with stick.ai
             </p>
           </div>
 
@@ -144,36 +144,36 @@ export default function Documentation() {
 
         {/* Quick Links */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">💬</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-blue/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span className="text-3xl">💬</span>
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">Community</h3>
-            <p className="text-zinc-400 mb-4 text-sm">Join our Discord community</p>
-            <button className="px-4 py-2 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all text-sm">
-              Join Discord
+            <h3 className="text-xl font-bold mb-2 text-white">Join Community</h3>
+            <p className="text-zinc-400 mb-4">Connect with other developers building AI agents on Discord</p>
+            <button className="px-5 py-2.5 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all">
+              Join Discord Server
             </button>
           </div>
 
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-cyan/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">💻</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-cyan/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-accent-cyan/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span className="text-3xl">💻</span>
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">GitHub</h3>
-            <p className="text-zinc-400 mb-4 text-sm">View source code and contribute</p>
-            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
-              View on GitHub
+            <h3 className="text-xl font-bold mb-2 text-white">Contribute</h3>
+            <p className="text-zinc-400 mb-4">View source code, report issues, and contribute to the project</p>
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all">
+              Star on GitHub
             </a>
           </div>
 
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">🎓</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-blue/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <span className="text-3xl">🎓</span>
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">Examples</h3>
-            <p className="text-zinc-400 mb-4 text-sm">Explore example projects</p>
-            <Link href="/examples" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
-              Browse Examples
+            <h3 className="text-xl font-bold mb-2 text-white">Learn by Example</h3>
+            <p className="text-zinc-400 mb-4">Explore production-ready templates and example projects</p>
+            <Link href="/examples" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all">
+              View Templates
             </Link>
           </div>
         </div>

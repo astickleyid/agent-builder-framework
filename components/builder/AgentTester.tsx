@@ -10,17 +10,39 @@ export default function AgentTester({ config }: AgentTesterProps) {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ totalMessages: 0, avgResponseTime: 0 });
+  const [stats, setStats] = useState({ 
+    totalMessages: 0, 
+    avgResponseTime: 0, 
+    successRate: 100,
+    totalTests: 0 
+  });
 
   const testScenarios = [
-    'What can you help me with?',
-    'Tell me about your capabilities',
-    'What tools do you have access to?',
-    'Solve: 25 * 47 + 120',
-    'What is the current date and time?'
+    { 
+      text: 'What can you help me with?', 
+      category: 'General' 
+    },
+    { 
+      text: 'Tell me about your capabilities', 
+      category: 'Meta' 
+    },
+    { 
+      text: 'What tools do you have access to?', 
+      category: 'Tools' 
+    },
+    { 
+      text: 'Solve: 25 * 47 + 120', 
+      category: 'Calculator', 
+      requiresTool: 'calculator' 
+    },
+    { 
+      text: 'What is the current date and time?', 
+      category: 'DateTime', 
+      requiresTool: 'datetime' 
+    }
   ];
 
-  const sendMessage = async (message: string) => {
+  const sendMessage = async (message: string, scenario?: any) => {
     if (!message.trim()) return;
 
     setLoading(true);
@@ -31,24 +53,54 @@ export default function AgentTester({ config }: AgentTesterProps) {
     const startTime = Date.now();
 
     try {
-      // Simulate agent response (in production, call actual API)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Simulate more realistic agent response
+      const thinkingTime = 800 + Math.random() * 700; // 800-1500ms
+      await new Promise(resolve => setTimeout(resolve, thinkingTime));
       
       const responseTime = Date.now() - startTime;
+      
+      // Generate more realistic responses based on message content
+      let responseContent = '';
+      const hasRequiredTool = scenario?.requiresTool ? config.tools.includes(scenario.requiresTool) : true;
+      
+      if (scenario?.category === 'Calculator' && config.tools.includes('calculator')) {
+        responseContent = `I can help with that calculation! Using the calculator tool:\n25 × 47 = 1,175\n1,175 + 120 = 1,295\n\nThe answer is 1,295.`;
+      } else if (scenario?.category === 'DateTime' && config.tools.includes('datetime')) {
+        const now = new Date();
+        responseContent = `Current date and time:\n📅 ${now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\n⏰ ${now.toLocaleTimeString()}`;
+      } else if (scenario?.category === 'Tools') {
+        responseContent = `I have access to ${config.tools.length} tools:\n${config.tools.map((t: string) => `• ${t}`).join('\n')}\n\nI'm using ${config.provider}/${config.model} as my language model.`;
+      } else if (scenario?.category === 'General') {
+        responseContent = `Hello! I'm ${config.name}, an AI agent powered by ${config.provider}/${config.model}. I can assist you with various tasks using my ${config.tools.length} available tools. How can I help you today?`;
+      } else if (scenario?.category === 'Meta') {
+        responseContent = `I'm configured with the following capabilities:\n• Provider: ${config.provider}\n• Model: ${config.model}\n• Tools: ${config.tools.length} (${config.tools.slice(0, 3).join(', ')}${config.tools.length > 3 ? '...' : ''})\n• Temperature: ${config.temperature}\n• Max Tokens: ${config.maxTokens}`;
+      } else {
+        responseContent = `[Test Mode] I'm processing your request: "${message}"\n\nConfiguration:\n• Model: ${config.provider}/${config.model}\n• Tools: ${config.tools.length} available\n• Temperature: ${config.temperature}\n\nIn production, I would provide a real response based on your query.`;
+      }
+
       const agentMsg = {
         role: 'agent',
-        content: `[Simulated Response] I received your message: "${message}". In production, I would use the ${config.provider} ${config.model} model with ${config.tools.length} tools to provide a real response.`,
+        content: responseContent,
         timestamp: Date.now(),
-        responseTime
+        responseTime,
+        toolsUsed: scenario?.requiresTool && hasRequiredTool ? [scenario.requiresTool] : [],
+        status: hasRequiredTool ? 'success' : 'warning'
       };
 
       setMessages(prev => [...prev, agentMsg]);
       setStats(prev => ({
         totalMessages: prev.totalMessages + 1,
-        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + responseTime) / (prev.totalMessages + 1)
+        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + responseTime) / (prev.totalMessages + 1),
+        successRate: Math.round(((prev.totalTests * prev.successRate / 100) + (hasRequiredTool ? 1 : 0)) / (prev.totalTests + 1) * 100),
+        totalTests: prev.totalTests + 1
       }));
     } catch (error) {
       console.error('Test failed:', error);
+      setStats(prev => ({
+        ...prev,
+        successRate: Math.round((prev.totalTests * prev.successRate / 100) / (prev.totalTests + 1) * 100),
+        totalTests: prev.totalTests + 1
+      }));
     } finally {
       setLoading(false);
     }
@@ -56,7 +108,42 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
   const clearChat = () => {
     setMessages([]);
-    setStats({ totalMessages: 0, avgResponseTime: 0 });
+    setStats({ totalMessages: 0, avgResponseTime: 0, successRate: 100, totalTests: 0 });
+  };
+
+  const exportTestResults = () => {
+    const results = {
+      agentName: config.name,
+      provider: config.provider,
+      model: config.model,
+      testDate: new Date().toISOString(),
+      statistics: stats,
+      messages: messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        timestamp: new Date(m.timestamp).toISOString(),
+        responseTime: m.responseTime,
+        toolsUsed: m.toolsUsed,
+        status: m.status
+      }))
+    };
+    
+    const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${config.name}-test-results-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const runAllTests = async () => {
+    if (loading) return;
+    clearChat();
+    for (const scenario of testScenarios) {
+      await sendMessage(scenario.text, scenario);
+      await new Promise(resolve => setTimeout(resolve, 500)); // Pause between tests
+    }
   };
 
   return (
@@ -73,12 +160,21 @@ export default function AgentTester({ config }: AgentTesterProps) {
                   Testing: {config.name} ({config.provider}/{config.model})
                 </p>
               </div>
-              <button
-                onClick={clearChat}
-                className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all"
-              >
-                Clear Chat
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={exportTestResults}
+                  disabled={messages.length === 0}
+                  className="px-4 py-2 bg-accent-cyan text-white rounded-lg text-sm font-medium hover:bg-accent-cyan/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  📊 Export Results
+                </button>
+                <button
+                  onClick={clearChat}
+                  className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all"
+                >
+                  🗑️ Clear
+                </button>
+              </div>
             </div>
           </div>
 
@@ -113,9 +209,20 @@ export default function AgentTester({ config }: AgentTesterProps) {
                     </span>
                   </div>
                   <div className="whitespace-pre-wrap">{msg.content}</div>
-                  <div className={`text-xs mt-2 ${msg.role === 'user' ? 'opacity-70' : 'text-zinc-500'}`}>
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                    {msg.responseTime && ` • ${msg.responseTime}ms`}
+                  {msg.toolsUsed && msg.toolsUsed.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {msg.toolsUsed.map((tool: string) => (
+                        <span key={tool} className="px-2 py-0.5 bg-accent-cyan/20 text-accent-cyan text-xs rounded">
+                          🛠️ {tool}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className={`text-xs mt-2 flex items-center gap-2 ${msg.role === 'user' ? 'opacity-70' : 'text-zinc-500'}`}>
+                    <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    {msg.responseTime && <span>• {msg.responseTime}ms</span>}
+                    {msg.status === 'success' && <span className="text-accent-cyan">✓</span>}
+                    {msg.status === 'warning' && <span className="text-yellow-400">⚠</span>}
                   </div>
                 </div>
               </div>
@@ -161,16 +268,36 @@ export default function AgentTester({ config }: AgentTesterProps) {
       <div className="space-y-6">
         {/* Quick Test Scenarios */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">🎯 Quick Tests</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-white">🎯 Quick Tests</h3>
+            <button
+              onClick={runAllTests}
+              disabled={loading}
+              className="px-3 py-1.5 bg-accent-blue text-white rounded-lg text-xs font-medium hover:bg-accent-blue/90 transition-all disabled:opacity-50"
+            >
+              Run All
+            </button>
+          </div>
           <div className="space-y-2">
             {testScenarios.map((scenario, idx) => (
               <button
                 key={idx}
-                onClick={() => sendMessage(scenario)}
+                onClick={() => sendMessage(scenario.text, scenario)}
                 disabled={loading}
-                className="w-full text-left px-4 py-3 bg-surface hover:bg-surface-hover rounded-lg text-sm text-zinc-300 hover:text-white transition-colors disabled:opacity-50 border border-border hover:border-accent-blue/50"
+                className="w-full text-left px-4 py-3 bg-surface hover:bg-surface-hover rounded-lg text-sm text-zinc-300 hover:text-white transition-colors disabled:opacity-50 border border-border hover:border-accent-blue/50 group"
               >
-                {scenario}
+                <div className="flex items-center justify-between">
+                  <span>{scenario.text}</span>
+                  {scenario.requiresTool && (
+                    <span className={`text-xs px-2 py-0.5 rounded ${
+                      config.tools.includes(scenario.requiresTool)
+                        ? 'bg-accent-cyan/20 text-accent-cyan'
+                        : 'bg-red-500/20 text-red-400'
+                    }`}>
+                      {scenario.requiresTool}
+                    </span>
+                  )}
+                </div>
               </button>
             ))}
           </div>
@@ -181,8 +308,14 @@ export default function AgentTester({ config }: AgentTesterProps) {
           <h3 className="text-xl font-bold text-white mb-4">📊 Test Statistics</h3>
           <div className="space-y-4">
             <div>
-              <div className="text-sm text-zinc-500">Total Messages</div>
-              <div className="text-3xl font-bold text-accent-blue">{stats.totalMessages}</div>
+              <div className="text-sm text-zinc-500">Total Tests</div>
+              <div className="text-3xl font-bold text-accent-blue">{stats.totalTests}</div>
+            </div>
+            <div>
+              <div className="text-sm text-zinc-500">Success Rate</div>
+              <div className={`text-3xl font-bold ${stats.successRate >= 80 ? 'text-accent-cyan' : 'text-yellow-400'}`}>
+                {stats.successRate}%
+              </div>
             </div>
             <div>
               <div className="text-sm text-zinc-500">Avg Response Time</div>

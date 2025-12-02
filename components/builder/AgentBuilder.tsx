@@ -29,9 +29,32 @@ interface AgentBuilderProps {
 
 export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showLoadMenu, setShowLoadMenu] = useState(false);
 
   const updateConfig = (field: string, value: any) => {
     onChange({ ...config, [field]: value });
+  };
+
+  const getSavedAgents = () => {
+    if (typeof window === 'undefined') return [];
+    const saved: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key?.startsWith('agent-')) {
+        saved.push(key.replace('agent-', ''));
+      }
+    }
+    return saved;
+  };
+
+  const loadAgent = (name: string) => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem(`agent-${name}`);
+    if (saved) {
+      onChange(JSON.parse(saved));
+      setShowLoadMenu(false);
+      alert(`✅ Agent "${name}" loaded successfully!`);
+    }
   };
 
   const toggleTool = (tool: string) => {
@@ -48,13 +71,48 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
     }
   };
 
+  const savedAgents = getSavedAgents();
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Basic Configuration */}
-      <div className="holographic-card rounded-xl border border-border p-6 space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-4">Basic Configuration</h2>
+    <div className="space-y-6">
+      {/* Saved Agents Menu */}
+      {savedAgents.length > 0 && (
+        <div className="holographic-card rounded-xl border border-border p-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setShowLoadMenu(!showLoadMenu)}
+              className="flex items-center gap-2 text-accent-blue hover:text-accent-cyan transition-colors"
+            >
+              <span className="text-lg">📂</span>
+              <span className="font-medium">Load Saved Agent ({savedAgents.length})</span>
+              <span className="text-xs">{showLoadMenu ? '▼' : '▶'}</span>
+            </button>
+          </div>
+          {showLoadMenu && (
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+              {savedAgents.map((name) => (
+                <button
+                  key={name}
+                  onClick={() => loadAgent(name)}
+                  className="px-4 py-3 bg-surface hover:bg-accent-blue/20 border border-border hover:border-accent-blue rounded-lg text-sm text-zinc-300 hover:text-white transition-all"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Basic Configuration */}
+        <div className="holographic-card rounded-xl border border-border p-6 space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-3xl">⚙️</span>
+              Basic Configuration
+            </h2>
+          </div>
 
         {/* Agent Name */}
         <div>
@@ -240,19 +298,87 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
         {/* Action Buttons */}
         <div className="holographic-card rounded-xl border border-border p-6">
           <div className="grid grid-cols-2 gap-4">
-            <button className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20">
+            <button 
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem(`agent-${config.name}`, JSON.stringify(config));
+                  alert(`✅ Agent "${config.name}" saved successfully!`);
+                }
+              }}
+              className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20 hover:scale-105"
+            >
               💾 Save Agent
             </button>
-            <button className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20">
+            <button 
+              onClick={() => {
+                const deployCode = `# Deploy ${config.name} agent
+docker run -d \\
+  --name ${config.name} \\
+  -p 3000:3000 \\
+  -e PROVIDER=${config.provider.toUpperCase()} \\
+  -e MODEL=${config.model} \\
+  stick-ai/agent
+
+# Or deploy with CLI
+stick deploy ${config.name} --port 3000`;
+                navigator.clipboard.writeText(deployCode);
+                alert('🚀 Deployment commands copied to clipboard!');
+              }}
+              className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20 hover:scale-105"
+            >
               🚀 Deploy
             </button>
-            <button className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all">
+            <button 
+              onClick={() => {
+                const jsonConfig = {
+                  name: config.name,
+                  version: "1.0.0",
+                  description: config.description,
+                  capabilities: config.capabilities,
+                  tools: config.tools,
+                  instructions: config.instructions,
+                  llm: {
+                    provider: config.provider,
+                    model: config.model,
+                    temperature: config.temperature,
+                    maxTokens: config.maxTokens
+                  }
+                };
+                const blob = new Blob([JSON.stringify(jsonConfig, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${config.name}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all hover:scale-105 border border-border hover:border-accent-blue/50"
+            >
               📋 Export JSON
             </button>
-            <button className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all">
+            <button 
+              onClick={() => {
+                if (confirm('⚠️ Reset agent to default configuration? This cannot be undone.')) {
+                  onChange({
+                    name: 'my-agent',
+                    description: 'A custom AI agent',
+                    provider: 'ollama',
+                    model: 'mistral:7b',
+                    tools: ['datetime', 'text'],
+                    instructions: 'You are a helpful AI assistant.',
+                    temperature: 0.7,
+                    maxTokens: 2000,
+                    capabilities: ['chat', 'reasoning'],
+                    mcpServers: []
+                  });
+                }
+              }}
+              className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all hover:scale-105"
+            >
               🔄 Reset
             </button>
           </div>
+        </div>
         </div>
       </div>
     </div>

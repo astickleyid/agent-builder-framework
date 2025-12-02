@@ -155,19 +155,40 @@ export default function AgentPreview({ config }: AgentPreviewProps) {
         </div>
 
         {/* CLI Commands */}
-        <div className="mt-6 p-4 glass-morphic rounded-lg">
-          <h3 className="font-semibold text-white mb-3">🚀 Quick Start Commands</h3>
-          <div className="space-y-3">
+        <div className="mt-6 p-6 glass-morphic rounded-lg border border-border">
+          <h3 className="font-semibold text-white mb-4 text-xl flex items-center gap-2">
+            <span>🚀</span> Deployment Guide
+          </h3>
+          <div className="space-y-4">
             <div>
-              <div className="text-xs text-zinc-500 mb-1">Run Agent</div>
-              <code className="block px-3 py-2 bg-black/40 border border-border/50 text-accent-cyan rounded text-sm terminal-text">
+              <div className="text-sm text-zinc-400 mb-2 font-medium">1. Run Locally (Interactive)</div>
+              <code className="block px-4 py-3 bg-black/40 border border-border/50 text-accent-cyan rounded-lg text-sm terminal-text hover:bg-black/60 transition-colors cursor-pointer">
                 stick run {config.name} --interactive
               </code>
             </div>
             <div>
-              <div className="text-xs text-zinc-500 mb-1">Deploy as API</div>
-              <code className="block px-3 py-2 bg-black/40 border border-border/50 text-accent-cyan rounded text-sm terminal-text">
+              <div className="text-sm text-zinc-400 mb-2 font-medium">2. Deploy as API Server</div>
+              <code className="block px-4 py-3 bg-black/40 border border-border/50 text-accent-cyan rounded-lg text-sm terminal-text hover:bg-black/60 transition-colors cursor-pointer">
                 stick deploy {config.name} --port 3000
+              </code>
+            </div>
+            <div>
+              <div className="text-sm text-zinc-400 mb-2 font-medium">3. Deploy with Docker</div>
+              <code className="block px-4 py-3 bg-black/40 border border-border/50 text-accent-cyan rounded-lg text-xs terminal-text hover:bg-black/60 transition-colors cursor-pointer whitespace-pre">
+{`docker run -d \\
+  --name ${config.name} \\
+  -p 3000:3000 \\
+  -e PROVIDER=${config.provider.toUpperCase()} \\
+  -e MODEL=${config.model} \\
+  stick-ai/agent`}
+              </code>
+            </div>
+            <div>
+              <div className="text-sm text-zinc-400 mb-2 font-medium">4. Test the API</div>
+              <code className="block px-4 py-3 bg-black/40 border border-border/50 text-accent-cyan rounded-lg text-xs terminal-text hover:bg-black/60 transition-colors cursor-pointer whitespace-pre">
+{`curl -X POST http://localhost:3000/chat \\
+  -H "Content-Type: application/json" \\
+  -d '{"message": "Hello!"}'`}
               </code>
             </div>
           </div>

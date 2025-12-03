@@ -1,5 +1,8 @@
 'use client';
 
+import ProIcon from '@/components/icons/ProIcon';
+import AnimatedCodeBlock from '@/components/AnimatedCodeBlock';
+
 interface AgentPreviewProps {
   config: any;
 }
@@ -72,7 +75,10 @@ export default function AgentPreview({ config }: AgentPreviewProps) {
 
           {/* LLM Configuration */}
           <div className="border border-border rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">🧠 LLM Configuration</h4>
+            <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+              <ProIcon name="zap" size={18} className="text-accent-cyan" />
+              LLM Configuration
+            </h4>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
                 <div className="text-zinc-500">Provider</div>
@@ -95,7 +101,10 @@ export default function AgentPreview({ config }: AgentPreviewProps) {
 
           {/* Tools */}
           <div className="border border-border rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">🛠️ Available Tools ({config.tools.length})</h4>
+            <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+              <ProIcon name="wrench" size={18} className="text-accent-blue" />
+              Available Tools ({config.tools.length})
+            </h4>
             <div className="flex flex-wrap gap-2">
               {config.tools.map((tool: string) => (
                 <span key={tool} className="px-3 py-1 bg-surface text-zinc-300 rounded-lg text-sm border border-border">
@@ -122,7 +131,10 @@ export default function AgentPreview({ config }: AgentPreviewProps) {
 
           {/* Instructions Preview */}
           <div className="border border-border rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">📝 System Instructions</h4>
+            <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+              <ProIcon name="fileJson" size={18} className="text-accent-cyan" />
+              System Instructions
+            </h4>
             <p className="text-sm text-zinc-400 whitespace-pre-wrap">{config.instructions}</p>
           </div>
         </div>
@@ -135,29 +147,32 @@ export default function AgentPreview({ config }: AgentPreviewProps) {
           <div className="flex gap-2">
             <button
               onClick={copyToClipboard}
-              className="px-4 py-2 glass-morphic text-white rounded-lg text-sm font-medium hover:bg-surface transition-all"
+              className="px-4 py-2 glass-morphic text-white rounded-lg text-sm font-medium hover:bg-surface transition-all flex items-center gap-2"
             >
-              📋 Copy
+              <ProIcon name="fileJson" size={16} />
+              Copy
             </button>
             <button
               onClick={downloadJSON}
-              className="px-4 py-2 bg-accent-blue text-white rounded-lg text-sm font-medium hover:bg-accent-blue/90 transition-all"
+              className="px-4 py-2 bg-accent-blue text-white rounded-lg text-sm font-medium hover:bg-accent-blue/90 transition-all flex items-center gap-2"
             >
-              💾 Download
+              <ProIcon name="save" size={16} />
+              Download
             </button>
           </div>
         </div>
 
-        <div className="bg-black/40 border border-border/50 rounded-lg p-6 overflow-auto max-h-[calc(100vh-200px)]">
-          <pre className="text-accent-cyan text-sm terminal-text">
-            {JSON.stringify(jsonConfig, null, 2)}
-          </pre>
-        </div>
+        <AnimatedCodeBlock 
+          code={JSON.stringify(jsonConfig, null, 2)}
+          language="json"
+          animationSpeed={10}
+        />
 
         {/* CLI Commands */}
         <div className="mt-6 p-6 glass-morphic rounded-lg border border-border">
-          <h3 className="font-semibold text-white mb-4 text-xl flex items-center gap-2">
-            <span>🚀</span> Deployment Guide
+          <h3 className="font-semibold text-white mb-4 text-xl flex items-center gap-3">
+            <ProIcon name="rocket" size={22} className="text-accent-blue" />
+            Deployment Guide
           </h3>
           <div className="space-y-4">
             <div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ProIcon from '@/components/icons/ProIcon';
 
 const AVAILABLE_TOOLS = [
   'datetime', 'text', 'json', 'csv', 'xml', 'yaml',
@@ -108,8 +109,8 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
         {/* Basic Configuration */}
         <div className="holographic-card rounded-xl border border-border p-6 space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-              <span className="text-3xl">⚙️</span>
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+              <ProIcon name="settings" size={28} className="text-accent-blue" />
               Basic Configuration
             </h2>
           </div>
@@ -305,9 +306,10 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
                   alert(`✅ Agent "${config.name}" saved successfully!`);
                 }
               }}
-              className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20 hover:scale-105"
+              className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20 hover:scale-105 flex items-center justify-center gap-2"
             >
-              💾 Save Agent
+              <ProIcon name="save" size={18} />
+              Save Agent
             </button>
             <button 
               onClick={() => {
@@ -324,9 +326,10 @@ stick deploy ${config.name} --port 3000`;
                 navigator.clipboard.writeText(deployCode);
                 alert('🚀 Deployment commands copied to clipboard!');
               }}
-              className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20 hover:scale-105"
+              className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20 hover:scale-105 flex items-center justify-center gap-2"
             >
-              🚀 Deploy
+              <ProIcon name="rocket" size={18} />
+              Deploy
             </button>
             <button 
               onClick={() => {
@@ -352,9 +355,10 @@ stick deploy ${config.name} --port 3000`;
                 a.click();
                 URL.revokeObjectURL(url);
               }}
-              className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all hover:scale-105 border border-border hover:border-accent-blue/50"
+              className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all hover:scale-105 border border-border hover:border-accent-blue/50 flex items-center justify-center gap-2"
             >
-              📋 Export JSON
+              <ProIcon name="fileJson" size={18} />
+              Export JSON
             </button>
             <button 
               onClick={() => {
@@ -373,9 +377,10 @@ stick deploy ${config.name} --port 3000`;
                   });
                 }
               }}
-              className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all hover:scale-105"
+              className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
-              🔄 Reset
+              <ProIcon name="reset" size={18} />
+              Reset
             </button>
           </div>
         </div>

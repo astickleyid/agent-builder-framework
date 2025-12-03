@@ -6,6 +6,7 @@ import AIAssistant from '@/components/AIAssistant';
 import TerminalAnimation from '@/components/TerminalAnimation';
 import HolographicNodes from '@/components/HolographicNodes';
 import FeatureCard from '@/components/FeatureCard';
+import ProIcon from '@/components/icons/ProIcon';
 import { Terminal, ArrowRight, Github, Sparkles } from 'lucide-react';
 
 export default function Home() {
@@ -107,8 +108,9 @@ export default function Home() {
       <section id="features" className="py-32 px-6 border-t border-border">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <div className="inline-block px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-6 font-semibold">
-              ⚡ Powerful Features
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-6 font-semibold">
+              <ProIcon name="zap" size={16} />
+              Powerful Features
             </div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Enterprise-Grade Capabilities
@@ -263,8 +265,9 @@ export default function Home() {
       <section id="pricing" className="py-32 px-6 border-t border-border">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-            <div className="inline-block px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-6 font-semibold">
-              💰 Flexible Plans
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-6 font-semibold">
+              <ProIcon name="dollar" size={16} />
+              Flexible Plans
             </div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Simple, Transparent Pricing
@@ -409,8 +412,9 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-accent-blue/10 via-transparent to-transparent" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent-blue/10 rounded-full blur-3xl" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-block px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-8 font-semibold">
-            ⚡ Ready to Get Started?
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-8 font-semibold">
+            <ProIcon name="sparkles" size={16} />
+            Ready to Get Started?
           </div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
             Transform Your Business with

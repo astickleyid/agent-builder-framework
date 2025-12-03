@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Terminal, Sparkles } from 'lucide-react';
+import ProIcon from '@/components/icons/ProIcon';
 import AgentBuilder from '@/components/builder/AgentBuilder';
 import AgentPreview from '@/components/builder/AgentPreview';
 import AgentTester from '@/components/builder/AgentTester';
@@ -71,33 +72,36 @@ export default function Playground() {
         <div className="glass-morphic rounded-xl p-2 flex gap-2">
           <button
             onClick={() => setActiveTab('builder')}
-            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-3 ${
               activeTab === 'builder'
                 ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
                 : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            <span className="text-lg">🛠️</span> Builder
+            <ProIcon name="wrench" size={20} />
+            Builder
           </button>
           <button
             onClick={() => setActiveTab('preview')}
-            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-3 ${
               activeTab === 'preview'
                 ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
                 : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            <span className="text-lg">👁️</span> Preview
+            <ProIcon name="eye" size={20} />
+            Preview
           </button>
           <button
             onClick={() => setActiveTab('test')}
-            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-4 px-6 rounded-lg font-medium transition-all flex items-center justify-center gap-3 ${
               activeTab === 'test'
                 ? 'bg-accent-blue text-white shadow-lg shadow-accent-blue/20'
                 : 'text-zinc-400 hover:bg-surface hover:text-white'
             }`}
           >
-            <span className="text-lg">🧪</span> Test
+            <ProIcon name="test" size={20} />
+            Test
           </button>
         </div>
       </div>

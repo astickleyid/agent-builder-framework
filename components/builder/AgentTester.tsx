@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ProIcon from '@/components/icons/ProIcon';
 
 interface AgentTesterProps {
   config: any;
@@ -164,15 +165,17 @@ export default function AgentTester({ config }: AgentTesterProps) {
                 <button
                   onClick={exportTestResults}
                   disabled={messages.length === 0}
-                  className="px-4 py-2 bg-accent-cyan text-white rounded-lg text-sm font-medium hover:bg-accent-cyan/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-accent-cyan text-white rounded-lg text-sm font-medium hover:bg-accent-cyan/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  📊 Export Results
+                  <ProIcon name="barChart" size={16} />
+                  Export Results
                 </button>
                 <button
                   onClick={clearChat}
-                  className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all"
+                  className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all flex items-center gap-2"
                 >
-                  🗑️ Clear
+                  <ProIcon name="reset" size={16} />
+                  Clear
                 </button>
               </div>
             </div>
@@ -182,8 +185,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.length === 0 && (
               <div className="text-center text-zinc-500 mt-20">
-                <div className="text-6xl mb-4">💬</div>
-                <p>Start a conversation to test your agent</p>
+                <div className="mb-4 flex justify-center">
+                  <ProIcon name="message" size={64} className="text-zinc-700" />
+                </div>
+                <p className="text-lg font-medium">Start a conversation to test your agent</p>
                 <p className="text-sm mt-2 text-zinc-600">Try the quick tests below ↓</p>
               </div>
             )}
@@ -212,8 +217,9 @@ export default function AgentTester({ config }: AgentTesterProps) {
                   {msg.toolsUsed && msg.toolsUsed.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {msg.toolsUsed.map((tool: string) => (
-                        <span key={tool} className="px-2 py-0.5 bg-accent-cyan/20 text-accent-cyan text-xs rounded">
-                          🛠️ {tool}
+                        <span key={tool} className="px-2 py-0.5 bg-accent-cyan/20 text-accent-cyan text-xs rounded flex items-center gap-1 inline-flex">
+                          <ProIcon name="wrench" size={12} />
+                          {tool}
                         </span>
                       ))}
                     </div>
@@ -269,7 +275,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
         {/* Quick Test Scenarios */}
         <div className="holographic-card rounded-xl border border-border p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-white">🎯 Quick Tests</h3>
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <ProIcon name="target" size={20} className="text-accent-blue" />
+              Quick Tests
+            </h3>
             <button
               onClick={runAllTests}
               disabled={loading}
@@ -305,7 +314,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
         {/* Stats */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">📊 Test Statistics</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <ProIcon name="barChart" size={20} className="text-accent-cyan" />
+            Test Statistics
+          </h3>
           <div className="space-y-4">
             <div>
               <div className="text-sm text-zinc-500">Total Tests</div>
@@ -332,7 +344,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
         {/* Configuration Summary */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">⚙️ Active Config</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <ProIcon name="settings" size={20} className="text-accent-blue" />
+            Active Config
+          </h3>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-zinc-500">Provider:</span>

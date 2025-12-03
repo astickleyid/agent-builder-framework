@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface AgentTesterProps {
   config: any;
@@ -11,6 +13,8 @@ export default function AgentTester({ config }: AgentTesterProps) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ totalMessages: 0, avgResponseTime: 0 });
+  const [deploymentStatus, setDeploymentStatus] = useState<string>('unknown');
+  const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
 
   const testScenarios = [
     'What can you help me with?',
@@ -19,6 +23,28 @@ export default function AgentTester({ config }: AgentTesterProps) {
     'Solve: 25 * 47 + 120',
     'What is the current date and time?'
   ];
+
+  // Check deployment status on mount and when config.id changes
+  useEffect(() => {
+    if (config.id) {
+      checkDeploymentStatus();
+    }
+  }, [config.id]);
+
+  const checkDeploymentStatus = async () => {
+    if (!config.id) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/api/agents/${config.id}/status`);
+      if (response.ok) {
+        const data = await response.json();
+        setDeploymentStatus(data.status);
+        setDeploymentUrl(data.url);
+      }
+    } catch (error) {
+      console.error('Failed to check deployment status:', error);
+    }
+  };
 
   const sendMessage = async (message: string) => {
     if (!message.trim()) return;
@@ -31,24 +57,56 @@ export default function AgentTester({ config }: AgentTesterProps) {
     const startTime = Date.now();
 
     try {
-      // Simulate agent response (in production, call actual API)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const responseTime = Date.now() - startTime;
-      const agentMsg = {
-        role: 'agent',
-        content: `[Simulated Response] I received your message: "${message}". In production, I would use the ${config.provider} ${config.model} model with ${config.tools.length} tools to provide a real response.`,
-        timestamp: Date.now(),
-        responseTime
-      };
+      let response;
+      let agentMsg;
+
+      // Try to use deployed agent if available
+      if (config.id && deploymentStatus === 'running') {
+        const apiResponse = await fetch(`${API_BASE}/api/agents/${config.id}/test`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ input: message })
+        });
+
+        if (apiResponse.ok) {
+          const data = await apiResponse.json();
+          const responseTime = Date.now() - startTime;
+          agentMsg = {
+            role: 'agent',
+            content: data.result,
+            timestamp: Date.now(),
+            responseTime
+          };
+        } else {
+          throw new Error('Agent request failed');
+        }
+      } else {
+        // Fallback to simulation
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const responseTime = Date.now() - startTime;
+        agentMsg = {
+          role: 'agent',
+          content: deploymentStatus === 'stopped' 
+            ? `⚠️ Agent is not deployed. Deploy the agent first to get real responses.\n\n[Simulated] I would use ${config.provider} ${config.model} with ${config.tools.length} tools to respond.`
+            : `⚠️ Please save and deploy the agent first.\n\n[Simulated Response]`,
+          timestamp: Date.now(),
+          responseTime
+        };
+      }
 
       setMessages(prev => [...prev, agentMsg]);
       setStats(prev => ({
         totalMessages: prev.totalMessages + 1,
-        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + responseTime) / (prev.totalMessages + 1)
+        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + agentMsg.responseTime) / (prev.totalMessages + 1)
       }));
-    } catch (error) {
-      console.error('Test failed:', error);
+    } catch (error: any) {
+      const errorMsg = {
+        role: 'agent',
+        content: `❌ Error: ${error.message}. Make sure the agent is deployed and running.`,
+        timestamp: Date.now(),
+        responseTime: 0
+      };
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setLoading(false);
     }
@@ -72,6 +130,27 @@ export default function AgentTester({ config }: AgentTesterProps) {
                 <p className="text-sm text-zinc-500 mt-1">
                   Testing: {config.name} ({config.provider}/{config.model})
                 </p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
+                    deploymentStatus === 'running' ? 'bg-green-500/20 text-green-400' :
+                    deploymentStatus === 'starting' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-red-500/20 text-red-400'
+                  }`}>
+                    <span className={`w-2 h-2 rounded-full ${
+                      deploymentStatus === 'running' ? 'bg-green-400' :
+                      deploymentStatus === 'starting' ? 'bg-yellow-400 animate-pulse' :
+                      'bg-red-400'
+                    }`}></span>
+                    {deploymentStatus === 'running' ? 'Deployed' : 
+                     deploymentStatus === 'starting' ? 'Starting' : 
+                     'Not Deployed'}
+                  </span>
+                  {deploymentUrl && (
+                    <span className="text-xs text-zinc-600">
+                      {deploymentUrl}
+                    </span>
+                  )}
+                </div>
               </div>
               <button
                 onClick={clearChat}
@@ -221,11 +300,20 @@ export default function AgentTester({ config }: AgentTesterProps) {
         </div>
 
         {/* Note */}
-        <div className="glass-morphic border border-accent-blue/30 rounded-xl p-4">
+        <div className={`glass-morphic border rounded-xl p-4 ${
+          deploymentStatus === 'running' ? 'border-green-500/30' : 'border-accent-blue/30'
+        }`}>
           <div className="flex gap-2">
-            <span className="text-accent-blue">⚠️</span>
+            <span className={deploymentStatus === 'running' ? 'text-green-400' : 'text-accent-blue'}>
+              {deploymentStatus === 'running' ? '✓' : '⚠️'}
+            </span>
             <div className="text-sm text-zinc-400">
-              <strong className="text-white">Note:</strong> This is a simulation. Deploy the agent to test with real LLM responses.
+              <strong className="text-white">
+                {deploymentStatus === 'running' ? 'Live Testing:' : 'Note:'}
+              </strong>{' '}
+              {deploymentStatus === 'running' 
+                ? 'Connected to deployed agent. All responses are real LLM outputs.'
+                : 'Deploy the agent first to test with real LLM responses. Currently showing simulated mode.'}
             </div>
           </div>
         </div>

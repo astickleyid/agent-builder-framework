@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+
 const AVAILABLE_TOOLS = [
   'datetime', 'text', 'json', 'csv', 'xml', 'yaml',
   'http', 'bash', 'filesystem', 'calculator',
@@ -29,6 +31,9 @@ interface AgentBuilderProps {
 
 export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [deploying, setDeploying] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const updateConfig = (field: string, value: any) => {
     onChange({ ...config, [field]: value });
@@ -46,6 +51,83 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
     if (!mcpServers.find((s: any) => s.id === serverId)) {
       updateConfig('mcpServers', [...mcpServers, { id: serverId, enabled: true }]);
     }
+  };
+
+  const saveAgent = async () => {
+    setSaving(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_BASE}/api/agents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save agent');
+      }
+
+      const data = await response.json();
+      onChange({ ...config, id: data.agent.id });
+      setMessage({ type: 'success', text: 'Agent saved successfully!' });
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deployAgent = async () => {
+    if (!config.id) {
+      setMessage({ type: 'error', text: 'Please save the agent first' });
+      return;
+    }
+
+    setDeploying(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_BASE}/api/agents/${config.id}/deploy`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to deploy agent');
+      }
+
+      const data = await response.json();
+      setMessage({ type: 'success', text: `Agent deployed at ${data.url}` });
+    } catch (error: any) {
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setDeploying(false);
+    }
+  };
+
+  const exportJSON = () => {
+    const json = JSON.stringify(config, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${config.name || 'agent'}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const resetConfig = () => {
+    const defaultConfig = {
+      name: 'my-agent',
+      description: 'A custom AI agent',
+      provider: 'ollama',
+      model: 'mistral:7b',
+      tools: ['datetime', 'text'],
+      instructions: 'You are a helpful AI assistant.',
+      temperature: 0.7,
+      maxTokens: 2000,
+      capabilities: ['chat', 'reasoning']
+    };
+    onChange(defaultConfig);
+    setMessage({ type: 'success', text: 'Configuration reset' });
   };
 
   return (
@@ -237,19 +319,44 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
           )}
         </div>
 
+        {/* Status Message */}
+        {message && (
+          <div className={`holographic-card rounded-xl border p-4 ${
+            message.type === 'success' ? 'border-accent-cyan bg-accent-cyan/10' : 'border-red-500 bg-red-500/10'
+          }`}>
+            <p className={message.type === 'success' ? 'text-accent-cyan' : 'text-red-400'}>
+              {message.text}
+            </p>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="holographic-card rounded-xl border border-border p-6">
           <div className="grid grid-cols-2 gap-4">
-            <button className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20">
-              💾 Save Agent
+            <button 
+              onClick={saveAgent}
+              disabled={saving}
+              className="px-6 py-3 bg-accent-cyan text-white rounded-lg font-medium hover:bg-accent-cyan/90 transition-all shadow-lg shadow-accent-cyan/20 disabled:opacity-50"
+            >
+              {saving ? '⏳ Saving...' : '💾 Save Agent'}
             </button>
-            <button className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20">
-              🚀 Deploy
+            <button 
+              onClick={deployAgent}
+              disabled={deploying || !config.id}
+              className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all shadow-lg shadow-accent-blue/20 disabled:opacity-50"
+            >
+              {deploying ? '⏳ Deploying...' : '🚀 Deploy'}
             </button>
-            <button className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all">
+            <button 
+              onClick={exportJSON}
+              className="px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all"
+            >
               📋 Export JSON
             </button>
-            <button className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all">
+            <button 
+              onClick={resetConfig}
+              className="px-6 py-3 glass-morphic text-zinc-400 rounded-lg font-medium hover:bg-surface hover:text-white transition-all"
+            >
               🔄 Reset
             </button>
           </div>

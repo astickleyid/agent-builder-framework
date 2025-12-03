@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 const isGitHubPages = process.env.GITHUB_PAGES === 'true';
 
 const nextConfig: NextConfig = {
-  // Only export for GitHub Pages
+  // Only export for GitHub Pages (not when we have API routes)
   ...(isGitHubPages && { output: 'export' }),
   
   images: {
@@ -15,6 +15,16 @@ const nextConfig: NextConfig = {
   basePath: isGitHubPages ? '/agent-builder-framework' : '',
   
   trailingSlash: true,
+
+  // Mark server-only packages as external
+  serverExternalPackages: ['@stick-ai/runtime', 'express', 'axios'],
+
+  experimental: {
+    // Allow dynamic imports of server-only modules
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
 };
 
 export default nextConfig;

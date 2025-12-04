@@ -1,57 +1,59 @@
 'use client';
 
 import Link from 'next/link';
-import { Terminal, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
+import { Terminal, ArrowRight, BookOpen } from 'lucide-react';
+
+import ProIcon from '@/components/icons/ProIcon';
 
 const documentation = [
   {
     category: 'Getting Started',
-    icon: '🚀',
+    icon: 'rocket',
     docs: [
-      { title: 'Quick Start', slug: 'quick-start', description: 'Get up and running in 5 minutes' },
-      { title: 'Installation', slug: 'installation', description: 'Install the framework and CLI' },
-      { title: 'Your First Agent', slug: 'first-agent', description: 'Build your first AI agent' },
-      { title: 'Configuration', slug: 'configuration', description: 'Configure agents and settings' }
+      { title: 'Quick Start', slug: 'quick-start', description: 'Launch your first agent in under 5 minutes' },
+      { title: 'Installation', slug: 'installation', description: 'Install the framework and CLI tools' },
+      { title: 'Your First Agent', slug: 'first-agent', description: 'Build and deploy your first intelligent agent' },
+      { title: 'Configuration', slug: 'configuration', description: 'Configure agents with declarative JSON' }
     ]
   },
   {
     category: 'Core Concepts',
-    icon: '🧠',
+    icon: 'zap',
     docs: [
-      { title: 'Agents', slug: 'agents', description: 'Understanding AI agents' },
-      { title: 'Tools', slug: 'tools', description: '17 built-in tools explained' },
-      { title: 'LLM Providers', slug: 'llm-providers', description: 'OpenAI, Anthropic, Ollama' },
-      { title: 'Memory System', slug: 'memory', description: 'Persistent and vector memory' }
+      { title: 'Agent Architecture', slug: 'agents', description: 'Understanding intelligent agent design patterns' },
+      { title: 'Built-in Tools', slug: 'tools', description: '17 production-ready tools for agent capabilities' },
+      { title: 'LLM Providers', slug: 'llm-providers', description: 'OpenAI, Anthropic, Ollama integration guide' },
+      { title: 'Memory Systems', slug: 'memory', description: 'Persistent context and vector memory management' }
     ]
   },
   {
-    category: 'Advanced',
-    icon: '⚡',
+    category: 'Advanced Topics',
+    icon: 'sparkles',
     docs: [
-      { title: 'Multi-Agent Systems', slug: 'multi-agent', description: 'Orchestrate multiple agents' },
-      { title: 'MCP Integration', slug: 'mcp', description: 'Model Context Protocol servers' },
-      { title: 'Security', slug: 'security', description: 'Sandboxing and rate limiting' },
-      { title: 'Deployment', slug: 'deployment', description: 'Deploy to production' }
+      { title: 'Multi-Agent Orchestration', slug: 'multi-agent', description: 'Coordinate multiple specialized agents' },
+      { title: 'MCP Integration', slug: 'mcp', description: 'Model Context Protocol server configuration' },
+      { title: 'Security & Sandboxing', slug: 'security', description: 'Enterprise-grade security and rate limiting' },
+      { title: 'Production Deployment', slug: 'deployment', description: 'Deploy agents to production environments' }
     ]
   },
   {
     category: 'API Reference',
-    icon: '📚',
+    icon: 'code',
     docs: [
-      { title: 'REST API', slug: 'api-reference', description: 'Complete API documentation' },
-      { title: 'CLI Commands', slug: 'cli', description: 'Command line interface' },
-      { title: 'SDK Reference', slug: 'sdk', description: 'TypeScript/JavaScript SDK' },
-      { title: 'Configuration Schema', slug: 'schema', description: 'JSON configuration reference' }
+      { title: 'REST API', slug: 'api-reference', description: 'Complete HTTP API endpoint documentation' },
+      { title: 'CLI Commands', slug: 'cli', description: 'Command-line interface reference guide' },
+      { title: 'TypeScript SDK', slug: 'sdk', description: 'Full TypeScript/JavaScript SDK documentation' },
+      { title: 'Configuration Schema', slug: 'schema', description: 'JSON schema and validation reference' }
     ]
   },
   {
-    category: 'Guides',
-    icon: '📖',
+    category: 'Practical Guides',
+    icon: 'graduation',
     docs: [
-      { title: 'Building a Chatbot', slug: 'guide-chatbot', description: 'Create a conversational agent' },
-      { title: 'Research Pipeline', slug: 'guide-research', description: 'Multi-agent research system' },
-      { title: 'Code Review Bot', slug: 'guide-code-review', description: 'Automated code reviewer' },
-      { title: 'Docker Deployment', slug: 'guide-docker', description: 'Deploy with Docker' }
+      { title: 'Building a Chatbot', slug: 'guide-chatbot', description: 'Step-by-step conversational agent tutorial' },
+      { title: 'Research Pipeline', slug: 'guide-research', description: 'Multi-agent research automation system' },
+      { title: 'Code Review Automation', slug: 'guide-code-review', description: 'Automated code review agent setup' },
+      { title: 'Docker Deployment', slug: 'guide-docker', description: 'Containerized deployment with Docker' }
     ]
   }
 ];
@@ -89,13 +91,13 @@ export default function Documentation() {
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <BookOpen className="w-4 h-4 text-accent-blue" />
-              Complete Documentation
+              Comprehensive Documentation
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              <span className="gradient-text">Documentation</span>
+              <span className="gradient-text">Documentation Hub</span>
             </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Everything you need to build amazing AI agents
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              Complete guides, API references, and tutorials to master AI agent development with stick.ai
             </p>
           </div>
 
@@ -115,8 +117,10 @@ export default function Documentation() {
         <div className="space-y-8">
           {documentation.map((section) => (
             <div key={section.category} className="holographic-card rounded-xl border border-border p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="text-3xl">{section.icon}</span>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-blue/20 to-accent-cyan/20 flex items-center justify-center">
+                  <ProIcon name={section.icon as any} size={24} className="text-accent-blue" />
+                </div>
                 <h2 className="text-2xl font-bold text-white">{section.category}</h2>
               </div>
 
@@ -144,36 +148,39 @@ export default function Documentation() {
 
         {/* Quick Links */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">💬</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-blue/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-blue/20 to-accent-cyan/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <ProIcon name="message" size={28} className="text-accent-blue" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">Community</h3>
-            <p className="text-zinc-400 mb-4 text-sm">Join our Discord community</p>
-            <button className="px-4 py-2 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all text-sm">
-              Join Discord
+            <h3 className="text-xl font-bold mb-2 text-white">Join Developer Community</h3>
+            <p className="text-zinc-400 mb-4">Connect with developers building production AI agents. Get support, share insights, and collaborate.</p>
+            <button className="px-5 py-2.5 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all flex items-center gap-2">
+              <ProIcon name="message" size={16} />
+              Join Discord Server
             </button>
           </div>
 
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-cyan/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">💻</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-cyan/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-cyan/20 to-accent-blue/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <ProIcon name="code" size={28} className="text-accent-cyan" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">GitHub</h3>
-            <p className="text-zinc-400 mb-4 text-sm">View source code and contribute</p>
-            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
-              View on GitHub
+            <h3 className="text-xl font-bold mb-2 text-white">Contribute to Open Source</h3>
+            <p className="text-zinc-400 mb-4">View source code, report issues, and contribute features to the framework. 100% open source.</p>
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
+              <ProIcon name="code" size={16} />
+              Star on GitHub
             </a>
           </div>
 
-          <div className="holographic-card rounded-xl p-6 border border-border hover:border-accent-blue/50 transition-all">
-            <div className="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center mb-4">
-              <span className="text-2xl">🎓</span>
+          <div className="holographic-card rounded-xl p-8 border border-border hover:border-accent-blue/50 transition-all group cursor-pointer">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-blue/20 to-accent-cyan/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <ProIcon name="graduation" size={28} className="text-accent-blue" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-white">Examples</h3>
-            <p className="text-zinc-400 mb-4 text-sm">Explore example projects</p>
-            <Link href="/examples" className="inline-block px-4 py-2 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all text-sm">
-              Browse Examples
+            <h3 className="text-xl font-bold mb-2 text-white">Learn by Example</h3>
+            <p className="text-zinc-400 mb-4">Explore production-ready agent templates and real-world implementation examples.</p>
+            <Link href="/examples" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
+              <ProIcon name="graduation" size={16} />
+              View Templates
             </Link>
           </div>
         </div>

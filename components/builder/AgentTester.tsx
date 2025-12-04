@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+import { useState } from 'react';
+import ProIcon from '@/components/icons/ProIcon';
 
 interface AgentTesterProps {
   config: any;
@@ -17,11 +16,28 @@ export default function AgentTester({ config }: AgentTesterProps) {
   const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
 
   const testScenarios = [
-    'What can you help me with?',
-    'Tell me about your capabilities',
-    'What tools do you have access to?',
-    'Solve: 25 * 47 + 120',
-    'What is the current date and time?'
+    { 
+      text: 'What can you help me with?', 
+      category: 'General' 
+    },
+    { 
+      text: 'Tell me about your capabilities', 
+      category: 'Meta' 
+    },
+    { 
+      text: 'What tools do you have access to?', 
+      category: 'Tools' 
+    },
+    { 
+      text: 'Solve: 25 * 47 + 120', 
+      category: 'Calculator', 
+      requiresTool: 'calculator' 
+    },
+    { 
+      text: 'What is the current date and time?', 
+      category: 'DateTime', 
+      requiresTool: 'datetime' 
+    }
   ];
 
   // Check deployment status on mount and when config.id changes
@@ -97,16 +113,17 @@ export default function AgentTester({ config }: AgentTesterProps) {
       setMessages(prev => [...prev, agentMsg]);
       setStats(prev => ({
         totalMessages: prev.totalMessages + 1,
-        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + agentMsg.responseTime) / (prev.totalMessages + 1)
+        avgResponseTime: (prev.avgResponseTime * prev.totalMessages + responseTime) / (prev.totalMessages + 1),
+        successRate: Math.round(((prev.totalTests * prev.successRate / 100) + (hasRequiredTool ? 1 : 0)) / (prev.totalTests + 1) * 100),
+        totalTests: prev.totalTests + 1
       }));
-    } catch (error: any) {
-      const errorMsg = {
-        role: 'agent',
-        content: `❌ Error: ${error.message}. Make sure the agent is deployed and running.`,
-        timestamp: Date.now(),
-        responseTime: 0
-      };
-      setMessages(prev => [...prev, errorMsg]);
+    } catch (error) {
+      console.error('Test failed:', error);
+      setStats(prev => ({
+        ...prev,
+        successRate: Math.round((prev.totalTests * prev.successRate / 100) / (prev.totalTests + 1) * 100),
+        totalTests: prev.totalTests + 1
+      }));
     } finally {
       setLoading(false);
     }
@@ -114,7 +131,42 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
   const clearChat = () => {
     setMessages([]);
-    setStats({ totalMessages: 0, avgResponseTime: 0 });
+    setStats({ totalMessages: 0, avgResponseTime: 0, successRate: 100, totalTests: 0 });
+  };
+
+  const exportTestResults = () => {
+    const results = {
+      agentName: config.name,
+      provider: config.provider,
+      model: config.model,
+      testDate: new Date().toISOString(),
+      statistics: stats,
+      messages: messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        timestamp: new Date(m.timestamp).toISOString(),
+        responseTime: m.responseTime,
+        toolsUsed: m.toolsUsed,
+        status: m.status
+      }))
+    };
+    
+    const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${config.name}-test-results-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const runAllTests = async () => {
+    if (loading) return;
+    clearChat();
+    for (const scenario of testScenarios) {
+      await sendMessage(scenario.text, scenario);
+      await new Promise(resolve => setTimeout(resolve, 500)); // Pause between tests
+    }
   };
 
   return (
@@ -152,12 +204,23 @@ export default function AgentTester({ config }: AgentTesterProps) {
                   )}
                 </div>
               </div>
-              <button
-                onClick={clearChat}
-                className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all"
-              >
-                Clear Chat
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={exportTestResults}
+                  disabled={messages.length === 0}
+                  className="px-4 py-2 bg-accent-cyan text-white rounded-lg text-sm font-medium hover:bg-accent-cyan/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  <ProIcon name="barChart" size={16} />
+                  Export Results
+                </button>
+                <button
+                  onClick={clearChat}
+                  className="px-4 py-2 glass-morphic text-zinc-300 rounded-lg text-sm font-medium hover:bg-surface hover:text-white transition-all flex items-center gap-2"
+                >
+                  <ProIcon name="reset" size={16} />
+                  Clear
+                </button>
+              </div>
             </div>
           </div>
 
@@ -165,8 +228,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.length === 0 && (
               <div className="text-center text-zinc-500 mt-20">
-                <div className="text-6xl mb-4">💬</div>
-                <p>Start a conversation to test your agent</p>
+                <div className="mb-4 flex justify-center">
+                  <ProIcon name="message" size={64} className="text-zinc-700" />
+                </div>
+                <p className="text-lg font-medium">Start a conversation to test your agent</p>
                 <p className="text-sm mt-2 text-zinc-600">Try the quick tests below ↓</p>
               </div>
             )}
@@ -192,9 +257,21 @@ export default function AgentTester({ config }: AgentTesterProps) {
                     </span>
                   </div>
                   <div className="whitespace-pre-wrap">{msg.content}</div>
-                  <div className={`text-xs mt-2 ${msg.role === 'user' ? 'opacity-70' : 'text-zinc-500'}`}>
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                    {msg.responseTime && ` • ${msg.responseTime}ms`}
+                  {msg.toolsUsed && msg.toolsUsed.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {msg.toolsUsed.map((tool: string) => (
+                        <span key={tool} className="px-2 py-0.5 bg-accent-cyan/20 text-accent-cyan text-xs rounded flex items-center gap-1 inline-flex">
+                          <ProIcon name="wrench" size={12} />
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className={`text-xs mt-2 flex items-center gap-2 ${msg.role === 'user' ? 'opacity-70' : 'text-zinc-500'}`}>
+                    <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    {msg.responseTime && <span>• {msg.responseTime}ms</span>}
+                    {msg.status === 'success' && <span className="text-accent-cyan">✓</span>}
+                    {msg.status === 'warning' && <span className="text-yellow-400">⚠</span>}
                   </div>
                 </div>
               </div>
@@ -240,16 +317,39 @@ export default function AgentTester({ config }: AgentTesterProps) {
       <div className="space-y-6">
         {/* Quick Test Scenarios */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">🎯 Quick Tests</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <ProIcon name="target" size={20} className="text-accent-blue" />
+              Quick Tests
+            </h3>
+            <button
+              onClick={runAllTests}
+              disabled={loading}
+              className="px-3 py-1.5 bg-accent-blue text-white rounded-lg text-xs font-medium hover:bg-accent-blue/90 transition-all disabled:opacity-50"
+            >
+              Run All
+            </button>
+          </div>
           <div className="space-y-2">
             {testScenarios.map((scenario, idx) => (
               <button
                 key={idx}
-                onClick={() => sendMessage(scenario)}
+                onClick={() => sendMessage(scenario.text, scenario)}
                 disabled={loading}
-                className="w-full text-left px-4 py-3 bg-surface hover:bg-surface-hover rounded-lg text-sm text-zinc-300 hover:text-white transition-colors disabled:opacity-50 border border-border hover:border-accent-blue/50"
+                className="w-full text-left px-4 py-3 bg-surface hover:bg-surface-hover rounded-lg text-sm text-zinc-300 hover:text-white transition-colors disabled:opacity-50 border border-border hover:border-accent-blue/50 group"
               >
-                {scenario}
+                <div className="flex items-center justify-between">
+                  <span>{scenario.text}</span>
+                  {scenario.requiresTool && (
+                    <span className={`text-xs px-2 py-0.5 rounded ${
+                      config.tools.includes(scenario.requiresTool)
+                        ? 'bg-accent-cyan/20 text-accent-cyan'
+                        : 'bg-red-500/20 text-red-400'
+                    }`}>
+                      {scenario.requiresTool}
+                    </span>
+                  )}
+                </div>
               </button>
             ))}
           </div>
@@ -257,11 +357,20 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
         {/* Stats */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">📊 Test Statistics</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <ProIcon name="barChart" size={20} className="text-accent-cyan" />
+            Test Statistics
+          </h3>
           <div className="space-y-4">
             <div>
-              <div className="text-sm text-zinc-500">Total Messages</div>
-              <div className="text-3xl font-bold text-accent-blue">{stats.totalMessages}</div>
+              <div className="text-sm text-zinc-500">Total Tests</div>
+              <div className="text-3xl font-bold text-accent-blue">{stats.totalTests}</div>
+            </div>
+            <div>
+              <div className="text-sm text-zinc-500">Success Rate</div>
+              <div className={`text-3xl font-bold ${stats.successRate >= 80 ? 'text-accent-cyan' : 'text-yellow-400'}`}>
+                {stats.successRate}%
+              </div>
             </div>
             <div>
               <div className="text-sm text-zinc-500">Avg Response Time</div>
@@ -278,7 +387,10 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
         {/* Configuration Summary */}
         <div className="holographic-card rounded-xl border border-border p-6">
-          <h3 className="text-xl font-bold text-white mb-4">⚙️ Active Config</h3>
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <ProIcon name="settings" size={20} className="text-accent-blue" />
+            Active Config
+          </h3>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-zinc-500">Provider:</span>

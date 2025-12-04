@@ -132,13 +132,13 @@ export default function Examples() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <Bot className="w-4 h-4 text-accent-blue" />
-              Example Agents
+              Production-Ready Examples
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              Agent <span className="gradient-text">Examples</span>
+              Agent <span className="gradient-text">Templates</span>
             </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Copy-paste examples to get started quickly
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+              Production-ready agent templates to accelerate your development. Copy, customize, and deploy in minutes.
             </p>
           </div>
 
@@ -193,29 +193,29 @@ export default function Examples() {
             })}
           </div>
 
-          <div className="mt-12 text-center p-8 holographic-card rounded-xl border border-border">
-            <div className="w-16 h-16 rounded-2xl bg-accent-blue/20 flex items-center justify-center mx-auto mb-4 border border-accent-blue/30">
-              <Sparkles className="w-8 h-8 text-accent-blue" />
+          <div className="mt-12 text-center p-10 holographic-card rounded-xl border border-border hover:border-accent-blue/50 transition-all">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/30">
+              <Sparkles className="w-10 h-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-3">Create Your Own Agent</h3>
-            <p className="text-zinc-400 mb-6">
-              Start building with the interactive CLI
+            <h3 className="text-3xl font-bold mb-4">Build Your Custom Agent</h3>
+            <p className="text-zinc-400 mb-8 text-lg max-w-2xl mx-auto leading-relaxed">
+              Ready to create something unique? Use our interactive CLI to scaffold and deploy your custom AI agent.
             </p>
-            <pre className="bg-black/40 border border-border rounded-xl p-4 mb-6 inline-block">
-              <code className="text-accent-cyan terminal-text">$ npm install -g @stick-ai/cli{'\n'}$ stick</code>
+            <pre className="bg-black/40 border border-border rounded-xl p-6 mb-8 inline-block text-left">
+              <code className="text-accent-cyan terminal-text text-base">$ npm install -g @stick-ai/cli{'\n'}$ stick init my-agent{'\n'}$ stick deploy</code>
             </pre>
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/docs/getting-started"
-                className="px-6 py-3 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-xl font-semibold transition-all shadow-lg shadow-accent-blue/20"
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all shadow-xl shadow-accent-blue/30 hover:scale-105"
               >
-                Get Started
+                Read Documentation
               </Link>
               <Link
                 href="/playground"
-                className="px-6 py-3 glass-morphic hover:bg-surface text-white rounded-xl font-semibold transition-all"
+                className="px-8 py-4 glass-morphic hover:bg-surface border border-white/20 text-white rounded-xl font-semibold transition-all hover:scale-105"
               >
-                Try Playground
+                Try Visual Builder
               </Link>
             </div>
           </div>

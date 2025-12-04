@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import ProIcon from '@/components/icons/ProIcon';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+
 const AVAILABLE_TOOLS = [
   'datetime', 'text', 'json', 'csv', 'xml', 'yaml',
   'http', 'bash', 'filesystem', 'calculator',
@@ -30,7 +32,9 @@ interface AgentBuilderProps {
 
 export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [showLoadMenu, setShowLoadMenu] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [deploying, setDeploying] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const updateConfig = (field: string, value: any) => {
     onChange({ ...config, [field]: value });
@@ -295,6 +299,17 @@ export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
             </div>
           )}
         </div>
+
+        {/* Status Message */}
+        {message && (
+          <div className={`holographic-card rounded-xl border p-4 ${
+            message.type === 'success' ? 'border-accent-cyan bg-accent-cyan/10' : 'border-red-500 bg-red-500/10'
+          }`}>
+            <p className={message.type === 'success' ? 'text-accent-cyan' : 'text-red-400'}>
+              {message.text}
+            </p>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="holographic-card rounded-xl border border-border p-6">

@@ -1,0 +1,19 @@
+{
+  "id": "5cece63b52090ef195ef6ced2772d8b9",
+  "name": "my-agent",
+  "description": "A custom AI agent",
+  "provider": "ollama",
+  "model": "mistral:7b",
+  "tools": [
+    "datetime",
+    "text"
+  ],
+  "instructions": "You are a helpful AI assistant.",
+  "temperature": 0.7,
+  "maxTokens": 2000,
+  "capabilities": [
+    "chat",
+    "reasoning"
+  ],
+  "mcpServers": []
+}

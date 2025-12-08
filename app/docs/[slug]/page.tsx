@@ -1,7 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 import { Terminal, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
 
 // Documentation content for each page
@@ -1107,9 +1104,15 @@ docker-compose up -d`}</code></pre>
   }
 };
 
-export default function DocPage() {
-  const params = useParams();
-  const slug = params.slug as string;
+// Generate static paths for all documentation pages
+export async function generateStaticParams() {
+  return Object.keys(documentationContent).map((slug) => ({
+    slug: slug,
+  }));
+}
+
+export default function DocPage({ params }: { params: { slug: string } }) {
+  const slug = params.slug;
   
   const doc = documentationContent[slug];
   

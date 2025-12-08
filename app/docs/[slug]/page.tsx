@@ -1107,7 +1107,7 @@ docker-compose up -d`}</code></pre>
 // Generate static paths for all documentation pages
 export async function generateStaticParams() {
   return Object.keys(documentationContent).map((slug) => ({
-    slug: slug,
+    slug,
   }));
 }
 

@@ -32,6 +32,7 @@ interface AgentBuilderProps {
 
 export default function AgentBuilder({ config, onChange }: AgentBuilderProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showLoadMenu, setShowLoadMenu] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deploying, setDeploying] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);

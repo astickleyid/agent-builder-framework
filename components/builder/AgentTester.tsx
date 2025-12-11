@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProIcon from '@/components/icons/ProIcon';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
 
 interface AgentTesterProps {
   config: any;
@@ -11,7 +13,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ totalMessages: 0, avgResponseTime: 0 });
+  const [stats, setStats] = useState({ totalMessages: 0, avgResponseTime: 0, successRate: 0, totalTests: 0 });
   const [deploymentStatus, setDeploymentStatus] = useState<string>('unknown');
   const [deploymentUrl, setDeploymentUrl] = useState<string | null>(null);
 
@@ -75,6 +77,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
     try {
       let response;
       let agentMsg;
+      let responseTime;
 
       // Try to use deployed agent if available
       if (config.id && deploymentStatus === 'running') {
@@ -86,7 +89,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
 
         if (apiResponse.ok) {
           const data = await apiResponse.json();
-          const responseTime = Date.now() - startTime;
+          responseTime = Date.now() - startTime;
           agentMsg = {
             role: 'agent',
             content: data.result,
@@ -99,7 +102,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
       } else {
         // Fallback to simulation
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const responseTime = Date.now() - startTime;
+        responseTime = Date.now() - startTime;
         agentMsg = {
           role: 'agent',
           content: deploymentStatus === 'stopped' 
@@ -114,7 +117,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
       setStats(prev => ({
         totalMessages: prev.totalMessages + 1,
         avgResponseTime: (prev.avgResponseTime * prev.totalMessages + responseTime) / (prev.totalMessages + 1),
-        successRate: Math.round(((prev.totalTests * prev.successRate / 100) + (hasRequiredTool ? 1 : 0)) / (prev.totalTests + 1) * 100),
+        successRate: Math.round(((prev.totalTests * prev.successRate / 100) + 1) / (prev.totalTests + 1) * 100),
         totalTests: prev.totalTests + 1
       }));
     } catch (error) {
@@ -164,7 +167,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
     if (loading) return;
     clearChat();
     for (const scenario of testScenarios) {
-      await sendMessage(scenario.text, scenario);
+      await sendMessage(scenario.text);
       await new Promise(resolve => setTimeout(resolve, 500)); // Pause between tests
     }
   };
@@ -334,7 +337,7 @@ export default function AgentTester({ config }: AgentTesterProps) {
             {testScenarios.map((scenario, idx) => (
               <button
                 key={idx}
-                onClick={() => sendMessage(scenario.text, scenario)}
+                onClick={() => sendMessage(scenario.text)}
                 disabled={loading}
                 className="w-full text-left px-4 py-3 bg-surface hover:bg-surface-hover rounded-lg text-sm text-zinc-300 hover:text-white transition-colors disabled:opacity-50 border border-border hover:border-accent-blue/50 group"
               >

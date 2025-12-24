@@ -1,8 +1,9 @@
 'use client';
 
-import { Terminal, Bot, Search, Code, BarChart, MessageSquare, Copy, Check, Sparkles } from 'lucide-react';
+import { Terminal, Bot, Search, Code, BarChart, MessageSquare, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import SparklesIcon from '@/components/icons/SparklesIcon';
 
 const examples = [
   {
@@ -194,8 +195,8 @@ export default function Examples() {
           </div>
 
           <div className="mt-12 text-center p-10 holographic-card rounded-xl border border-border hover:border-accent-blue/50 transition-all">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/30">
-              <Sparkles className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 rounded-2xl bg-accent-blue flex items-center justify-center mx-auto mb-6 shadow-lg shadow-accent-blue/30">
+              <SparklesIcon className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-3xl font-bold mb-4">Build Your Custom Agent</h3>
             <p className="text-zinc-400 mb-8 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -207,7 +208,7 @@ export default function Examples() {
             <div className="flex gap-4 justify-center flex-wrap">
               <Link
                 href="/docs/getting-started"
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all shadow-xl shadow-accent-blue/30 hover:scale-105"
+                className="px-8 py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-xl font-semibold transition-all shadow-xl shadow-accent-blue/30 hover:scale-105"
               >
                 Read Documentation
               </Link>

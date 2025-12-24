@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Terminal, Github } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TerminalIcon from '@/components/icons/TerminalIcon';
+import GithubIcon from '@/components/icons/GithubIcon';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,8 +37,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.95 }}
             >
               <div className="relative">
-                <Terminal className="w-5 h-5 sm:w-6 sm:h-6 text-accent-blue" />
-                <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+                <TerminalIcon className="w-5 h-5 sm:w-6 sm:h-6 text-accent-blue" />
               </div>
               <span className="text-lg sm:text-xl font-semibold tracking-tight">stick.ai</span>
             </motion.div>
@@ -57,7 +58,7 @@ export default function Navbar() {
               Pricing
             </a>
             <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer">
-              <Github className="w-5 h-5 text-zinc-400 hover:text-white transition-colors" />
+              <GithubIcon className="w-5 h-5 text-zinc-400 hover:text-white transition-colors" />
             </a>
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -128,7 +129,7 @@ export default function Navbar() {
                   className="text-zinc-400 hover:text-white transition-colors py-2 flex items-center gap-2"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Github className="w-5 h-5" />
+                  <GithubIcon className="w-5 h-5" />
                   GitHub
                 </a>
                 <Link 

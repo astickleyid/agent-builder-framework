@@ -7,7 +7,11 @@ import TerminalAnimation from '@/components/TerminalAnimation';
 import HolographicNodes from '@/components/HolographicNodes';
 import FeatureCard from '@/components/FeatureCard';
 import ProIcon from '@/components/icons/ProIcon';
-import { Terminal, ArrowRight, Github, Sparkles } from 'lucide-react';
+import SparklesIcon from '@/components/icons/SparklesIcon';
+import GithubIcon from '@/components/icons/GithubIcon';
+import ArrowRightIcon from '@/components/icons/ArrowRightIcon';
+import TerminalIcon from '@/components/icons/TerminalIcon';
+import { Terminal } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -25,7 +29,7 @@ export default function Home() {
         
         <div className="relative z-10 max-w-6xl mx-auto text-center px-4">
           <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass-morphic text-xs sm:text-sm text-zinc-400 mb-6 sm:mb-8 animate-fade-in">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-accent-blue animate-pulse" />
+            <SparklesIcon className="w-3 h-3 sm:w-4 sm:h-4 text-accent-blue" />
             <span className="whitespace-nowrap">Enterprise-Grade AI Agent Orchestration • Local-First • Open Source</span>
           </div>
           
@@ -48,16 +52,16 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center flex-wrap px-4 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
             <Link 
               href="/docs/quick-start" 
-              className="group px-6 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 text-sm sm:text-base"
+              className="group px-6 sm:px-10 py-3 sm:py-4 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-3 shadow-xl shadow-accent-blue/30 hover:shadow-accent-blue/50 hover:scale-105 text-sm sm:text-base"
             >
               Start Building Now
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link 
               href="/playground" 
               className="group px-6 sm:px-10 py-3 sm:py-4 glass-morphic hover:bg-white/10 border border-white/20 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-3 hover:scale-105 text-sm sm:text-base"
             >
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+              <SparklesIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               Try Interactive Demo
             </Link>
             <a 
@@ -66,7 +70,7 @@ export default function Home() {
               rel="noopener noreferrer" 
               className="group px-6 sm:px-10 py-3 sm:py-4 glass-morphic hover:bg-surface border border-white/10 text-white rounded-xl font-semibold transition-all flex items-center justify-center gap-3 hover:scale-105 text-sm sm:text-base"
             >
-              <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+              <GithubIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               Star on GitHub
             </a>
           </div>
@@ -319,7 +323,7 @@ export default function Home() {
 
             {/* Pro Tier */}
             <div className="relative holographic-card p-6 sm:p-8 rounded-xl border-2 border-accent-blue shadow-2xl shadow-accent-blue/30 transform hover:scale-105 transition-all animate-scale-in" style={{ animationDelay: '0.2s' }}>
-              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 sm:py-1.5 bg-accent-blue text-white text-xs font-bold rounded-full uppercase tracking-wide">
                 Coming Soon
               </div>
               <div className="text-xs sm:text-sm font-semibold text-accent-blue mb-3 sm:mb-4">MOST POPULAR</div>
@@ -429,7 +433,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             <Link 
               href="/docs/quick-start" 
-              className="px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold transition-all text-base sm:text-lg shadow-2xl shadow-accent-blue/40 hover:scale-105 hover:shadow-accent-blue/60"
+              className="px-8 sm:px-12 py-4 sm:py-5 bg-accent-blue hover:bg-accent-blue/90 text-white rounded-xl font-bold transition-all text-base sm:text-lg shadow-2xl shadow-accent-blue/40 hover:scale-105 hover:shadow-accent-blue/60"
             >
               Start Building Now →
             </Link>
@@ -452,7 +456,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Terminal className="w-5 h-5 sm:w-6 sm:h-6 text-accent-blue" />
+                <TerminalIcon className="w-5 h-5 sm:w-6 sm:h-6 text-accent-blue" />
                 <span className="text-lg sm:text-xl font-bold">stick.ai</span>
               </div>
               <p className="text-zinc-400 text-xs sm:text-sm">
@@ -493,10 +497,10 @@ export default function Home() {
             </div>
             <div className="flex gap-4 sm:gap-6">
               <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
-                <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+                <GithubIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
               <a href="https://npmjs.com/package/@stick-ai/cli" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors">
-                <Terminal className="w-4 h-4 sm:w-5 sm:h-5" />
+                <TerminalIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
             </div>
           </div>

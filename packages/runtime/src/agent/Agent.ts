@@ -69,9 +69,6 @@ export class Agent {
 
     this.conversationHistory.push(userMessage);
 
-    // Simulate processing
-    await new Promise(resolve => setTimeout(resolve, 500));
-
     const response = await this.processInput(input);
 
     const assistantMessage: Message = {
@@ -86,8 +83,18 @@ export class Agent {
   }
 
   private async processInput(input: string): Promise<string> {
-    // Basic response generation
-    return `[${this.config.name}] Processing: ${input}`;
+    // Check if agent has LLM capabilities (extended by IntelligentAgent)
+    // This base implementation provides a helpful response for non-intelligent agents
+
+    const toolsAvailable = this.config.tools.length > 0
+      ? `\n\nAvailable tools: ${this.config.tools.join(', ')}`
+      : '';
+
+    const capabilities = this.config.capabilities.length > 0
+      ? `\n\nCapabilities: ${this.config.capabilities.join(', ')}`
+      : '';
+
+    return `Agent "${this.config.name}" received your request: "${input}"${toolsAvailable}${capabilities}\n\nNote: This is a base agent. For AI-powered responses, use IntelligentAgent with LLM configuration (OpenAI, Anthropic, or Ollama).`;
   }
 
   public registerTool(name: string, tool: any) {

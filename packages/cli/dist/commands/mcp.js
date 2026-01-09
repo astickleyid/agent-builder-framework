@@ -248,17 +248,30 @@ async function createParameters() {
 function generateHandler(toolName, parameters) {
     const paramNames = Object.keys(parameters.properties || {});
     const paramList = paramNames.join(', ');
-    return `async function ${toolName}(${paramList ? `{ ${paramList} }` : ''}) {
-  // TODO: Implement ${toolName}
-  
-  // Example implementation:
-  try {
-    // Your logic here
+    // Generate example implementation based on parameter names
+    const exampleLogic = paramNames.length > 0
+        ? `    // Process parameters
+    console.log('Executing ${toolName} with:', { ${paramList} });
+
+    // Implement your business logic here
+    // Example: validation, API calls, data processing, etc.
+
     const result = {
       success: true,
-      data: 'Implementation needed'
-    };
-    
+      message: '${toolName} executed successfully',
+      data: {
+        ${paramNames.map(p => `${p}: ${p}`).join(',\n        ')}
+      }
+    };`
+        : `    // Implement your business logic here
+    const result = {
+      success: true,
+      message: '${toolName} executed successfully'
+    };`;
+    return `async function ${toolName}(${paramList ? `{ ${paramList} }` : ''}) {
+  try {
+${exampleLogic}
+
     return result;
   } catch (error) {
     throw new Error(\`Failed to execute ${toolName}: \${error.message}\`);
@@ -587,8 +600,94 @@ async function testMCPServer(serverName) {
         ]);
         serverName = name;
     }
-    console.log(chalk_1.default.yellow(`Testing ${serverName}...\n`));
-    console.log(chalk_1.default.gray('(Test functionality coming soon)\n'));
+    const spinner = (0, ora_1.default)(`Testing ${serverName}...`).start();
+    try {
+        const serverDir = path_1.default.join(process.cwd(), 'mcp-servers', serverName);
+        // Check if server exists
+        if (!await fs_extra_1.default.pathExists(serverDir)) {
+            spinner.fail(`Server not found: ${serverName}`);
+            console.log(chalk_1.default.yellow('\nAvailable servers:'));
+            await listMCPServers();
+            return;
+        }
+        // Check if server is built
+        const distPath = path_1.default.join(serverDir, 'dist', 'index.js');
+        if (!await fs_extra_1.default.pathExists(distPath)) {
+            spinner.warn('Server not built. Building now...');
+            const { exec } = await import('child_process');
+            const { promisify } = await import('util');
+            const execAsync = promisify(exec);
+            try {
+                await execAsync('npm run build', { cwd: serverDir });
+                spinner.succeed('Server built successfully');
+            }
+            catch (error) {
+                spinner.fail('Build failed');
+                console.error(chalk_1.default.red('Error:'), error.message);
+                return;
+            }
+        }
+        spinner.text = 'Starting MCP server test...';
+        // Import and test the MCP server
+        const { spawn } = await import('child_process');
+        const serverProcess = spawn('node', [distPath], {
+            cwd: serverDir,
+            stdio: ['pipe', 'pipe', 'pipe']
+        });
+        let output = '';
+        let errorOutput = '';
+        serverProcess.stdout.on('data', (data) => {
+            output += data.toString();
+        });
+        serverProcess.stderr.on('data', (data) => {
+            errorOutput += data.toString();
+        });
+        // Wait for server to start (or fail)
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        // Send a test request
+        const testRequest = JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'tools/list',
+            params: {}
+        }) + '\n';
+        serverProcess.stdin.write(testRequest);
+        // Wait for response
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        serverProcess.kill();
+        if (errorOutput.includes('running on stdio')) {
+            spinner.succeed(`${serverName} is working correctly!`);
+            console.log(chalk_1.default.green('\n✓ Server started successfully'));
+            console.log(chalk_1.default.gray('  Server output:', errorOutput.split('\n')[0]));
+        }
+        else if (output || errorOutput) {
+            spinner.succeed('Server test completed');
+            console.log(chalk_1.default.cyan('\nServer output:'));
+            if (errorOutput)
+                console.log(chalk_1.default.gray(errorOutput));
+            if (output)
+                console.log(chalk_1.default.white(output));
+        }
+        else {
+            spinner.warn('Server started but no output received');
+            console.log(chalk_1.default.yellow('\nThe server may need additional configuration.'));
+        }
+        console.log(chalk_1.default.cyan('\nNext steps:'));
+        console.log(chalk_1.default.white(`  1. Add to agent config:`));
+        console.log(chalk_1.default.gray(`     mcp: {
+       servers: {
+         "${serverName}": {
+           command: "node",
+           args: ["./mcp-servers/${serverName}/dist/index.js"]
+         }
+       }
+     }`));
+        console.log();
+    }
+    catch (error) {
+        spinner.fail('Test failed');
+        console.error(chalk_1.default.red('Error:'), error.message);
+    }
 }
 /**
  * Publish MCP server

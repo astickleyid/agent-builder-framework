@@ -339,7 +339,15 @@ async function interactiveMode() {
                 running = false;
                 break;
             default:
-                console.log(chalk_1.default.yellow('\n⚠ Feature coming soon!\n'));
+                console.log(chalk_1.default.yellow(`\n⚠ Unknown action: "${choice}"\n`));
+                console.log(chalk_1.default.gray('Available actions:'));
+                console.log(chalk_1.default.cyan('  • create') + chalk_1.default.gray(' - Create a new agent'));
+                console.log(chalk_1.default.cyan('  • tools') + chalk_1.default.gray('  - Configure tools'));
+                console.log(chalk_1.default.cyan('  • mcp') + chalk_1.default.gray('    - Add MCP server'));
+                console.log(chalk_1.default.cyan('  • list') + chalk_1.default.gray('   - List agents'));
+                console.log(chalk_1.default.cyan('  • metrics') + chalk_1.default.gray(' - View metrics'));
+                console.log(chalk_1.default.cyan('  • help') + chalk_1.default.gray('   - Show help'));
+                console.log(chalk_1.default.cyan('  • exit') + chalk_1.default.gray('   - Exit interactive mode\n'));
                 await inquirer_1.default.prompt([{ type: 'input', name: 'continue', message: chalk_1.default.gray('Press Enter to continue...') }]);
         }
     }

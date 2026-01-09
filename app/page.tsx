@@ -323,8 +323,8 @@ export default function Home() {
 
             {/* Pro Tier */}
             <div className="relative holographic-card p-6 sm:p-8 rounded-xl border-2 border-accent-blue shadow-2xl shadow-accent-blue/30 transform hover:scale-105 transition-all animate-scale-in" style={{ animationDelay: '0.2s' }}>
-              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 sm:py-1.5 bg-accent-blue text-white text-xs font-bold rounded-full uppercase tracking-wide">
-                Coming Soon
+              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-r from-accent-blue to-accent-cyan text-white text-xs font-bold rounded-full uppercase tracking-wide shadow-lg">
+                Early Access
               </div>
               <div className="text-xs sm:text-sm font-semibold text-accent-blue mb-3 sm:mb-4">MOST POPULAR</div>
               <h3 className="text-xl sm:text-2xl font-bold mb-2">Professional</h3>

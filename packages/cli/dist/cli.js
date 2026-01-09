@@ -222,7 +222,7 @@ async function handleNaturalLanguage(input) {
                 await (0, multi_agent_1.multiAgentCommand)(params?.action, entity);
                 break;
             case 'workflow':
-                console.log(chalk_1.default.cyan('\n⚙️  Workflow builder coming soon!\n'));
+                await (0, workflow_1.workflowCommand)(params?.action, entity);
                 break;
             case 'list':
                 await (0, list_1.listCommand)();

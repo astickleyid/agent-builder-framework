@@ -56,7 +56,13 @@ export class SimpleAgent {
 
   private async simulateResponse(input: string): Promise<string> {
     await new Promise(resolve => setTimeout(resolve, 500));
-    return `[Simulated ${this.config.provider}/${this.config.model}] I received: "${input}". Tools available: ${this.config.tools.join(', ')}`;
+
+    // Provide helpful guidance instead of just echoing
+    const toolsInfo = this.config.tools.length > 0
+      ? `\n\nConfigured tools: ${this.config.tools.join(', ')}`
+      : '';
+
+    return `⚠️ Agent Configuration Required\n\nThe agent "${this.config.name}" needs LLM credentials to generate real responses.\n\nProvider: ${this.config.provider}\nModel: ${this.config.model}${toolsInfo}\n\nTo enable real responses, configure your API credentials:\n• For OpenAI: Set OPENAI_API_KEY environment variable\n• For Anthropic: Set ANTHROPIC_API_KEY environment variable\n• For Ollama: Ensure Ollama is running locally (ollama serve)\n\nYour message: "${input}"`;
   }
 
   private async callLLM(input: string): Promise<string> {

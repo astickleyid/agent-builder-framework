@@ -32,6 +32,7 @@
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@stick-ai/runtime": "file:./packages/runtime",
+    "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.12.0",
     "fs-extra": "^11.3.2",

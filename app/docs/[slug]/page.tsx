@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Terminal, ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
+import TerminalIcon from '@/components/icons/TerminalIcon';
 
 // Documentation content for each page
 const documentationContent: Record<string, {
@@ -1123,14 +1124,13 @@ export default function DocPage({ params }: { params: { slug: string } }) {
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
               <div className="relative">
-                <Terminal className="w-6 h-6 text-accent-blue" />
-                <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+                <TerminalIcon className="w-6 h-6 text-accent-blue" />
               </div>
               <span className="text-xl font-bold">stick.ai</span>
             </Link>
           </div>
         </nav>
-        
+
         <div className="pt-32 text-center">
           <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
           <p className="text-zinc-400 mb-8">The documentation page "{slug}" doesn't exist.</p>
@@ -1149,8 +1149,7 @@ export default function DocPage({ params }: { params: { slug: string } }) {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="relative">
-              <Terminal className="w-6 h-6 text-accent-blue" />
-              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+              <TerminalIcon className="w-6 h-6 text-accent-blue" />
             </div>
             <span className="text-xl font-bold">stick.ai</span>
           </Link>

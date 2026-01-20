@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Terminal, MessageSquare, Sparkles } from 'lucide-react';
+import { MessageSquare, Sparkles } from 'lucide-react';
+import TerminalIcon from '@/components/icons/TerminalIcon';
 
 export default function Dashboard() {
   const [agents, setAgents] = useState<any[]>([]);
@@ -115,8 +116,7 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="relative">
-              <Terminal className="w-6 h-6 text-accent-blue" />
-              <div className="absolute inset-0 blur-md bg-accent-blue/30" />
+              <TerminalIcon className="w-6 h-6 text-accent-blue" />
             </div>
             <span className="text-xl font-bold">stick.ai</span>
           </Link>

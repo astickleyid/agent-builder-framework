@@ -5,7 +5,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import TerminalIcon from '@/components/icons/TerminalIcon';
 import { getDocBySlug, getAllDocs } from '@/lib/docs';
-import { notFound } from 'next/navigation';
 
 // Fallback documentation content for pages not in markdown files
 const fallbackDocumentationContent: Record<string, {
@@ -1124,19 +1123,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function DocPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+export default async function DocPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   
   // Try to load from markdown files first
   const markdownDoc = getDocBySlug(slug);
   
   // Fall back to hardcoded content
   const fallbackDoc = fallbackDocumentationContent[slug];
-  
-  // If neither exists, show not found
-  if (!markdownDoc && !fallbackDoc) {
-    notFound();
-  }
   
   // Use markdown doc if available, otherwise use fallback
   const doc = markdownDoc || fallbackDoc;

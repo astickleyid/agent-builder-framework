@@ -1,9 +1,14 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import TerminalIcon from '@/components/icons/TerminalIcon';
+import { getDocBySlug, getAllDocs } from '@/lib/docs';
+import { notFound } from 'next/navigation';
 
-// Documentation content for each page
-const documentationContent: Record<string, {
+// Fallback documentation content for pages not in markdown files
+const fallbackDocumentationContent: Record<string, {
   title: string;
   description: string;
   content: React.ReactNode;
@@ -1107,7 +1112,14 @@ docker-compose up -d`}</code></pre>
 
 // Generate static paths for all documentation pages
 export async function generateStaticParams() {
-  return Object.keys(documentationContent).map((slug) => ({
+  const allDocs = getAllDocs();
+  const fallbackSlugs = Object.keys(fallbackDocumentationContent);
+  const markdownSlugs = allDocs.map((doc) => doc.slug);
+  
+  // Combine markdown slugs and fallback slugs
+  const allSlugs = Array.from(new Set([...markdownSlugs, ...fallbackSlugs]));
+  
+  return allSlugs.map((slug) => ({
     slug,
   }));
 }
@@ -1115,7 +1127,19 @@ export async function generateStaticParams() {
 export default function DocPage({ params }: { params: { slug: string } }) {
   const slug = params.slug;
   
-  const doc = documentationContent[slug];
+  // Try to load from markdown files first
+  const markdownDoc = getDocBySlug(slug);
+  
+  // Fall back to hardcoded content
+  const fallbackDoc = fallbackDocumentationContent[slug];
+  
+  // If neither exists, show not found
+  if (!markdownDoc && !fallbackDoc) {
+    notFound();
+  }
+  
+  // Use markdown doc if available, otherwise use fallback
+  const doc = markdownDoc || fallbackDoc;
   
   if (!doc) {
     return (
@@ -1202,7 +1226,13 @@ export default function DocPage({ params }: { params: { slug: string } }) {
             prose-th:border prose-th:border-border prose-th:bg-surface prose-th:px-4 prose-th:py-2 prose-th:text-left
             prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2
           ">
-            {doc.content}
+            {typeof doc.content === 'string' ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+                {doc.content}
+              </ReactMarkdown>
+            ) : (
+              doc.content
+            )}
           </article>
 
           {/* Navigation */}

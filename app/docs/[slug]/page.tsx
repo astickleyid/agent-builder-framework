@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, BookOpen } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
+import { ArrowLeft, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 import TerminalIcon from '@/components/icons/TerminalIcon';
+import AIAssistant from '@/components/AIAssistant';
+import EnhancedMarkdown from '@/components/EnhancedMarkdown';
 import { getDocBySlug, getAllDocs } from '@/lib/docs';
 
 // Fallback documentation content for pages not in markdown files
@@ -1161,18 +1160,24 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground relative">
+      {/* Animated background gradient */}
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-blue/5 via-background to-background pointer-events-none" />
+      
+      {/* Grid pattern */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(14,165,233,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.03)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none opacity-20" />
+      
       {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
+      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 group">
             <div className="relative">
-              <TerminalIcon className="w-6 h-6 text-accent-blue" />
+              <TerminalIcon className="w-6 h-6 text-accent-blue group-hover:scale-110 transition-transform" />
             </div>
             <span className="text-xl font-bold">stick.ai</span>
           </Link>
           <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-white font-semibold">
+            <Link href="/docs" className="text-sm text-white font-semibold hover:text-accent-blue transition-colors">
               Docs
             </Link>
             <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
@@ -1185,12 +1190,15 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
         </div>
       </nav>
 
+      {/* AI Assistant */}
+      <AIAssistant />
+
       {/* Content */}
-      <div className="pt-24 pb-16">
+      <div className="relative pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-6">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-zinc-400 mb-8">
-            <Link href="/docs" className="hover:text-white transition-colors flex items-center gap-1">
+          <div className="flex items-center gap-2 text-sm text-zinc-400 mb-8 animate-fade-in">
+            <Link href="/docs" className="hover:text-accent-blue transition-colors flex items-center gap-1">
               <BookOpen className="w-4 h-4" />
               Documentation
             </Link>
@@ -1199,63 +1207,69 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
           </div>
 
           {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">{doc.title}</h1>
-            <p className="text-xl text-zinc-400">{doc.description}</p>
+          <div className="mb-12 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-accent-blue mb-4">
+              <Sparkles className="w-4 h-4" />
+              Documentation
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 gradient-text leading-tight">{doc.title}</h1>
+            <p className="text-xl text-zinc-400 leading-relaxed">{doc.description}</p>
           </div>
 
           {/* Content */}
           <article className="prose prose-invert prose-lg max-w-none
-            prose-headings:font-bold prose-headings:text-white
-            prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
-            prose-p:text-zinc-300 prose-p:leading-relaxed
-            prose-a:text-accent-blue prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-white
-            prose-code:text-accent-cyan prose-code:bg-surface prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm
-            prose-pre:bg-black/40 prose-pre:border prose-pre:border-border prose-pre:rounded-xl
-            prose-ul:text-zinc-300 prose-ol:text-zinc-300
-            prose-li:marker:text-accent-blue
-            prose-table:border-collapse
-            prose-th:border prose-th:border-border prose-th:bg-surface prose-th:px-4 prose-th:py-2 prose-th:text-left
-            prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2
-          ">
+            prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight
+            prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:border-b prose-h2:border-border/30 prose-h2:pb-4
+            prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-accent-blue
+            prose-h4:text-xl prose-h4:mt-8 prose-h4:mb-3
+            prose-p:text-zinc-300 prose-p:leading-relaxed prose-p:text-lg prose-p:mb-6
+            prose-a:text-accent-blue prose-a:no-underline prose-a:font-medium hover:prose-a:underline hover:prose-a:text-accent-cyan prose-a:transition-colors
+            prose-strong:text-white prose-strong:font-semibold
+            prose-code:text-accent-cyan prose-code:bg-surface/80 prose-code:px-2 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:border prose-code:border-border/50
+            prose-pre:!bg-transparent prose-pre:!p-0 prose-pre:!my-6
+            prose-ul:text-zinc-300 prose-ul:my-6 prose-ul:space-y-2
+            prose-ol:text-zinc-300 prose-ol:my-6 prose-ol:space-y-2
+            prose-li:marker:text-accent-blue prose-li:text-lg prose-li:leading-relaxed
+            prose-table:border-collapse prose-table:my-8
+            prose-th:border prose-th:border-border prose-th:bg-surface/50 prose-th:px-6 prose-th:py-3 prose-th:text-left prose-th:font-semibold
+            prose-td:border prose-td:border-border prose-td:px-6 prose-td:py-3 prose-td:text-zinc-300
+            prose-blockquote:border-l-4 prose-blockquote:border-accent-blue prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-zinc-400
+            animate-fade-in-up
+          " style={{ animationDelay: '0.1s' }}>
             {typeof doc.content === 'string' ? (
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
-                {doc.content}
-              </ReactMarkdown>
+              <EnhancedMarkdown content={doc.content} />
             ) : (
               doc.content
             )}
           </article>
 
           {/* Navigation */}
-          <div className="mt-16 pt-8 border-t border-border flex justify-between">
+          <div className="mt-20 pt-8 border-t border-border/50 flex justify-between items-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             {doc.prev ? (
               <Link 
                 href={`/docs/${doc.prev.slug}`}
-                className="group flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
+                className="group flex items-center gap-3 px-6 py-4 glass-morphic hover:border-accent-blue/50 rounded-xl transition-all flex-1"
               >
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                <div>
-                  <div className="text-xs text-zinc-500">Previous</div>
-                  <div className="font-medium">{doc.prev.title}</div>
+                <ArrowLeft className="w-5 h-5 text-accent-blue group-hover:-translate-x-1 transition-transform" />
+                <div className="text-left">
+                  <div className="text-xs text-zinc-500 mb-1">Previous</div>
+                  <div className="font-semibold text-white group-hover:text-accent-blue transition-colors">{doc.prev.title}</div>
                 </div>
               </Link>
-            ) : <div />}
+            ) : <div className="flex-1" />}
             
             {doc.next ? (
               <Link 
                 href={`/docs/${doc.next.slug}`}
-                className="group flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-right"
+                className="group flex items-center gap-3 px-6 py-4 glass-morphic hover:border-accent-blue/50 rounded-xl transition-all flex-1 justify-end"
               >
-                <div>
-                  <div className="text-xs text-zinc-500">Next</div>
-                  <div className="font-medium">{doc.next.title}</div>
+                <div className="text-right">
+                  <div className="text-xs text-zinc-500 mb-1">Next</div>
+                  <div className="font-semibold text-white group-hover:text-accent-blue transition-colors">{doc.next.title}</div>
                 </div>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 text-accent-blue group-hover:translate-x-1 transition-transform" />
               </Link>
-            ) : <div />}
+            ) : <div className="flex-1" />}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
-import TerminalIcon from '@/components/icons/TerminalIcon';
+import Navbar from '@/components/Navbar';
 import AIAssistant from '@/components/AIAssistant';
 import EnhancedMarkdown from '@/components/EnhancedMarkdown';
 import { getDocBySlug, getAllDocs } from '@/lib/docs';
@@ -1137,16 +1137,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
   if (!doc) {
     return (
       <div className="min-h-screen bg-background text-foreground">
-        <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="relative">
-                <TerminalIcon className="w-6 h-6 text-accent-blue" />
-              </div>
-              <span className="text-xl font-bold">stick.ai</span>
-            </Link>
-          </div>
-        </nav>
+        <Navbar />
 
         <div className="pt-32 text-center">
           <h1 className="text-4xl font-bold mb-4">Page Not Found</h1>
@@ -1164,38 +1155,17 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
       {/* Animated background gradient */}
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-blue/5 via-background to-background pointer-events-none" />
       
-      {/* Grid pattern */}
-      <div className="fixed inset-0 bg-[linear-gradient(rgba(14,165,233,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.03)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none opacity-20" />
+      {/* Grid pattern - Standardized to 80px like main site */}
+      <div className="fixed inset-0 bg-[linear-gradient(rgba(14,165,233,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.02)_1px,transparent_1px)] bg-[size:80px_80px] pointer-events-none opacity-20 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_90%)]" />
       
-      {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <TerminalIcon className="w-6 h-6 text-accent-blue group-hover:scale-110 transition-transform" />
-            </div>
-            <span className="text-xl font-bold">stick.ai</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-white font-semibold hover:text-accent-blue transition-colors">
-              Docs
-            </Link>
-            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Examples
-            </Link>
-            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Playground
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* AI Assistant */}
       <AIAssistant />
 
       {/* Content */}
       <div className="relative pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-zinc-400 mb-8 animate-fade-in">
             <Link href="/docs" className="hover:text-accent-blue transition-colors flex items-center gap-1">
@@ -1220,7 +1190,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
           <article className="prose prose-invert prose-lg max-w-none
             prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight
             prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:border-b prose-h2:border-border/30 prose-h2:pb-4
-            prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-accent-blue
+            prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4
             prose-h4:text-xl prose-h4:mt-8 prose-h4:mb-3
             prose-p:text-zinc-300 prose-p:leading-relaxed prose-p:text-lg prose-p:mb-6
             prose-a:text-accent-blue prose-a:no-underline prose-a:font-medium hover:prose-a:underline hover:prose-a:text-accent-cyan prose-a:transition-colors

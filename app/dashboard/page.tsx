@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { MessageSquare, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 

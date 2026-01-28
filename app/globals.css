@@ -108,6 +108,161 @@ body {
   }
 }
 
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out;
+}
+
+.terminal-text {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Enhanced glass morphism */
+.glass-morphic {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-morphic:hover {
+  background: rgba(15, 15, 15, 0.7);
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #0ea5e9 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holographic-shimmer 4s ease-in-out infinite;
+}
+
+/* Enhanced code blocks */
+.prose pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.prose code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
+}
+
+/* Smooth scrolling for documentation */
+html {
+  scroll-padding-top: 100px;
+}
+
+/* Enhanced link hover effects */
+.prose a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.prose a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+  transition: width 0.3s ease;
+}
+
+.prose a:hover::after {
+  width: 100%;
+}
+
+/* Enhanced table styling */
+.prose table {
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.prose th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.prose tr:hover td {
+  background: rgba(14, 165, 233, 0.05);
+}
+
+/* Highlight important text */
+.prose strong {
+  color: #0ea5e9;
+  font-weight: 600;
+}
+
+/* Better list styling */
+.prose ul > li,
+.prose ol > li {
+  padding-left: 0.5rem;
+}
+
+.prose ul > li::marker {
+  font-size: 1.2em;
+}
+
+/* Enhanced blockquote */
+.prose blockquote {
+  border-left-width: 4px;
+  border-left-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.05);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.5rem;
+}
+
+/* Section dividers */
+.prose h2 {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.prose h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #0ea5e9, transparent);
+  border-radius: 2px;
+}
+
 @keyframes scale-in {
   from {
     opacity: 0;

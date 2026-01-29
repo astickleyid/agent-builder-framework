@@ -3,8 +3,8 @@
 import { Bot, Search, Code, BarChart, MessageSquare, Copy, Check } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import Navbar from '@/components/Navbar';
 import SparklesIcon from '@/components/icons/SparklesIcon';
-import TerminalIcon from '@/components/icons/TerminalIcon';
 
 const examples = [
   {
@@ -104,32 +104,11 @@ export default function Examples() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative">
-              <TerminalIcon className="w-6 h-6 text-accent-blue" />
-            </div>
-            <span className="text-xl font-bold">stick.ai</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Docs
-            </Link>
-            <Link href="/examples" className="text-sm text-white font-semibold">
-              Examples
-            </Link>
-            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Playground
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
-      <div className="pt-24 pb-8">
-        <div className="max-w-6xl mx-auto px-6">
+      <div className="pt-24 pb-16 sm:pb-20">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
               <Bot className="w-4 h-4 text-accent-blue" />

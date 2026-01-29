@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
+import Navbar from '@/components/Navbar';
 import ProIcon from '@/components/icons/ProIcon';
-import TerminalIcon from '@/components/icons/TerminalIcon';
 import AgentBuilder from '@/components/builder/AgentBuilder';
 import AgentPreview from '@/components/builder/AgentPreview';
 import AgentTester from '@/components/builder/AgentTester';
@@ -26,31 +26,10 @@ export default function Playground() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative">
-              <TerminalIcon className="w-6 h-6 text-accent-blue" />
-            </div>
-            <span className="text-xl font-bold">stick.ai</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Docs
-            </Link>
-            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Examples
-            </Link>
-            <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Dashboard
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
-      <div className="pt-24 pb-8">
+      <div className="pt-24 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">

@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight, BookOpen } from 'lucide-react';
 
+import Navbar from '@/components/Navbar';
 import ProIcon from '@/components/icons/ProIcon';
-import TerminalIcon from '@/components/icons/TerminalIcon';
 
 const documentation = [
   {
@@ -62,31 +62,10 @@ const documentation = [
 export default function Documentation() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Fixed Header */}
-      <nav className="fixed top-0 w-full z-50 glass-morphic border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="relative">
-              <TerminalIcon className="w-6 h-6 text-accent-blue" />
-            </div>
-            <span className="text-xl font-bold">stick.ai</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/docs" className="text-sm text-white font-semibold">
-              Docs
-            </Link>
-            <Link href="/examples" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Examples
-            </Link>
-            <Link href="/playground" className="text-sm text-zinc-400 hover:text-white transition-colors">
-              Playground
-            </Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
-      <div className="pt-24 pb-8">
+      <div className="pt-24 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-morphic text-sm text-zinc-400 mb-6">
@@ -113,8 +92,8 @@ export default function Documentation() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="space-y-8">
+      <div className="max-w-7xl mx-auto px-6 py-16 sm:py-24">
+        <div className="space-y-12">
           {documentation.map((section) => (
             <div key={section.category} className="holographic-card rounded-xl border border-border p-8">
               <div className="flex items-center gap-4 mb-6">
@@ -154,7 +133,7 @@ export default function Documentation() {
             </div>
             <h3 className="text-xl font-bold mb-2 text-white">Join Developer Community</h3>
             <p className="text-zinc-400 mb-4">Connect with developers building production AI agents. Get support, share insights, and collaborate.</p>
-            <button className="px-5 py-2.5 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all flex items-center gap-2">
+            <button className="px-6 py-3 bg-accent-blue text-white rounded-lg font-medium hover:bg-accent-blue/90 transition-all flex items-center gap-2">
               <ProIcon name="message" size={16} />
               Join Discord Server
             </button>
@@ -166,7 +145,7 @@ export default function Documentation() {
             </div>
             <h3 className="text-xl font-bold mb-2 text-white">Contribute to Open Source</h3>
             <p className="text-zinc-400 mb-4">View source code, report issues, and contribute features to the framework. 100% open source.</p>
-            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
+            <a href="https://github.com/astickleyid/agent-builder-framework" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
               <ProIcon name="code" size={16} />
               Star on GitHub
             </a>
@@ -178,7 +157,7 @@ export default function Documentation() {
             </div>
             <h3 className="text-xl font-bold mb-2 text-white">Learn by Example</h3>
             <p className="text-zinc-400 mb-4">Explore production-ready agent templates and real-world implementation examples.</p>
-            <Link href="/examples" className="inline-block px-5 py-2.5 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
+            <Link href="/examples" className="inline-block px-6 py-3 glass-morphic text-white rounded-lg font-medium hover:bg-surface transition-all flex items-center gap-2">
               <ProIcon name="graduation" size={16} />
               View Templates
             </Link>

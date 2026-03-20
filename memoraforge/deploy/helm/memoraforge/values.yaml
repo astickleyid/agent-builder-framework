@@ -1,0 +1,232 @@
+# MemoraForge Helm Chart — Default Values
+# Override with: helm install memoraforge ./memoraforge -f my-values.yaml
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# ─── API Server ──────────────────────────────────────────────────
+apiServer:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: memoraforge/api-server
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2000m"
+      memory: "4Gi"
+      nvidia.com/gpu: "1"  # Request GPU for vLLM
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 8
+    targetCPUUtilization: 70
+  env:
+    LLM_BACKEND: "vllm"
+    DEFAULT_MODEL: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    MAX_CONCURRENT_REQUESTS: "64"
+  probes:
+    liveness:
+      path: /health
+      initialDelaySeconds: 30
+      periodSeconds: 10
+    readiness:
+      path: /health
+      initialDelaySeconds: 10
+      periodSeconds: 5
+
+# ─── MCP Server ──────────────────────────────────────────────────
+mcpServer:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: memoraforge/mcp-server
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8100
+    grpcPort: 50051
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+  env:
+    REDIS_URL: "redis://memoraforge-redis-master:6379/0"
+
+# ─── Memory Hub ──────────────────────────────────────────────────
+memoryHub:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: memoraforge/memory-hub
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8200
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2000m"
+      memory: "4Gi"
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilization: 75
+    targetRequestsPerSecond: 1000
+  env:
+    WEAVIATE_URL: "http://weaviate:8080"
+    NEO4J_URI: "bolt://neo4j:7687"
+    EMBEDDING_MODEL: "all-MiniLM-L6-v2"
+
+# ─── ACP Handler ─────────────────────────────────────────────────
+acpHandler:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: memoraforge/acp-handler
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8300
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+  env:
+    RATE_LIMIT_CAPACITY: "500"
+    RATE_LIMIT_REFILL: "50"
+
+# ─── Ingress ─────────────────────────────────────────────────────
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/websocket-services: "mcp-server,acp-handler"
+  hosts:
+    - host: api.memoraforge.example.com
+      paths:
+        - path: /v1
+          service: api-server
+          port: 8000
+        - path: /streams
+          service: mcp-server
+          port: 8100
+        - path: /retrieve
+          service: memory-hub
+          port: 8200
+        - path: /ingest
+          service: memory-hub
+          port: 8200
+        - path: /rpc
+          service: acp-handler
+          port: 8300
+        - path: /agents
+          service: acp-handler
+          port: 8300
+  tls:
+    - secretName: memoraforge-tls
+      hosts:
+        - api.memoraforge.example.com
+
+# ─── Infrastructure ──────────────────────────────────────────────
+postgresql:
+  enabled: true
+  auth:
+    username: memoraforge
+    password: ""  # Set via --set or secrets
+    database: memoraforge
+  primary:
+    persistence:
+      size: 50Gi
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+
+redis:
+  enabled: true
+  architecture: sentinel
+  sentinel:
+    enabled: true
+    quorum: 2
+  master:
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+    persistence:
+      size: 10Gi
+  replica:
+    replicaCount: 2
+
+neo4j:
+  enabled: true
+  neo4j:
+    password: ""  # Set via --set or secrets
+  core:
+    numberOfServers: 3
+  volumes:
+    data:
+      mode: defaultStorageClass
+      defaultStorageClass:
+        requests:
+          storage: 50Gi
+
+weaviate:
+  enabled: true
+  replicas: 3
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "2Gi"
+  storage:
+    size: 100Gi
+
+# ─── Monitoring ──────────────────────────────────────────────────
+monitoring:
+  enabled: true
+  prometheus:
+    scrapeInterval: 15s
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: prometheus
+
+# ─── Security ────────────────────────────────────────────────────
+security:
+  networkPolicies:
+    enabled: true
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]

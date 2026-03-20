@@ -1,0 +1,198 @@
+name: MemoraForge CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'memoraforge/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'memoraforge/**'
+
+env:
+  PYTHON_VERSION: '3.12'
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository_owner }}/memoraforge
+
+jobs:
+  # ── Lint & Type Check ──────────────────────────────────────────
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          cd memoraforge
+          pip install -r requirements.txt
+          pip install ruff mypy
+
+      - name: Ruff lint
+        run: cd memoraforge && ruff check .
+
+      - name: Ruff format check
+        run: cd memoraforge && ruff format --check .
+
+      - name: MyPy type check
+        run: cd memoraforge && mypy --ignore-missing-imports --no-error-summary .
+        continue-on-error: true  # Warnings only for now
+
+  # ── Unit Tests ─────────────────────────────────────────────────
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          cd memoraforge
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: |
+          cd memoraforge
+          python -m pytest tests/ -v --tb=short --cov=. --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: memoraforge/coverage.xml
+          flags: unit
+        continue-on-error: true
+
+  # ── Integration Tests ──────────────────────────────────────────
+  test-integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: test-unit
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd "redis-cli ping" --health-interval 5s
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: memoraforge_test
+          POSTGRES_USER: memoraforge
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 5s
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          cd memoraforge
+          pip install -r requirements.txt
+
+      - name: Run integration tests
+        env:
+          REDIS_URL: redis://localhost:6379/0
+          POSTGRES_URL: postgresql+asyncpg://memoraforge:test@localhost:5432/memoraforge_test
+        run: |
+          cd memoraforge
+          python -m pytest tests/integration/ -v --tb=short
+
+  # ── UI Tests ───────────────────────────────────────────────────
+  test-ui:
+    name: UI Build & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: memoraforge/ui/package.json
+
+      - name: Install dependencies
+        run: cd memoraforge/ui && npm ci
+
+      - name: Type check
+        run: cd memoraforge/ui && npx tsc --noEmit
+
+      - name: Build
+        run: cd memoraforge/ui && npm run build
+
+  # ── Docker Build ───────────────────────────────────────────────
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [test-unit, test-ui]
+    if: github.event_name == 'push'
+    strategy:
+      matrix:
+        service:
+          - { name: api-server, context: memoraforge, target: api-server }
+          - { name: mcp-server, context: memoraforge, target: mcp-server }
+          - { name: memory-hub, context: memoraforge, target: memory-hub }
+          - { name: acp-handler, context: memoraforge, target: acp-handler }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.service.context }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service.name }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service.name }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Helm Lint ──────────────────────────────────────────────────
+  helm-lint:
+    name: Helm Chart Lint
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Lint chart
+        run: helm lint memoraforge/deploy/helm/memoraforge
+
+      - name: Template check
+        run: helm template test memoraforge/deploy/helm/memoraforge > /dev/null

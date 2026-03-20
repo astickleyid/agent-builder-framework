@@ -1,0 +1,62 @@
+{{- if .Values.security.networkPolicies.enabled }}
+# Memory Hub: only accepts traffic from API server, MCP server, ACP handler
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "memoraforge.fullname" . }}-memory-hub
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: memory-hub
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: api-server
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: mcp-server
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: acp-handler
+      ports:
+        - port: 8200
+          protocol: TCP
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: neo4j
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: weaviate
+    - ports:
+        - port: 53
+          protocol: UDP  # DNS
+---
+# Data stores: only accept traffic from MemoraForge services
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "memoraforge.fullname" . }}-data-stores
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ include "memoraforge.name" . }}
+{{- end }}

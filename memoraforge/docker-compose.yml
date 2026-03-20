@@ -1,0 +1,157 @@
+version: "3.9"
+
+# MemoraForge — Local Development Stack
+# Run: docker compose up -d
+
+services:
+  # ─── Headless API Server ────────────────────────────
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn api_server.server:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_BACKEND=ollama
+      - OLLAMA_URL=http://ollama:11434
+      - DEFAULT_MODEL=llama3.1:8b
+    depends_on:
+      - ollama
+    networks:
+      - memoraforge
+
+  # ─── MCP Server ─────────────────────────────────────
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn mcp_server.server:app --host 0.0.0.0 --port 8100 --reload
+    ports:
+      - "8100:8100"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    networks:
+      - memoraforge
+
+  # ─── Memory Hub ─────────────────────────────────────
+  memory-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn memory_hub.app:app --host 0.0.0.0 --port 8200 --reload
+    ports:
+      - "8200:8200"
+    environment:
+      - WEAVIATE_URL=http://weaviate:8080
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=memoraforge
+      - POSTGRES_URL=postgresql://memoraforge:memoraforge@postgres:5432/memoraforge
+      - REDIS_URL=redis://redis:6379/1
+    depends_on:
+      - weaviate
+      - neo4j
+      - postgres
+      - redis
+    networks:
+      - memoraforge
+
+  # ─── ACP Handler ────────────────────────────────────
+  acp-handler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn acp_handler.handler:app --host 0.0.0.0 --port 8300 --reload
+    ports:
+      - "8300:8300"
+    environment:
+      - POSTGRES_URL=postgresql://memoraforge:memoraforge@postgres:5432/memoraforge
+      - REDIS_URL=redis://redis:6379/2
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - memoraforge
+
+  # ─── Infrastructure ─────────────────────────────────
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - memoraforge
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=memoraforge
+      - POSTGRES_USER=memoraforge
+      - POSTGRES_PASSWORD=memoraforge
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - memoraforge
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - memoraforge
+
+  neo4j:
+    image: neo4j:5-community
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/memoraforge
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - memoraforge
+
+  weaviate:
+    image: semitechnologies/weaviate:1.27.0
+    ports:
+      - "8080:8080"
+    environment:
+      - QUERY_DEFAULTS_LIMIT=50
+      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+      - DEFAULT_VECTORIZER_MODULE=none
+      - CLUSTER_HOSTNAME=node1
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - memoraforge
+
+volumes:
+  ollama_data:
+  postgres_data:
+  redis_data:
+  neo4j_data:
+  weaviate_data:
+
+networks:
+  memoraforge:
+    driver: bridge

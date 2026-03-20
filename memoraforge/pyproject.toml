@@ -41,6 +41,9 @@ dev = [
     "python-dotenv>=1.0",
 ]
 
+[project.scripts]
+memoraforge = "memoraforge.cli:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"

@@ -1,0 +1,45 @@
+# Multi-stage Dockerfile for all MemoraForge services
+# Build: docker build --target <service> -t memoraforge/<service> .
+
+# ── Base ──────────────────────────────────────────────────────────
+FROM python:3.12-slim AS base
+
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Non-root user
+RUN groupadd -r memoraforge && useradd -r -g memoraforge memoraforge
+USER memoraforge
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
+
+# ── API Server ────────────────────────────────────────────────────
+FROM base AS api-server
+ENV PORT=8000
+EXPOSE 8000
+CMD ["uvicorn", "api_server.server:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
+
+# ── MCP Server ────────────────────────────────────────────────────
+FROM base AS mcp-server
+ENV PORT=8100
+EXPOSE 8100 50051
+CMD ["uvicorn", "mcp_server.server:app", "--host", "0.0.0.0", "--port", "8100", "--workers", "2"]
+
+# ── Memory Hub ────────────────────────────────────────────────────
+FROM base AS memory-hub
+ENV PORT=8200
+EXPOSE 8200
+CMD ["uvicorn", "memory_hub.app:app", "--host", "0.0.0.0", "--port", "8200", "--workers", "4"]
+
+# ── ACP Handler ───────────────────────────────────────────────────
+FROM base AS acp-handler
+ENV PORT=8300
+EXPOSE 8300
+CMD ["uvicorn", "acp_handler.handler:app", "--host", "0.0.0.0", "--port", "8300", "--workers", "2"]

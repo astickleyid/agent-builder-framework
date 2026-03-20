@@ -1,0 +1,59 @@
+# MemoraForge — Python Dependencies
+
+# Core framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.3
+
+# HTTP client
+httpx==0.28.1
+
+# Compression
+lz4==4.3.3
+
+# Database
+asyncpg==0.30.0
+sqlalchemy[asyncio]==2.0.36
+psycopg2-binary==2.9.10
+
+# Cache
+redis[hiredis]==5.2.1
+
+# Vector store
+weaviate-client==4.9.6
+
+# Knowledge graph
+neo4j==5.27.0
+
+# ML / Embeddings
+sentence-transformers==3.3.1
+numpy==2.2.1
+
+# LangChain / LlamaIndex
+langchain==0.3.13
+langchain-core==0.3.28
+langgraph==0.2.60
+llama-index==0.12.5
+
+# Serialization
+orjson==3.10.12
+
+# Security
+PyJWT==2.10.1
+cryptography==44.0.0
+python-multipart==0.0.18
+
+# gRPC (for MCP inter-service)
+grpcio==1.69.0
+grpcio-tools==1.69.0
+
+# Monitoring
+prometheus-client==0.21.1
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.25.0
+pytest-cov==6.0.0
+
+# Dev
+python-dotenv==1.0.1

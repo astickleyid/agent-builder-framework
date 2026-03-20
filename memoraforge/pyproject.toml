@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "memoraforge"
+version = "0.1.0"
+description = "Production-ready platform for autonomous AI agents with 5M+ token effective context"
+readme = "ARCHITECTURE.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "pydantic>=2.10",
+    "httpx>=0.28",
+    "lz4>=4.3",
+    "redis>=5.2",
+    "orjson>=3.10",
+]
+
+[project.optional-dependencies]
+all = [
+    "asyncpg>=0.30",
+    "sqlalchemy[asyncio]>=2.0",
+    "weaviate-client>=4.9",
+    "neo4j>=5.27",
+    "sentence-transformers>=3.3",
+    "langchain>=0.3",
+    "langgraph>=0.2",
+    "llama-index>=0.12",
+    "grpcio>=1.69",
+    "PyJWT>=2.10",
+    "cryptography>=44.0",
+    "prometheus-client>=0.21",
+]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.setuptools.packages.find]
+include = ["memoraforge*"]

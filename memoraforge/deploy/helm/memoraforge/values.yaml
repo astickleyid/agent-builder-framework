@@ -6,14 +6,17 @@ global:
   imagePullSecrets: []
   storageClass: ""
 
+# ─── Shared Image (single Dockerfile for all services) ──────────
+image:
+  repository: memoraforge/memoraforge
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
 # ─── API Server ──────────────────────────────────────────────────
 apiServer:
   enabled: true
   replicaCount: 2
-  image:
-    repository: memoraforge/api-server
-    tag: "0.1.0"
-    pullPolicy: IfNotPresent
+  command: ["uvicorn", "api_server.server:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
   service:
     type: ClusterIP
     port: 8000
@@ -48,10 +51,7 @@ apiServer:
 mcpServer:
   enabled: true
   replicaCount: 3
-  image:
-    repository: memoraforge/mcp-server
-    tag: "0.1.0"
-    pullPolicy: IfNotPresent
+  command: ["uvicorn", "mcp_server.server:app", "--host", "0.0.0.0", "--port", "8100", "--workers", "2"]
   service:
     type: ClusterIP
     port: 8100
@@ -70,10 +70,7 @@ mcpServer:
 memoryHub:
   enabled: true
   replicaCount: 3
-  image:
-    repository: memoraforge/memory-hub
-    tag: "0.1.0"
-    pullPolicy: IfNotPresent
+  command: ["uvicorn", "memory_hub.app:app", "--host", "0.0.0.0", "--port", "8200", "--workers", "4"]
   service:
     type: ClusterIP
     port: 8200
@@ -99,10 +96,7 @@ memoryHub:
 acpHandler:
   enabled: true
   replicaCount: 2
-  image:
-    repository: memoraforge/acp-handler
-    tag: "0.1.0"
-    pullPolicy: IfNotPresent
+  command: ["uvicorn", "acp_handler.handler:app", "--host", "0.0.0.0", "--port", "8300", "--workers", "2"]
   service:
     type: ClusterIP
     port: 8300

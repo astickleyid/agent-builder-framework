@@ -19,6 +19,11 @@ import sys
 import time
 from pathlib import Path
 
+from .acp_handler.schemas import (
+    AgentRegisterParams,
+    JsonRpcRequest,
+)
+
 BANNER = """
   ╔══════════════════════════════════════════════════════════════╗
   ║         🦀  M E M O R A F O R G E  v0.1.0  🦀             ║
@@ -246,17 +251,20 @@ def cmd_agent(args):
 
 async def _agent_create(args):
     import httpx
+
+    params = AgentRegisterParams(
+        agent_id=args.name.lower().replace(" ", "-"),
+        agent_name=args.name,
+        capabilities=args.capabilities,
+    )
+    rpc_request = JsonRpcRequest(
+        method="agent.register",
+        params=params.model_dump(),
+        id=1,
+    )
+
     async with httpx.AsyncClient(timeout=10) as client:
-        resp = await client.post("http://localhost:8300/rpc", json={
-            "jsonrpc": "2.0",
-            "method": "agent.register",
-            "params": {
-                "agent_id": args.name.lower().replace(" ", "-"),
-                "agent_name": args.name,
-                "capabilities": args.capabilities,
-            },
-            "id": 1,
-        })
+        resp = await client.post("http://localhost:8300/rpc", json=rpc_request.model_dump())
         result = resp.json()
         if "result" in result:
             r = result["result"]

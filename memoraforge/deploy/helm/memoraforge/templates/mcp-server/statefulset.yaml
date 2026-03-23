@@ -27,8 +27,9 @@ spec:
         {{- toYaml .Values.security.podSecurityContext | nindent 8 }}
       containers:
         - name: mcp-server
-          image: "{{ .Values.mcpServer.image.repository }}:{{ .Values.mcpServer.image.tag }}"
-          imagePullPolicy: {{ .Values.mcpServer.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{ .Values.mcpServer.command | toJson }}
           ports:
             - name: http
               containerPort: 8100

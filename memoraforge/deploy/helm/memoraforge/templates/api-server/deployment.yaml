@@ -28,8 +28,9 @@ spec:
         {{- toYaml .Values.security.podSecurityContext | nindent 8 }}
       containers:
         - name: api-server
-          image: "{{ .Values.apiServer.image.repository }}:{{ .Values.apiServer.image.tag }}"
-          imagePullPolicy: {{ .Values.apiServer.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{ .Values.apiServer.command | toJson }}
           ports:
             - name: http
               containerPort: 8000

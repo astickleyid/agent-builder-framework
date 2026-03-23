@@ -8,6 +8,7 @@ for sub-100ms retrieval across 5M+ effective tokens.
 from __future__ import annotations
 
 import logging
+import os
 import time
 
 from fastapi import FastAPI
@@ -44,8 +45,15 @@ app.add_middleware(
 # Services
 # ---------------------------------------------------------------------------
 
-vector_store = VectorStoreService()
-knowledge_graph = KnowledgeGraphService()
+WEAVIATE_URL = os.environ.get("WEAVIATE_URL", "http://weaviate:8080")
+NEO4J_URI = os.environ.get("NEO4J_URI", "bolt://neo4j:7687")
+NEO4J_USER = os.environ.get("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.environ.get("NEO4J_PASSWORD", "memoraforge")
+POSTGRES_URL = os.environ.get("POSTGRES_URL", "postgresql://memoraforge:memoraforge@postgres:5432/memoraforge")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379/1")
+
+vector_store = VectorStoreService(weaviate_url=WEAVIATE_URL)
+knowledge_graph = KnowledgeGraphService(neo4j_uri=NEO4J_URI, user=NEO4J_USER, password=NEO4J_PASSWORD)
 embedding_service = EmbeddingService()
 summarizer = SummarizerService()
 eviction_engine = EvictionEngine()

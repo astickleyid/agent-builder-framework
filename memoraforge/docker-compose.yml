@@ -16,6 +16,12 @@ services:
       - LLM_BACKEND=ollama
       - OLLAMA_URL=http://ollama:11434
       - DEFAULT_MODEL=llama3.1:8b
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       - ollama
     networks:
@@ -31,6 +37,12 @@ services:
       - "8100:8100"
     environment:
       - REDIS_URL=redis://redis:6379/0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       - redis
     networks:
@@ -51,6 +63,12 @@ services:
       - NEO4J_PASSWORD=memoraforge
       - POSTGRES_URL=postgresql://memoraforge:memoraforge@postgres:5432/memoraforge
       - REDIS_URL=redis://redis:6379/1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8200/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       - weaviate
       - neo4j
@@ -70,6 +88,12 @@ services:
     environment:
       - POSTGRES_URL=postgresql://memoraforge:memoraforge@postgres:5432/memoraforge
       - REDIS_URL=redis://redis:6379/2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8300/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       - postgres
       - redis

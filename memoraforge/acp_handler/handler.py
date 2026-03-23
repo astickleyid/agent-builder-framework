@@ -210,15 +210,26 @@ async def handle_memory_claw(params: dict[str, Any], agent_id: str) -> dict:
     """Retrieve memories from the Memory Hub via semantic search + graph traversal.
 
     This is a proxy that forwards to the Memory Hub microservice.
-    In production, this calls the Memory Hub's /retrieve endpoint.
+    In production, this calls the Memory Hub's /retrieve/claw endpoint.
     """
     p = MemoryClawParams(**params)
     start = time.time()
 
     # Placeholder: in production, call Memory Hub via httpx
     # async with httpx.AsyncClient() as client:
-    #     resp = await client.post("http://memory-hub:8200/retrieve", json=p.model_dump())
-    #     memories = resp.json()
+    #     resp = await client.post("http://memory-hub:8200/retrieve/claw", json={
+    #         "query": p.query,
+    #         "agent_id": agent_id,
+    #         "top_k": p.top_k,
+    #         "max_tokens": p.max_tokens,
+    #         "min_relevance": p.min_relevance,
+    #         "include_graph": p.include_graph,
+    #         "include_fts": True,
+    #         "graph_depth": 2,
+    #         "filters": p.filters,
+    #         "rerank": True,
+    #     })
+    #     memories = resp.json()["results"]
 
     memories = [
         {
@@ -257,12 +268,14 @@ async def handle_memory_store(params: dict[str, Any], agent_id: str) -> dict:
 
     # Placeholder: in production, call Memory Hub via httpx
     # async with httpx.AsyncClient() as client:
-    #     resp = await client.post("http://memory-hub:8200/store", json={
+    #     resp = await client.post("http://memory-hub:8200/ingest/store", json={
     #         "agent_id": agent_id,
     #         "content": p.content,
     #         "memory_type": p.memory_type,
     #         "metadata": p.metadata,
     #         "relations": p.relations,
+    #         "ttl_hours": p.ttl_hours,
+    #         "auto_summarize": True,
     #     })
 
     logger.info("Stored memory %s for agent %s (%d chars)", memory_id, agent_id, len(p.content))

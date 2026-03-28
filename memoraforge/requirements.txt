@@ -40,7 +40,7 @@ orjson==3.10.12
 
 # Security
 PyJWT==2.10.1
-cryptography==44.0.0
+cryptography==46.0.6
 python-multipart==0.0.18
 
 # gRPC (for MCP inter-service)

@@ -32,7 +32,7 @@ numpy==2.2.1
 # LangChain / LlamaIndex
 langchain==0.3.13
 langchain-core==0.3.28
-langgraph==0.2.60
+langgraph==1.0.10rc1
 llama-index==0.12.5
 
 # Serialization

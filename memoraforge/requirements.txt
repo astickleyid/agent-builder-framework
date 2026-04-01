@@ -36,7 +36,7 @@ langgraph==0.2.60
 llama-index==0.12.5
 
 # Serialization
-orjson==3.10.12
+orjson==3.11.6
 
 # Security
 PyJWT==2.10.1
